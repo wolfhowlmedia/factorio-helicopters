@@ -1,9 +1,9 @@
  {
-     "name": "Helicopters",
-     "version": "0.3.14",
-     "title": "Helicopters",
-     "author": "Kumpu",
-     "factorio_version": "0.17",
-     "dependencies": ["base >= 0.17.35"],
-     "description": "Adds a fully animated attack helicopter to the game. Ideal for getting from A to B quickly, exploring the map, building islands and nuking biters from the sky. Now 84% less buggier!"
+     "name": "HelicopterRevival",
+     "version": "0.0.1",
+     "title": "HelicopterRevival",
+     "author": "twilightthepony",
+     "factorio_version": "0.18",
+     "dependencies": ["base >= 0.18.2"],
+     "description": "Adds a fully animated attack helicopter to the game. Ideal for getting from A to B quickly, exploring the map, building islands and nuking biters from the sky. Now 84% less buggier! Updated for 0.18 from Kumpu."
  }

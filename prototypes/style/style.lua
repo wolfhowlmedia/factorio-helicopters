@@ -23,7 +23,7 @@
   default_graphical_set =
   {
     type = "composition",
-    filename = "__Helicopters__/graphics/gui/black.png",
+    filename = "__HelicopterRevival__/graphics/gui/black.png",
     priority = "extra-high-no-scale",
     position = {0, 0}
   },
@@ -32,7 +32,7 @@
   hovered_graphical_set =
   {
     type = "composition",
-    filename = "__Helicopters__/graphics/gui/grey.png",
+    filename = "__HelicopterRevival__/graphics/gui/grey.png",
     priority = "extra-high-no-scale",
     corner_size = {0, 0},
     position = {0, 0}
@@ -42,7 +42,7 @@
   clicked_graphical_set =
   {
     type = "composition",
-    filename = "__Helicopters__/graphics/gui/orange.png",
+    filename = "__HelicopterRevival__/graphics/gui/orange.png",
     priority = "extra-high-no-scale",
     corner_size = {0, 0},
     position = {0, 0}
@@ -138,6 +138,6 @@ function makeButtonStyle(width, height, image, padding)
   }
 end
 
-data.raw["gui-style"].default["heli-clear_text_button"] = makeButtonStyle(15, 15, "__Helicopters__/graphics/icons/clear-text.png", {top = 4})
-data.raw["gui-style"].default["heli-speaker_on_button"] = makeButtonStyle(15, 15, "__Helicopters__/graphics/icons/speaker_on.png")
-data.raw["gui-style"].default["heli-speaker_off_button"] = makeButtonStyle(15, 15, "__Helicopters__/graphics/icons/speaker_off.png")
+data.raw["gui-style"].default["heli-clear_text_button"] = makeButtonStyle(15, 15, "__HelicopterRevival__/graphics/icons/clear-text.png", {top = 4})
+data.raw["gui-style"].default["heli-speaker_on_button"] = makeButtonStyle(15, 15, "__HelicopterRevival__/graphics/icons/speaker_on.png")
+data.raw["gui-style"].default["heli-speaker_off_button"] = makeButtonStyle(15, 15, "__HelicopterRevival__/graphics/icons/speaker_off.png")

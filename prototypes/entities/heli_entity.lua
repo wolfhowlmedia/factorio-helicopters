@@ -5,7 +5,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-placement-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "player-creation"},
 		has_belt_immunity = true,
@@ -47,7 +47,7 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body-0.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body-0.png",
 							width_in_frames = 1,
 							height_in_frames = 1,
 						},
@@ -66,7 +66,7 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor-0.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor-0.png",
 							width_in_frames = 1,
 							height_in_frames = 1,
 						},
@@ -91,7 +91,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "player-creation"},
 		has_belt_immunity = true,
@@ -134,7 +134,7 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/void.png",
+							filename = "__HelicopterRevival__/graphics/void.png",
 							width_in_frames = 8,
 							height_in_frames = 8,
 						},
@@ -225,7 +225,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-flying-collision-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
@@ -264,7 +264,7 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/void.png",
+							filename = "__HelicopterRevival__/graphics/void.png",
 							width_in_frames = 1,
 							height_in_frames = 1,
 						},
@@ -300,7 +300,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-landed-collision-side-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
@@ -339,7 +339,7 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/void.png",
+							filename = "__HelicopterRevival__/graphics/void.png",
 							width_in_frames = 1,
 							height_in_frames = 1,
 						},
@@ -364,7 +364,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-landed-collision-end-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "not-on-map"},
 		has_belt_immunity = true,
@@ -403,7 +403,7 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/void.png",
+							filename = "__HelicopterRevival__/graphics/void.png",
 							width_in_frames = 1,
 							height_in_frames = 1,
 						},
@@ -439,7 +439,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-body-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
@@ -474,22 +474,22 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body-0.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body-0.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body-1.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body-1.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body-2.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body-2.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body-3.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body-3.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
@@ -513,7 +513,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-shadow-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
@@ -549,22 +549,22 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body_shadow-0.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body_shadow-0.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body_shadow-1.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body_shadow-1.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body_shadow-2.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body_shadow-2.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/body_shadow-3.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/body_shadow-3.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
@@ -588,7 +588,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-burner-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
@@ -647,7 +647,7 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/void.png",
+							filename = "__HelicopterRevival__/graphics/void.png",
 							width_in_frames = 1,
 							height_in_frames = 1,
 						},
@@ -658,15 +658,15 @@ data:extend({
 
 		working_sound = {
 			sound = {
-				filename = "__Helicopters__/sound/heli_loop.ogg",
+				filename = "__HelicopterRevival__/sound/heli_loop.ogg",
 				volume = 0.6
 			},
 			activate_sound = {
-				filename = "__Helicopters__/sound/heli_startup.ogg",
+				filename = "__HelicopterRevival__/sound/heli_startup.ogg",
 				volume = 0.6
 			},
 			deactivate_sound = {
-				filename = "__Helicopters__/sound/heli_shutdown.ogg",
+				filename = "__HelicopterRevival__/sound/heli_shutdown.ogg",
 				volume = 0.6
 			},
 			--match_speed_to_activity = true,
@@ -682,7 +682,7 @@ data:extend({
 	{
 		type = "car",
 		name = "heli-floodlight-entity-_-",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
@@ -722,7 +722,7 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/void.png",
+							filename = "__HelicopterRevival__/graphics/void.png",
 							width_in_frames = 1,
 							height_in_frames = 1,
 						},

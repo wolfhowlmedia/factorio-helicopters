@@ -2,7 +2,7 @@ data:extend({
 	{
 		type = "item-with-entity-data",
 		name = "heli-item",
-		icon = "__Helicopters__/graphics/icons/heli.png",
+		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 32,
 		flags = {},
 		subgroup = "transport",

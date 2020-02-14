@@ -104,7 +104,7 @@ local frameFixes = {
 	0.984375, 	--64
 }
 
---local modVersion = versionStrToInt(game.active_mods.Helicopters)
+--local modVersion = versionStrToInt(game.active_mods.HelicopterRevival)
 
 maxCollisionHeight = 2
 
@@ -181,7 +181,7 @@ heliBase = {
 		baseEnt.health = placementEnt.health
 
 		local obj = {
-			version = versionStrToInt(game.active_mods.Helicopters),
+			version = versionStrToInt(game.active_mods.HelicopterRevival),
 
 			lockedBaseOrientation = baseEnt.orientation,
 

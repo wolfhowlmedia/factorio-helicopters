@@ -37,22 +37,22 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor-0.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor-0.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor-1.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor-1.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor-2.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor-2.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor-3.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor-3.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
@@ -104,22 +104,22 @@ data:extend({
 					stripes =
 					{
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor_shadow-0.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor_shadow-0.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor_shadow-1.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor_shadow-1.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor_shadow-2.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor_shadow-2.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},
 						{
-							filename = "__Helicopters__/graphics/entities/heli/rotor_shadow-3.png",
+							filename = "__HelicopterRevival__/graphics/entities/heli/rotor_shadow-3.png",
 							width_in_frames = 4,
 							height_in_frames = 4,
 						},

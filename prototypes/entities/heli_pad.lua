@@ -3,7 +3,7 @@ data:extend({
     type = "simple-entity-with-force",
     name = "heli-pad-placement-entity",
     flags = {"placeable-neutral", "player-creation"},
-    icon = "__Helicopters__/graphics/icons/heli_pad.png",
+    icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
     icon_size = 32,
     subgroup = "grass",
     order = "b[decorative]-k[stone-rock]-a[big]",
@@ -33,12 +33,12 @@ data:extend({
     pictures =
     {
       {
-        filename = "__Helicopters__/graphics/entities/heli_pad.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_pad.png",
         width = 260,
         height = 260,
 
         hr_version = {
-          filename = "__Helicopters__/graphics/entities/heli_pad_hr.png",
+          filename = "__HelicopterRevival__/graphics/entities/heli_pad_hr.png",
           width = 520,
           height = 520,
           scale = 0.5,
@@ -51,7 +51,7 @@ data:extend({
     type = "simple-entity-with-force",
     name = "heli-pad-entity",
     flags = {"placeable-neutral", "player-creation"},
-    icon = "__Helicopters__/graphics/icons/heli_pad.png",
+    icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
     icon_size = 32,
     subgroup = "grass",
     order = "b[decorative]-k[stone-rock]-a[big]",
@@ -97,7 +97,7 @@ data:extend({
     pictures =
     {
       {
-        filename = "__Helicopters__/graphics/entities/heli_pad_inner.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_pad_inner.png",
         width = 173,
         height = 172,
       },
