@@ -7,6 +7,7 @@ require("prototypes.items.heli_item")
 require("prototypes.items.heli_rocket_launcher_item")
 require("prototypes.items.remote_items")
 require("prototypes.items.heli_gun")
+require("prototypes.items.heli_flamethrower")
 
 require("prototypes.recipes.heli_recipe")
 require("prototypes.recipes.remote_recipes")
