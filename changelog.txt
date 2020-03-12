@@ -1,11 +1,12 @@
-
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
-Date: 14.02.2020
+Date: 12.03.2020
+  Fixes:
+    - Fix some icons
   Changes:
     - Added flamethrower to the helicopter
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 14.02.2020
   Changes:
-    - Initial release.
+    - Fork from Kumpu's Helicopters with fixes for Factorio 0.18.2+

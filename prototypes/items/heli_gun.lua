@@ -3,10 +3,10 @@ data:extend({
         type = "gun",
         name = "heli-gun",
         icon = "__base__/graphics/icons/submachine-gun.png",
-        icon_size = 32,
+        icon_size = 64,
         flags = {"hidden"},
         subgroup = "gun",
-        order = "a[basic-clips]-b[tank-machine-gun]",
+        order = "a[basic-clips]-b[tank-machine-gun]-c[flamethrower-ammo]",
         attack_parameters =
         {
           type = "projectile",

@@ -10,8 +10,8 @@ data:extend({
         type = "double-setting",
         name = "heli-flamethrower-damage-modifier",
         setting_type = "startup",
-        default_value = 1,
-        minimum_value = 0,
+        default_value = 1.2,
+        minimum_value = 1,
     },
     {
         type = "string-setting",
