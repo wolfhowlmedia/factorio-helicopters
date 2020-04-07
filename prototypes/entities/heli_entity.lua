@@ -198,10 +198,10 @@ data:extend({
 	    },]]
 	    sound_no_fuel =
 	    {
-		{
-			filename = "__base__/sound/fight/tank-no-fuel-1.ogg",
-			volume = 0.6
-		},
+			{
+				filename = "__base__/sound/fight/tank-no-fuel-1.ogg",
+				volume = 0.6
+			},
 	    },
 	    open_sound = { filename = "__base__/sound/car-door-open.ogg", volume=0.7 },
     	close_sound = { filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },

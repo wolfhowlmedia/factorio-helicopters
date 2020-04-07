@@ -198,7 +198,11 @@ heliBase = {
 		obj.baseEnt.effectivity_modifier = 0
 
 		for k,v in pairs(obj.childs) do
-			v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
+				v.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+			else
+				v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+			end
 			v.destructible = false
 		end
 
@@ -747,7 +751,11 @@ heliBase = {
 		end
 
 		if self.childs.collisionEnt then
-			self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
+				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+			else
+				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+			end
 			self.childs.collisionEnt.operable = false
 		end
 	end,
@@ -756,7 +764,11 @@ heliBase = {
 		if enabled then
 			if not (self.childs.floodlightEnt and self.childs.floodlightEnt.valid) then
 				self.childs.floodlightEnt = self.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = self.baseEnt.position}
-				self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
+					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+				else
+					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+				end
 			end
 			self.childs.floodlightEnt.orientation = self.baseEnt.orientation
 			self.childs.floodlightEnt.operable = false
@@ -820,6 +832,10 @@ heliBase = {
 			end
 		end
 
+		if game.active_mods["Krastorio2"] then
+			remainingFuel = remainingFuel * 16
+		end
+
 		local burner = self.baseEnt.burner
 		local full_value = 0
 		if burner.currently_burning then
@@ -838,6 +854,7 @@ heliBase = {
 	end,
 
 	consumeBaseFuel = function(self)
+		
 		local baseBurner = self.baseEnt.burner
 
 		baseBurner.remaining_burning_fuel = baseBurner.remaining_burning_fuel - self.baseEngineConsumption
@@ -880,7 +897,11 @@ heliBase = {
 		if self.burnerDriver and self.burnerDriver.valid then
 			self.burnerDriver.riding_state = {acceleration = defines.riding.acceleration.accelerating, direction = defines.riding.direction.straight}
 			if self.childs.burnerEnt.burner.remaining_burning_fuel < 1000 then
-				self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
+				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
+					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 1})
+				else
+					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
+				end
 			end
 		end
 	end,

@@ -26,7 +26,7 @@ heliAttack =
 		
 			floodlightEnt = placementEnt.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = baseEnt.position},
 		}
-
+		
 		return heliBase.new(placementEnt, baseEnt, childs, {__index = heliAttack})
 	end,
 }
