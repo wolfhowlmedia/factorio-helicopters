@@ -16,9 +16,10 @@ basicState =
 basicState.mt =
 {
 	__index = function(t, k)
-		if basicState[k] then
+		if stateFuncs[t.name] and stateFuncs[t.name][k] then
+			return stateFuncs[t.name][k]
+		elseif basicState[k] then
 			return basicState[k]
-
 		elseif type(k) == "string" and k:match("^On.+") then
 			return function()
 			end

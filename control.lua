@@ -37,8 +37,11 @@ function OnLoad(e)
 	if global.remoteGuis then
 		for _,remotegui in pairs(global.remoteGuis) do
 			for _,gui in pairs(remotegui.guis) do
-				if gui.setmeta then
-					gui:setmeta()
+				if gui.prefix then
+					local n = string.gsub(gui.prefix, "heli_(%a+)_.*", "%1")
+					if _G[n] then
+						setmetatable(gui, {__index = _G[n]})
+					end
 				end
 			end
 		end
