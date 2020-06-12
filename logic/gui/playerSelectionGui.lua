@@ -16,7 +16,7 @@ playerSelectionGui =
 			prefix = "heli_playerSelectionGui_",
 		}
 
-		setmetatable(self, {__index = playerSelectionGui})
+		setmetatable(obj, {__index = playerSelectionGui})
 		obj:buildGui()
 
 		return obj
