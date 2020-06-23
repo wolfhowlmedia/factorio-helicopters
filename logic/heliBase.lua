@@ -132,6 +132,204 @@ end
 heliEntityNames = ""
 heliBaseEntityNames = ""
 
+stateFuncs = {
+	landed = {
+		init = function(heli)
+			heli.baseEnt.effectivity_modifier = 0
+			heli.baseEnt.friction_modifier = 50
+
+			heli.lockedBaseOrientation = heli.baseEnt.orientation
+
+			heli.landedColliderCreationDelay = 2
+
+			heli:setFloodlightEntities(false)
+
+			for k, curGG in pairs(heli.gaugeGuis) do
+				curGG:setPointerNoise("gauge_fs", "speed", false)
+				curGG:setPointerNoise("gauge_hr", "height", false)
+				curGG:setPointerNoise("gauge_hr", "rpm", false)
+			end
+
+			heli:setFuelGaugeTarget(0, true)
+		end,
+
+		OnTick = function(heli)
+			if heli.landedColliderCreationDelay > 0 then
+				if heli.landedColliderCreationDelay == 1 then
+					heli:setCollider("landed")
+					heli:updateEntityRotations()
+				end
+
+				heli.landedColliderCreationDelay = heli.landedColliderCreationDelay - 1
+			end
+
+			if heli.baseEnt.orientation ~= heli.lockedBaseOrientation then
+				heli.baseEnt.orientation = heli.lockedBaseOrientation
+			end
+
+			local speed = heli.baseEnt.speed
+			if speed > 0.25 then --54 km/h
+				local players = getCarPlayers(heli.baseEnt)
+
+				heli.baseEnt.damage(speed * 210, game.forces.neutral)
+
+				if not heli.baseEnt.valid then --destroy event might already be executed
+					heli:dealCrashDamage(players, speed)
+
+					return false
+				end
+			end
+		end,
+
+		OnUp = function(heli)
+			heli:changeState(heli.engineStarting)
+		end,
+	},
+	engineStarting = {
+		init = function(heli)
+			heli.lockedBaseOrientation = heli.baseEnt.orientation
+
+			heli:setRotorTargetRPF(heli.rotorMaxRPF)
+
+			if not (heli.burnerDriver and heli.burnerDriver.valid) then
+				heli.burnerDriver = heli.surface.create_entity{name="character", force = game.forces.neutral, position = heli.baseEnt.position}
+				heli.childs.burnerEnt.set_driver(heli.burnerDriver)
+			end
+
+			if heli.floodlightEnabled then
+				heli:setFloodlightEntities(true)
+			end
+
+			for k, curGG in pairs(heli.gaugeGuis) do
+				curGG:setPointerNoise("gauge_fs", "speed", true, 5)
+				curGG:setPointerNoise("gauge_hr", "height", true, 0.5, 0.2, 12, 18)
+				curGG:setPointerNoise("gauge_hr", "rpm", true, 50)
+			end
+
+			heli.lastFuelGaugeTargetVal = 1
+		end,
+
+		OnTick = function(heli)
+			if heli.baseEnt.orientation ~= heli.lockedBaseOrientation then
+				heli.baseEnt.orientation = heli.lockedBaseOrientation
+			end
+
+			heli:handleFuelConsumption()
+			heli:landIfEmpty()
+
+			if heli.rotorRPF == heli.rotorMaxRPF then
+				heli:changeState(heli.ascend)
+			end
+		end,
+	},
+	ascend = {
+		init = function(heli)
+			heli.baseEnt.effectivity_modifier = 1
+			heli.baseEnt.friction_modifier = 1
+
+			local time = heli:setTargetHeight(heli.maxHeight)
+			--heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time*60, "linear")
+
+			heli:setCollider("flying")
+		end,
+
+		OnTick = function(heli)
+			heli:updateEntityRotations()
+			heli:handleFuelConsumption()
+			heli:landIfEmpty()
+			heli:handleInserters()
+
+			--if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
+			--	heli.curBobbing = heli.bobbingAnimator:nextFrame()
+			--end
+
+			if heli.height > maxCollisionHeight then
+				heli:setCollider("none")
+			end
+
+			if heli.height == heli.maxHeight then
+				heli:changeState(heli.hovering)
+			end
+		end,
+
+		OnMaxHeightChanged = function(heli)
+			heli:setTargetHeight(heli.maxHeight)
+		end,
+	},
+	hovering = {
+		init = function(heli)
+			--heli.bobbingAnimator = basicAnimator.new(0, maxBobbing, bobbingPeriod, "cyclicSine")
+		end,
+
+		OnTick = function(heli)
+			heli:updateEntityRotations()
+			heli:handleFuelConsumption()
+			heli:landIfEmpty()
+			heli:handleInserters()
+
+			--[[
+			local isDone
+			heli.curBobbing, isDone = heli.bobbingAnimator:nextFrame()
+
+			if isDone then
+				heli.bobbingAnimator:reset()
+			end
+			]]
+		end,
+
+		OnMaxHeightChanged = function(heli)
+			heli:setTargetHeight(heli.maxHeight)
+		end,
+	},
+	descend = {
+		init = function(heli)
+			local time = heli:setTargetHeight(0)
+			--heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time*60, "linear")
+		end,
+
+		deinit = function(heli)
+			heli:reactivateAllInserters()
+		end,
+
+		OnTick = function(heli)
+			heli:updateEntityRotations()
+			heli:handleFuelConsumption()
+			heli:handleInserters()
+
+			--if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
+			--	heli.curBobbing = heli.bobbingAnimator:nextFrame()
+			--end
+
+			if heli.height <= maxCollisionHeight and not (heli.childs.collisionEnt and heli.childs.collisionEnt.valid) then
+				heli:setCollider("flying")
+			end
+
+			if heli.height == 0 then
+				heli:changeState(heli.engineStopping)
+			end
+		end,
+
+		OnUp = function(heli)
+			print("descend OnUp")
+			heli:changeState(heli.ascend)
+		end,
+	},
+	engineStopping = {
+		init = function(heli)
+			heli.childs.burnerEnt.set_driver(nil)
+
+			if heli.burnerDriver and heli.burnerDriver.valid then
+				heli.burnerDriver.destroy()
+				heli.burnerDriver = nil
+			end
+
+			heli:setRotorTargetRPF(0)
+
+			heli:changeState(heli.landed)
+		end,
+	},
+}
+
 heliBase = {
 	---------- default vals -----------
 	valid = true,
@@ -311,214 +509,26 @@ heliBase = {
 
 	landed = basicState.new({
 		name = "landed",
-
-		init = function(heli)
-			heli.baseEnt.effectivity_modifier = 0
-			heli.baseEnt.friction_modifier = 50
-
-			heli.lockedBaseOrientation = heli.baseEnt.orientation
-
-			heli.landedColliderCreationDelay = 2
-
-			heli:setFloodlightEntities(false)
-
-			for k, curGG in pairs(heli.gaugeGuis) do
-				curGG:setPointerNoise("gauge_fs", "speed", false)
-				curGG:setPointerNoise("gauge_hr", "height", false)
-				curGG:setPointerNoise("gauge_hr", "rpm", false)
-			end
-
-			heli:setFuelGaugeTarget(0, true)
-		end,
-
-		OnTick = function(heli)
-			if heli.landedColliderCreationDelay > 0 then
-				if heli.landedColliderCreationDelay == 1 then
-					heli:setCollider("landed")
-					heli:updateEntityRotations()
-				end
-
-				heli.landedColliderCreationDelay = heli.landedColliderCreationDelay - 1
-			end
-
-			if heli.baseEnt.orientation ~= heli.lockedBaseOrientation then
-				heli.baseEnt.orientation = heli.lockedBaseOrientation
-			end
-
-			local speed = heli.baseEnt.speed
-			if speed > 0.25 then --54 km/h
-				local players = getCarPlayers(heli.baseEnt)
-
-				heli.baseEnt.damage(speed * 210, game.forces.neutral)
-
-				if not heli.baseEnt.valid then --destroy event might already be executed
-					heli:dealCrashDamage(players, speed)
-
-					return false
-				end 
-			end
-		end,
-
-		OnUp = function(heli)
-			heli:changeState(heli.engineStarting)
-		end,
 	}),
 
 	engineStarting = basicState.new({
 		name = "engineStarting",
-		
-		init = function(heli)
-			heli.lockedBaseOrientation = heli.baseEnt.orientation
-
-			heli:setRotorTargetRPF(heli.rotorMaxRPF)
-
-			if not (heli.burnerDriver and heli.burnerDriver.valid) then
-				heli.burnerDriver = heli.surface.create_entity{name="character", force = game.forces.neutral, position = heli.baseEnt.position}
-				heli.childs.burnerEnt.set_driver(heli.burnerDriver)
-			end
-
-			if heli.floodlightEnabled then
-				heli:setFloodlightEntities(true)
-			end
-
-			for k, curGG in pairs(heli.gaugeGuis) do
-				curGG:setPointerNoise("gauge_fs", "speed", true, 5)
-				curGG:setPointerNoise("gauge_hr", "height", true, 0.5, 0.2, 12, 18)
-				curGG:setPointerNoise("gauge_hr", "rpm", true, 50)
-			end
-
-			heli.lastFuelGaugeTargetVal = 1
-		end,
-
-		OnTick = function(heli)
-			if heli.baseEnt.orientation ~= heli.lockedBaseOrientation then
-				heli.baseEnt.orientation = heli.lockedBaseOrientation
-			end
-
-			heli:handleFuelConsumption()
-			heli:landIfEmpty()
-
-			if heli.rotorRPF == heli.rotorMaxRPF then
-				heli:changeState(heli.ascend)
-			end
-		end,
 	}),
 
 	ascend = basicState.new({
 		name = "ascend",
-		
-		init = function(heli)
-			heli.baseEnt.effectivity_modifier = 1
-			heli.baseEnt.friction_modifier = 1
-
-			local time = heli:setTargetHeight(heli.maxHeight)
-			--heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time*60, "linear")
-
-			heli:setCollider("flying")
-		end,
-
-		OnTick = function(heli)
-			heli:updateEntityRotations()
-			heli:handleFuelConsumption()
-			heli:landIfEmpty()
-			heli:handleInserters()
-
-			--if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
-			--	heli.curBobbing = heli.bobbingAnimator:nextFrame()
-			--end
-			
-			if heli.height > maxCollisionHeight then
-				heli:setCollider("none")
-			end
-
-			if heli.height == heli.maxHeight then
-				heli:changeState(heli.hovering)
-			end
-		end,
-
-		OnMaxHeightChanged = function(heli)
-			heli:setTargetHeight(heli.maxHeight)
-		end,
 	}),
 
 	hovering = basicState.new({
 		name = "hovering",
-		
-		init = function(heli)
-			--heli.bobbingAnimator = basicAnimator.new(0, maxBobbing, bobbingPeriod, "cyclicSine")
-		end,
-
-		OnTick = function(heli)
-			heli:updateEntityRotations()
-			heli:handleFuelConsumption()
-			heli:landIfEmpty()
-			heli:handleInserters()
-
-			--[[
-			local isDone
-			heli.curBobbing, isDone = heli.bobbingAnimator:nextFrame()
-
-			if isDone then
-				heli.bobbingAnimator:reset()
-			end
-			]]
-		end,
-
-		OnMaxHeightChanged = function(heli)
-			heli:setTargetHeight(heli.maxHeight)
-		end,
 	}),
 
 	descend = basicState.new({
 		name = "descend",
-		
-		init = function(heli)
-			local time = heli:setTargetHeight(0)
-			--heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time*60, "linear")
-		end,
-
-		deinit = function(heli)
-			heli:reactivateAllInserters()
-		end,
-
-		OnTick = function(heli)
-			heli:updateEntityRotations()
-			heli:handleFuelConsumption()
-			heli:handleInserters()
-
-			--if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
-			--	heli.curBobbing = heli.bobbingAnimator:nextFrame()
-			--end
-			
-			if heli.height <= maxCollisionHeight and not (heli.childs.collisionEnt and heli.childs.collisionEnt.valid) then
-				heli:setCollider("flying")
-			end
-
-			if heli.height == 0 then
-				heli:changeState(heli.engineStopping)
-			end
-		end,
-
-		OnUp = function(heli)
-			heli:changeState(heli.ascend)
-		end,
 	}),
 
 	engineStopping = basicState.new({
 		name = "engineStopping",
-		
-		init = function(heli)
-			heli.childs.burnerEnt.set_driver(nil)
-
-			if heli.burnerDriver and heli.burnerDriver.valid then
-				heli.burnerDriver.destroy()
-				heli.burnerDriver = nil
-			end
-
-			heli:setRotorTargetRPF(0)
-
-			heli:changeState(heli.landed)
-		end,
 	}),
 
 

@@ -13,16 +13,10 @@ playerSelectionGui =
 			{
 				parent = mod_gui.get_frame_flow(p),
 			},
-
-			setmeta = function(self)
-				setmetatable(self, {__index = playerSelectionGui})
-			end,
+			prefix = "heli_playerSelectionGui_",
 		}
 
-		for k,v in pairs(playerSelectionGui) do
-			obj[k] = v
-		end
-
+		setmetatable(obj, {__index = playerSelectionGui})
 		obj:buildGui()
 
 		return obj

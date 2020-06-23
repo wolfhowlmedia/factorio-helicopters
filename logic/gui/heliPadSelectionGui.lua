@@ -13,17 +13,10 @@ heliPadSelectionGui =
 			{
 				parent = mod_gui.get_frame_flow(p),
 			},
-
-			setmeta = function(self)
-				setmetatable(self, {__index = heliPadSelectionGui})
-			end,
-
+			prefix = "heli_heliPadSelectionGui_",
 		}
 
-		for k,v in pairs(heliPadSelectionGui) do
-			obj[k] = v
-		end
-
+		setmetatable(obj, {__index = heliPadSelectionGui})
 		obj:buildGui()
 
 		return obj

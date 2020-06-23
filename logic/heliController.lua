@@ -39,6 +39,14 @@ function assignHeliController(owner, heli, target, targetIsPlayer)
 	insertInGlobal("heliControllers", heliController.new(owner, heli, target, targetIsPlayer))
 end
 
+heliControllerState = {
+	getUp = 1,
+	orientToTarget = 2,
+	moveToTarget = 3,
+	creepToPosition = 4,
+	land = 5,
+	stop = 6,
+}
 
 heliController = 
 {
@@ -51,7 +59,7 @@ heliController =
 			heli = heli,
 			targetIsPlayer = targetIsPlayer,
 
-			curState = heliController.getUp,
+			curStateId = heliControllerState.getUp,
 			stateChanged = true,
 		}
 
@@ -80,6 +88,10 @@ heliController =
 		return obj
 	end,
 
+	curState = function(self)
+		return heliControllerStates[self.curStateId](self)
+	end,
+
 	destroy = function(self)
 		self.valid = false
 		self.heli.hasRemoteController = nil
@@ -94,7 +106,7 @@ heliController =
 
 	stopAndDestroy = function(self)
 		if self.driverIsBot then
-			self:changeState(self.stop)
+			self:changeState(heliControllerState.stop)
 		else
 			self:destroy()
 		end
@@ -153,10 +165,10 @@ heliController =
 				end
 			end
 
-			local old = self.curState
+			local old = self.curStateId
 			self:curState()
 
-			if old == self.curState then
+			if old == self.curStateId then
 				self.stateChanged = false
 			else
 				self.stateChanged = true
@@ -165,7 +177,7 @@ heliController =
 	end,
 
 	changeState = function(self, newState)
-		self.curState = newState
+		self.curStateId = newState
 	end,
 
 	setRidingState = function(self, acc, dir)
@@ -240,7 +252,7 @@ heliController =
 		if self.stateChanged then
 			self.heli:OnUp()
 		elseif self.heli.height >= maxCollisionHeight then
-			self:changeState(self.orientToTarget)
+			self:changeState(heliControllerState.orientToTarget)
 		end
 	end,
 
@@ -253,7 +265,7 @@ heliController =
 			self:setRidingState(defines.riding.acceleration.nothing, dir)
 
 			if dir == defines.riding.direction.straight then
-				self:changeState(self.moveToTarget)
+				self:changeState(heliControllerState.moveToTarget)
 			end
 		end
 	end,
@@ -290,7 +302,7 @@ heliController =
 
 			if dist <= landingZone and (dist <= creepZone or dist == self.oldDist) then
 				self:setRidingState(defines.riding.acceleration.braking)
-				self:changeState(self.creepToPosition)
+				self:changeState(heliControllerState.creepToPosition)
 			end
 
 			self.oldDist = dist
@@ -323,7 +335,7 @@ heliController =
 
 		local dist = getDistance(self.heli.childs.bodyEntShadow.position, self.targetPos)
 		if dist < 0.2 or dist > self.oldDist then
-			self:changeState(self.land)
+			self:changeState(heliControllerState.land)
 		end
 
 		self.oldDist = dist
@@ -343,8 +355,17 @@ heliController =
 		self:setRidingState(defines.riding.acceleration.braking, defines.riding.direction.straight)
 		
 		if self.heli.baseEnt.speed == 0 then
-			self:changeState(self.land)
+			self:changeState(heliControllerState.land)
 		end
 	end,
 	------------------------------------
+}
+
+heliControllerStates = {
+	heliController.getUp,
+	heliController.orientToTarget,
+	heliController.moveToTarget,
+	heliController.creepToPosition,
+	heliController.land,
+	heliController.stop,
 }

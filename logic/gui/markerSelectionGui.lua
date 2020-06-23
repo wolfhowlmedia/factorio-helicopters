@@ -16,15 +16,10 @@ markerSelectionGui =
 			},
 
 			curRefreshCooldown = markerSelectionGui.refreshCooldown,
-			
-			setmeta = function(self)
-				setmetatable(self, {__index = markerSelectionGui})
-			end,
+			prefix = "heli_markerSelectionGui_",
 		}
 
-		for k,v in pairs(markerSelectionGui) do
-			obj[k] = v
-		end
+		setmetatable(obj, {__index = markerSelectionGui})
 
 		obj:buildGui()
 
