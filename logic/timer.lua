@@ -51,14 +51,23 @@ function OnTimerTick()
 			
 			else
 				if (not curTimer.paused) and curTimer.runTick <= game.tick then
-					curTimer:callback()
-
-					if curTimer.interval then
-						curTimer.runTick = game.tick + curTimer.interval
-
-					else
+					-- i don't know if this check is the correct way to catch it
+					-- but sometimes after game load, the callback slot will be
+					-- empty and cause a crash. this appears to fix that.
+					-- seems this is only used by the fuel gauge as well
+					if not curTimer.callback then
 						curTimer.valid = false
 						table.remove(timers, i)
+					else
+						curTimer:callback()
+
+						if curTimer.interval then
+							curTimer.runTick = game.tick + curTimer.interval
+
+						else
+							curTimer.valid = false
+							table.remove(timers, i)
+						end
 					end
 				end
 			end
