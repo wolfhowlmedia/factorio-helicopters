@@ -1,6 +1,7 @@
 # factorio-helicopters
-"Helicopters" mod for factorio. Actually interesting stuff is in logic/.
+"HelicopterRevival" mod for factorio. Actually interesting stuff is in logic/.
 
-[Mod Portal](https://mods.factorio.com/mods/kumpu/Helicopters)
+Original (Helicopters) by [Kumpu](https://github.com/kumpuu/factorio-helicopters)
 
-[Forum thread](https://forums.factorio.com/viewtopic.php?f=93&t=50631)
+[Mod Portal](https://mods.factorio.com/mods/twilightthepony/HelicopterRevival)
+

@@ -1,3 +1,4 @@
+--[[
 require("logic.heliBase")
 require("logic.heliAttack")
 require("logic.heliPad")
@@ -29,3 +30,4 @@ for _,surface in pairs(game.surfaces) do
         end
     end
 end
+]]--

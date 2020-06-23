@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 23.06.2020
+  Changes:
+    - dgw: Migration from old Helicopters (not active in this version, sorry)
+    - wchristian: load / save crash fix
+    - trilader: Updates for factorio 0.18.28+
+---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 07.04.2020
   Changes:
