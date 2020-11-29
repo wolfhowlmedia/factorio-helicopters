@@ -17,6 +17,8 @@ require("logic.gui.gaugeGui")
 
 Entity = require("stdlib.entity.entity")
 
+mod_gui = require("mod-gui")
+
 function playerIsInHeli(p)
 	return p.driving and string.find(heliBaseEntityNames, p.vehicle.name .. ",", 1, true)
 end

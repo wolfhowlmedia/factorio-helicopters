@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 29.11.2020
+  Changes:
+    - Changes for Factorio 1.1.x (technology changes and mod_gui isn't a global anymore)
+    - Schmarotzer: Russian translation update
+---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 23.06.2020
   Changes:
