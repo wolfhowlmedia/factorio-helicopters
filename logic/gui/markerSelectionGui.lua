@@ -1,3 +1,5 @@
+mod_gui = require("mod-gui")
+
 markerSelectionGui =
 {
 	prefix = "heli_markerSelectionGui_",

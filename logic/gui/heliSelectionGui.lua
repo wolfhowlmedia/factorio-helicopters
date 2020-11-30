@@ -1,3 +1,5 @@
+mod_gui = require("mod-gui")
+
 heliSelectionGui =
 {
 	prefix = "heli_heliSelectionGui_",

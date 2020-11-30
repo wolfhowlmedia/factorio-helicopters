@@ -1,3 +1,5 @@
+mod_gui = require("mod-gui")
+
 playerSelectionGui =
 {
 	prefix = "heli_playerSelectionGui_",

@@ -1,3 +1,5 @@
+mod_gui = require("mod-gui")
+
 heliPadSelectionGui = 
 {
 	prefix = "heli_heliPadSelectionGui_",

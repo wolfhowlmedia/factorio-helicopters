@@ -1,6 +1,4 @@
 math3d = require("math3d")
-require("mod-gui")
-
 require("logic.mtMgr")
 
 require("logic.util")
