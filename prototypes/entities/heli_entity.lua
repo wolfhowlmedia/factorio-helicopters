@@ -110,6 +110,7 @@ data:extend({
 			fuel_inventory_size = fuel_slots,
 			
 		},
+		equipment_grid = "heli-equipment-grid",
 		consumption = settings.startup["heli-consumption"].value,
 		braking_power = settings.startup["heli-braking-power"].value,
 		friction = 0.002,

@@ -106,6 +106,8 @@ heliController =
 
 	stopAndDestroy = function(self)
 		if self.driverIsBot then
+            -- Told to explicitly stop, make sure to clear the flag
+            self.targetIsPlayer = false
 			self:changeState(heliControllerState.stop)
 		else
 			self:destroy()
@@ -160,6 +162,8 @@ heliController =
 				if self.targetPlayer.valid then
 					self.targetPos = {x = self.targetPlayer.position.x, y = self.targetPlayer.position.y - 1}
 				else
+                    -- Invalid player target, clear the flag
+                    self.targetIsPlayer = false
 					self:stopAndDestroy()
 					return
 				end
@@ -317,7 +321,8 @@ heliController =
 		if self.stateChanged then
 			self:setRidingState(defines.riding.acceleration.braking, defines.riding.direction.straight)
 			self.heli.baseEnt.speed = 0
-			self.targetIsPlayer = false
+            --targetIsPlayer will be updated else where
+			--self.targetIsPlayer = false
 
 			local curDist = getDistance(curPos, self.targetPos)
 			local alignFactor = 1.1
@@ -335,7 +340,12 @@ heliController =
 
 		local dist = getDistance(self.heli.childs.bodyEntShadow.position, self.targetPos)
 		if dist < 0.2 or dist > self.oldDist then
-			self:changeState(heliControllerState.land)
+            -- If targeting the player and we shouldn't land when we catch up, then just stop, otherwise land
+            if( self.targetIsPlayer and self.targetPlayer.mod_settings["heli-remote-dont-land-following-player"].value )then
+                self:changeState(heliControllerState.stop)
+            else
+                self:changeState(heliControllerState.land)
+            end
 		end
 
 		self.oldDist = dist
@@ -343,19 +353,27 @@ heliController =
 
 	land = function(self)
 		local d = extractPlayer(self.driver)
+        
+        if not ((not self.driverIsBot and d and d.valid) and d.mod_settings["heli-remote-dont-auto-land-player"].value) then
+            self.heli:OnDown()
+        end
 
-		if not ((not self.driverIsBot and d and d.valid) and d.mod_settings["heli-remote-dont-auto-land-player"].value) then
-			self.heli:OnDown()
-		end
-
-		self:destroy()
+		-- self:destroy()
 	end,
 
 	stop = function(self)
 		self:setRidingState(defines.riding.acceleration.braking, defines.riding.direction.straight)
 		
 		if self.heli.baseEnt.speed == 0 then
-			self:changeState(heliControllerState.land)
+            if( self.targetIsPlayer and self.targetPlayer.mod_settings["heli-remote-dont-land-following-player"].value )then
+                local dist = getDistance(self.heli.childs.bodyEntShadow.position, self.targetPos)
+                if dist > 0.2 then
+                    -- Player moved off, orient on them
+                    self:changeState(heliControllerState.orientToTarget)
+                end
+            else
+                self:changeState(heliControllerState.land)
+            end
 		end
 	end,
 	------------------------------------
