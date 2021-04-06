@@ -358,7 +358,7 @@ heliController =
             self.heli:OnDown()
         end
 
-		-- self:destroy()
+		self:destroy()
 	end,
 
 	stop = function(self)
