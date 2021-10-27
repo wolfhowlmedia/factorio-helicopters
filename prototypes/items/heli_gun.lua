@@ -27,7 +27,7 @@ data:extend({
           },
           projectile_center = {-0.15625, -0.07812},
           projectile_creation_distance = 1,
-          range = 20,
+          range = settings.startup["heli-gun-range"].value,
           sound =
           {
             {

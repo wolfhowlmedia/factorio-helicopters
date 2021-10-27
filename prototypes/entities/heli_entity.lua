@@ -1,6 +1,13 @@
 local fuel_slots = 5
 local inventory_slots = 80
 
+gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower"}
+
+if mods["Krastorio2"] then
+	-- Override  gun slots for K2
+	gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower", "heli-k2-anti-material-gun"}
+end
+
 data:extend({
 	{
 		type = "car",
@@ -76,17 +83,6 @@ data:extend({
 		},
 	},
 
-
-
-
-
-
-
-
-
-
-
-
 	---------------------base entity---------------------
 	{
 		type = "car",
@@ -143,60 +139,6 @@ data:extend({
 				},
 			}
 		},
-
-		--[[turret_animation =
-	    {
-	      layers =
-	      {
-	        {
-	          filename = "__base__/graphics/entity/car/car-turret.png",
-	          priority = "low",
-	          line_length = 8,
-	          width = 36,
-	          height = 29,
-	          frame_count = 1,
-	          direction_count = 64,
-	          shift = {0.03125, -0.890625},
-	          animation_speed = 8,
-	          hr_version =
-	          {
-	            priority = "low",
-	            width = 71,
-	            height = 57,
-	            frame_count = 1,
-	            axially_symmetrical = false,
-	            direction_count = 64,
-	            shift = {0, -1.05},
-	            animation_speed = 8,
-	            scale = 0.5,
-	            stripes =
-	            {
-	              {
-	                filename = "__base__/graphics/entity/car/hr-car-turret-1.png",
-	                width_in_frames = 1,
-	                height_in_frames = 32
-	              },
-	              {
-	                filename = "__base__/graphics/entity/car/hr-car-turret-2.png",
-	                width_in_frames = 1,
-	                height_in_frames = 32
-	              }
-	            }
-	          }
-	        },
-	        {
-	          filename = "__base__/graphics/entity/car/car-turret-shadow.png",
-	          priority = "low",
-	          line_length = 8,
-	          width = 46,
-	          height = 31,
-	          frame_count = 1,
-	          draw_as_shadow = true,
-	          direction_count = 64,
-	          shift = {0.875, 0.359375}
-	        }
-	      }
-	    },]]
 	    sound_no_fuel =
 	    {
 			{
@@ -206,17 +148,9 @@ data:extend({
 	    },
 	    open_sound = { filename = "__base__/sound/car-door-open.ogg", volume=0.7 },
     	close_sound = { filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },
-	    guns = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower"},
+	    guns = gun_slots,
 	    turret_rotation_speed = 1 / 60,
 	},
-
-
-
-
-
-
-
-
 
 
 

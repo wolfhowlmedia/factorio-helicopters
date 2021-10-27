@@ -1,9 +1,17 @@
 data:extend({
+    --------- Armory settings ---------
     {
         type = "double-setting",
         name = "heli-gun-damage-modifier",
         setting_type = "startup",
         default_value = 1,
+        minimum_value = 0.1,
+    },
+    {
+        type = "int-setting",
+        name = "heli-gun-range",
+        setting_type = "startup",
+        default_value = 20,
         minimum_value = 0,
     },
     {
@@ -11,8 +19,45 @@ data:extend({
         name = "heli-flamethrower-damage-modifier",
         setting_type = "startup",
         default_value = 1.2,
-        minimum_value = 1,
+        minimum_value = 0.1,
     },
+    {
+        type = "int-setting",
+        name = "heli-flamethrower-range",
+        setting_type = "startup",
+        default_value = 50,
+        minimum_value = 0,
+    },
+    {
+        type = "double-setting",
+        name = "heli-rocket-damage-modifier",
+        setting_type = "startup",
+        default_value = 1,
+        minimum_value = 0.1,
+    },
+    {
+        type = "int-setting",
+        name = "heli-rocket-launcher-range",
+        setting_type = "startup",
+        default_value = 30,
+        minimum_value = 0,
+    },
+    {
+        type = "double-setting",
+        name = "heli-k2-anti-material-gun-damage-modifier",
+        setting_type = "startup",
+        default_value = 1,
+        minimum_value = 0.1,
+    },
+    {
+        type = "int-setting",
+        name = "heli-k2-anti-material-gun-range",
+        setting_type = "startup",
+        default_value = 70,
+        minimum_value = 0,
+    },
+
+    ------------------------------
     {
         type = "string-setting",
         name = "heli-consumption",
@@ -33,8 +78,7 @@ data:extend({
         minimum_value = 0,
     },
     
-    ----------------------------------------------
-
+    ------------- Misc -------------------
     {
         type = "bool-setting",
         name = "heli-deactivate-inserters",

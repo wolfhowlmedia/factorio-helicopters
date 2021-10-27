@@ -8,6 +8,7 @@ require("prototypes.items.heli_rocket_launcher_item")
 require("prototypes.items.remote_items")
 require("prototypes.items.heli_gun")
 require("prototypes.items.heli_flamethrower")
+require("prototypes.items.heli_k2_anti_material_gun")
 
 require("prototypes.recipes.heli_recipe")
 require("prototypes.recipes.remote_recipes")
@@ -23,3 +24,7 @@ require("prototypes.style.style")
 require("prototypes.signals.signals")
 
 require("input.input")
+
+if alien_biomes_priority_tiles then
+    table.insert(alien_biomes_priority_tiles, "heli-pad-entity")
+end

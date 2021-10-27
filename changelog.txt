@@ -1,17 +1,30 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 27.10.2021
+  Changes:
+    - More startup configuration options for flamethrower, gun, and rocket launcher
+    - More Japanese translations thanks to Shelaf
+    - Add an optional K2 anti-material gun
+  Fixes:
+    - Fixed potential crash when using Alien Biomes in conjunction of Asphalt Roads
+    - Fixed future date in the changelog
+    - Uniformed date format in changelog
+  Additional credits:
+    - Modified K2 icon for Anti-material gun as a temporary placeholder
+---------------------------------------------------------------------------------------------------
 Version: 0.1.4
-Date: 6.04.2021
+Date: 06.04.2021
   Changes:
     - Fixed continued fuel consumption even after the engine shut down
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.3
-Date: 29.3.2021
+Date: 29.03.2021
   Changes:
     - Dedicated equipment grid (K2-compatible)
     - Don't land when following player setting from 1000101 (thanks!)
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.2
-Date: 1.12.2021
+Date: 01.12.2020
   Changes:
     - Fix crash caused by russian locale
 ---------------------------------------------------------------------------------------------------

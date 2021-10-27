@@ -16,7 +16,7 @@ data:extend({
             damage_modifier = settings.startup["heli-flamethrower-damage-modifier"].value,
             gun_barrel_length = 0.8,
             gun_center_shift = { 0, -1 },
-            range = 50,
+            range = settings.startup["heli-flamethrower-range"].value,
             min_range = 3,
             cyclic_sound =
             {
