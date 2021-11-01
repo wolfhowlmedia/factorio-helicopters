@@ -4,7 +4,7 @@ data:extend({
     name = "heli-pad-placement-entity",
     flags = {"placeable-neutral", "player-creation"},
     icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
-    icon_size = 32,
+    icon_size = 64,
     subgroup = "grass",
     order = "b[decorative]-k[stone-rock]-a[big]",
     collision_box = {{-3.5, -3.5}, {3.5, 3.5}},
@@ -52,13 +52,13 @@ data:extend({
     name = "heli-pad-entity",
     flags = {"placeable-neutral", "player-creation"},
     icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
-    icon_size = 32,
+    icon_size = 64,
     subgroup = "grass",
     order = "b[decorative]-k[stone-rock]-a[big]",
     collision_box = {{-3.5, -3.5}, {3.5, 3.5}},
     collision_mask = {},--{"object-layer"},
     selection_box = {{-2, -2}, {2, 2}},
-    
+
     minable =
     {
       mining_time = 2,

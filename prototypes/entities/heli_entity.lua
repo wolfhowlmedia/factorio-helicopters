@@ -13,7 +13,7 @@ data:extend({
 		type = "car",
 		name = "heli-placement-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "player-creation"},
 		has_belt_immunity = true,
 		minable = {mining_time = 1, result = "heli-item"},
@@ -29,7 +29,7 @@ data:extend({
 			effectivity = 0.5,
 			emissions = 0,
 			fuel_inventory_size = 0,
-			
+
 		},
 		consumption = "3MW",
 		braking_power = "1MW",
@@ -78,7 +78,7 @@ data:extend({
 							height_in_frames = 1,
 						},
 					}
-				},	
+				},
 			}
 		},
 	},
@@ -88,7 +88,7 @@ data:extend({
 		type = "car",
 		name = "heli-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "player-creation"},
 		has_belt_immunity = true,
 		minable = {mining_time = 1, result = "heli-item"},
@@ -97,6 +97,7 @@ data:extend({
 		dying_explosion = "medium-explosion",
 		selection_box = {{-1.8, -1.8}, {1.2, 3}},
 		collision_box = {{-1.8, -1.8}, {1.2, 3}},
+		alert_icon_shift = {-0.25, -0.5},
 		collision_mask = {},
 		energy_per_hit_point = 1,
 		effectivity = 0.4,
@@ -104,7 +105,7 @@ data:extend({
 			effectivity = 0.5,
 			emissions = 0.005,
 			fuel_inventory_size = fuel_slots,
-			
+
 		},
 		equipment_grid = "heli-equipment-grid",
 		consumption = settings.startup["heli-consumption"].value,
@@ -150,6 +151,18 @@ data:extend({
     	close_sound = { filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },
 	    guns = gun_slots,
 	    turret_rotation_speed = 1 / 60,
+	    minimap_representation = {
+	    	filename = "__HelicopterRevival__/graphics/icons/heli-minimap-representation.png",
+	    	flags = {"icon"},
+	    	size = {40, 40},
+	    	scale = 0.5
+	    },
+	    selected_minimap_representation = {
+	    	filename = "__HelicopterRevival__/graphics/icons/heli-minimap-representation-selected.png",
+	    	flags = {"icon"},
+	    	size = {40, 40},
+	    	scale = 0.5
+	    },
 	},
 
 
@@ -161,7 +174,7 @@ data:extend({
 		type = "car",
 		name = "heli-flying-collision-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
 		has_belt_immunity = true,
@@ -236,7 +249,7 @@ data:extend({
 		type = "car",
 		name = "heli-landed-collision-side-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
 		has_belt_immunity = true,
@@ -300,7 +313,7 @@ data:extend({
 		type = "car",
 		name = "heli-landed-collision-end-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		has_belt_immunity = true,
 		minable = {mining_time = 1, result = "heli-item"},
@@ -375,7 +388,7 @@ data:extend({
 		type = "car",
 		name = "heli-body-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
 		has_belt_immunity = true,
@@ -449,7 +462,7 @@ data:extend({
 		type = "car",
 		name = "heli-shadow-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
 		has_belt_immunity = true,
@@ -478,7 +491,7 @@ data:extend({
 					frame_count = 1,
 					draw_as_shadow = true,
 					direction_count = 64,
-					shift = {0, 0},
+					shift = {0.4, -0.5},
 					animation_speed = 8,
 					max_advance = 0.2,
 					stripes =
@@ -524,7 +537,7 @@ data:extend({
 		type = "car",
 		name = "heli-burner-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
 		has_belt_immunity = true,
@@ -618,7 +631,7 @@ data:extend({
 		type = "car",
 		name = "heli-floodlight-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
 		has_belt_immunity = true,

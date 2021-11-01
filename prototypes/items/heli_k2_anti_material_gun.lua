@@ -7,7 +7,7 @@ data:extend({
 	type = "gun",
 	name = "heli-k2-anti-material-gun",
 	icon = "__HelicopterRevival__/graphics/icons/anti-material-rifle.png",
-	icon_size = 32,
+	icon_size = 64,
 	flags = {},
 	subgroup = "gun",
 	order = "d[rocket-launcher]",

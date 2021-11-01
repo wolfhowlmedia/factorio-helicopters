@@ -3,7 +3,7 @@ data:extend({
 		type = "car",
 		name = "rotor-entity-_-",
 		icon = "__base__/graphics/icons/car.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
 		has_belt_immunity = true,
@@ -57,7 +57,7 @@ data:extend({
 							height_in_frames = 4,
 						},
 					}
-				},		
+				},
 			}
 		},
 		inventory_size = 0,
@@ -69,7 +69,7 @@ data:extend({
 		type = "car",
 		name = "rotor-shadow-entity-_-",
 		icon = "__base__/graphics/icons/car.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		minable = {mining_time = 1, result = "heli-item"},
 		has_belt_immunity = true,
@@ -98,7 +98,7 @@ data:extend({
 					frame_count = 1,
 					draw_as_shadow = true,
 					direction_count = 64,
-					shift = {0, -0.1},
+					shift = {0.4, -0.5},
 					animation_speed = 8,
 					max_advance = 0.2,
 					stripes =

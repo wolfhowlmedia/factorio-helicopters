@@ -126,7 +126,7 @@ function OnTick(e)
 	checkAndTickInGlobal("helis")
 	checkAndTickInGlobal("remoteGuis")
 	checkAndTickInGlobal("heliControllers")
-	
+
 	OnTimerTick()
 end
 
@@ -143,7 +143,7 @@ function OnBuilt(e)
 		end
 
 	elseif ent.name == "heli-pad-placement-entity" then
-		local newPad = insertInGlobal("heliPads", heliPad.new(ent)) 
+		local newPad = insertInGlobal("heliPads", heliPad.new(ent))
 		callInGlobal("remoteGuis", "OnHeliPadBuilt", newPad)
 
 	elseif ent.type == "inserter" then
@@ -234,7 +234,7 @@ end
 
 function OnRemoteOpen(e)
 	local p = game.players[e.player_index]
-	
+
 	if playerHasEquipment(p, "heli-remote-equipment") then
 		toggleRemoteGui(p)
 	end
@@ -273,20 +273,20 @@ function OnGuiClick(e)
 
 	if name:match("^heli_") then
 		local p = game.players[e.player_index]
-		
+
 		if name == "heli_remote_btn" then
 			toggleRemoteGui(p)
-		
+
 		elseif gaugeGui.hasMyPrefix(name) then
 			local i = searchIndexInTable(global.gaugeGuis, p, "player")
 
 			if i then
 				global.gaugeGuis[i]:OnGuiClick(e)
 			end
-		
+
 		elseif remoteGui.hasMyPrefix(name) then
 			local i = searchIndexInTable(global.remoteGuis, p, "player")
-			
+
 			if i then
 				global.remoteGuis[i]:OnGuiClick(e)
 			end
@@ -300,7 +300,7 @@ function OnGuiTextChanged(e)
 	if name:match("^heli_") then
 		local p = game.players[e.player_index]
 		local i = searchIndexInTable(global.remoteGuis, p, "player")
-		
+
 		if i then
 			global.remoteGuis[i]:OnGuiTextChanged(e)
 		end
@@ -309,13 +309,13 @@ end
 
 function OnPlayerChangedForce(e)
 	local p = game.players[e.player_index]
-	
+
 	callInGlobal("remoteGuis", "OnPlayerChangedForce", p)
 end
 
 function OnPlayerDied(e)
 	local p = game.players[e.player_index]
-	
+
 	setRemoteBtn(p, false)
 
 	callInGlobal("remoteGuis", "OnPlayerDied", p)
