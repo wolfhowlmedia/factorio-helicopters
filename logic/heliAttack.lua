@@ -10,7 +10,7 @@ heliAttack =
 	engineReduction = 7.5,
 
 	fuelSlots = 5,
-			
+
 	new = function(placementEnt)
 		local baseEnt = placementEnt.surface.create_entity{name = "heli-entity-_-", force = placementEnt.force, position = placementEnt.position}
 
@@ -23,10 +23,10 @@ heliAttack =
 			rotorEntShadow = placementEnt.surface.create_entity{name = "rotor-shadow-entity-_-", force = game.forces.neutral, position = baseEnt.position},
 
 			burnerEnt = placementEnt.surface.create_entity{name = "heli-burner-entity-_-", force = game.forces.neutral, position = {x = baseEnt.position.x, y = baseEnt.position.y + 1.3}},
-		
+
 			floodlightEnt = placementEnt.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = baseEnt.position},
 		}
-		
+
 		return heliBase.new(placementEnt, baseEnt, childs, {__index = heliAttack})
 	end,
 }

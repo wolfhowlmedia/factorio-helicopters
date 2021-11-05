@@ -5,9 +5,10 @@ data:extend({
 		sprite =
 		{
 			filename = "__HelicopterRevival__/graphics/icons/heli-remote-equipment.png",
-			width = 64,
-			height = 64,
-			priority = "medium"
+			width = 128,
+			height = 128,
+			priority = "medium",
+			scale = 0.5,
 		},
 		shape =
 		{
