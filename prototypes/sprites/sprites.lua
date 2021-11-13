@@ -52,7 +52,7 @@ data:extend({
   {
     type = "sprite",
     name = "heli_search_icon",
-    filename = "__HelicopterRevival__/graphics/icons/search-icon.png",
+    filename = "__HelicopterRevival__/graphics/gui/search-icon.png",
     priority = "medium",
     width = 15,
     height = 15,

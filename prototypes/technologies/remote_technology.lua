@@ -2,7 +2,7 @@ data:extend({
   {
     type = "technology",
     name = "heli-remote-technology",
-    icon = "__HelicopterRevival__/graphics/icons/heli-remote-technology.png",
+    icon = "__HelicopterRevival__/graphics/technology/heli-remote-technology.png",
     icon_size = 256,
     effects =
     {
