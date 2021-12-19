@@ -1,14 +1,17 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.1.6
-Date: 01.11.2021
+Version: 0.2.0
+Date: 02.12.2021
+  Updated-by:
+    - snouz
   Changes:
-    - (snouz) New (hd) icons (technologies, items, equipment).
-    - (snouz) Shifting shadow to the right as helicopter rises (like other entities).
-    - (snouz) Added custom map icon.
-    - (snouz) New mod icon.
-    - (snouz) Helicopter is slightly more contrasted.
-    - (snouz) Centered alert icon.
-    - (snouz) Optimized PNG to gain space.
+    - HR version of the helicopter entity.
+    - New (hd) icons (technologies, items, equipment).
+    - Shifting shadow to the right as helicopter rises (like other entities).
+    - Added custom map icon.
+    - New mod icon.
+    - Centered alert icon.
+    - Fixed Helipad shadow.
+    - Optimized PNG to gain space.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.5
 Date: 27.10.2021

@@ -4,7 +4,7 @@ data:extend({
 		name = "heli-remote-equipment",
 		sprite =
 		{
-			filename = "__HelicopterRevival__/graphics/icons/heli-remote-equipment.png",
+			filename = "__HelicopterRevival__/graphics/equipment/heli-remote-equipment.png",
 			width = 128,
 			height = 128,
 			priority = "medium",
