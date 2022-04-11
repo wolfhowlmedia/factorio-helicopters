@@ -24,14 +24,14 @@ data:extend({
   {
     type = "custom-input",
     name = "heli-zaa-height-increase",
-    key_sequence = "Up",
+    key_sequence = "UP",
     consuming = "none"
   },
 
   {
     type = "custom-input",
     name = "heli-zab-height-decrease",
-    key_sequence = "Down",
+    key_sequence = "DOWN",
     consuming = "none"
   },
 

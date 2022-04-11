@@ -1,17 +1,20 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 02.12.2021
-  Updated-by:
-    - snouz
+  Fixes:
+    - Fixed default up / down keys (thanks to Keysivi / Pi-C from Discussion thread)
+    - Updated K2 anti-material sounds thanks to RafaelFuchs
+    - Fixed crash when attempting to load with newer version of Krastorio
+    - Bump K2 requirements to 2.2.20
   Changes:
-    - HR version of the helicopter entity.
-    - New (hd) icons (technologies, items, equipment).
-    - Shifting shadow to the right as helicopter rises (like other entities).
-    - Added custom map icon.
-    - New mod icon.
-    - Centered alert icon.
-    - Fixed Helipad shadow.
-    - Optimized PNG to gain space.
+    - snouz: HR version of the helicopter entity.
+    - snouz: New (hd) icons (technologies, items, equipment).
+    - snouz: Shifting shadow to the right as helicopter rises (like other entities).
+    - snouz: Added custom map icon.
+    - snouz: New mod icon.
+    - snouz: Centered alert icon.
+    - snouz: Fixed Helipad shadow.
+    - snouz: Optimized PNG to gain space.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.5
 Date: 27.10.2021
