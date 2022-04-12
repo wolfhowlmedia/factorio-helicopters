@@ -5,7 +5,7 @@ Date: 02.12.2021
     - Fixed default up / down keys (thanks to Keysivi / Pi-C from Discussion thread)
     - Updated K2 anti-material sounds thanks to RafaelFuchs
     - Fixed crash when attempting to load with newer version of Krastorio
-    - Bump K2 requirements to 2.2.20
+    - Bump optional K2 requirements to 1.2.7 due to assets splitting into its own mod...
   Changes:
     - snouz: HR version of the helicopter entity.
     - snouz: New (hd) icons (technologies, items, equipment).
