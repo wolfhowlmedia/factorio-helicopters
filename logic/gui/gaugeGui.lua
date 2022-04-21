@@ -87,7 +87,9 @@ gaugeGui =
 			self.guiElems.root.destroy()
 		end
 
-		self.heli:removeGaugeGui(self)
+		if self.heli.removeGaugeGui then
+			self.heli:removeGaugeGui(self)
+		end
 
 		removeInGlobal("gaugeGuis", self)
 	end,

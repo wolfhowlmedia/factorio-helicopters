@@ -1,6 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 21.04.2021
+  Fixes:
+    - Fixed a potential crash when unloading GaugeGUI
+    - Restore shadow positioning when auto-landing
+---------------------------------------------------------------------------------------------------
 Version: 0.2.0
-Date: 02.12.2021
+Date: 13.04.2021
   Fixes:
     - Fixed default up / down keys (thanks to Keysivi / Pi-C from Discussion thread)
     - Updated K2 anti-material sounds thanks to RafaelFuchs

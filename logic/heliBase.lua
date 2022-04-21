@@ -1008,8 +1008,8 @@ heliBase = {
 		self.childs.bodyEnt.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.bodyOffset - self.curBobbing})
 		self.childs.rotorEnt.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.rotorOffset - self.curBobbing})
 
-		self.childs.rotorEntShadow.teleport({x = basePos.x - vec[1] + self.height, y = basePos.y - vec[2] + self.height})
-		self.childs.bodyEntShadow.teleport({x = basePos.x - vec[1] + self.height, y = basePos.y - vec[2] + self.height})
+		self.childs.rotorEntShadow.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] +self.height})
+		self.childs.bodyEntShadow.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.height})
 
 		if self.childs.floodlightEnt then
 			local lightOffsetVec = math3d.vector2.mul(baseVec, self.height)
