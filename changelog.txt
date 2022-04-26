@@ -1,18 +1,26 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: ??.??.????
+  Fixes:
+    - Changelog date / credit fixes
+  Changes:
+    - Add support for vtk-armor-plating
+---------------------------------------------------------------------------------------------------
 Version: 0.2.1
-Date: 21.04.2021
+Date: 21.04.2022
   Fixes:
     - Fixed a potential crash when unloading GaugeGUI
     - Restore shadow positioning when auto-landing
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
-Date: 13.04.2021
+Date: 13.04.2022
   Fixes:
     - Fixed default up / down keys (thanks to Keysivi / Pi-C from Discussion thread)
     - Updated K2 anti-material sounds thanks to RafaelFuchs
     - Fixed crash when attempting to load with newer version of Krastorio
     - Bump optional K2 requirements to 1.2.7 due to assets splitting into its own mod...
   Changes:
+    - shelaf: Update japanese locale 
     - snouz: HR version of the helicopter entity.
     - snouz: New (hd) icons (technologies, items, equipment).
     - snouz: Shifting shadow to the right as helicopter rises (like other entities).

@@ -39,6 +39,7 @@ data:extend({
 
     rotation_speed = 0.005,
     inventory_size = 0,
+    equipment_grid = nil,
 
     animation = {
       layers = {
@@ -105,9 +106,7 @@ data:extend({
       effectivity = 0.5,
       emissions = 0.005,
       fuel_inventory_size = fuel_slots,
-
     },
-    equipment_grid = "heli-equipment-grid",
     consumption = settings.startup["heli-consumption"].value,
     braking_power = settings.startup["heli-braking-power"].value,
     friction = 0.002,
@@ -117,6 +116,7 @@ data:extend({
     rotation_speed = 0.005,
     tank_driving = true,
     inventory_size = inventory_slots,
+    equipment_grid = "heli-equipment-grid",
 
     animation = {
       layers = {
