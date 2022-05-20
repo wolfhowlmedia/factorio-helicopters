@@ -32,7 +32,7 @@ data:extend({
           {
             {
               filename = "__base__/sound/fight/tank-cannon.ogg",
-              volume = 1.0
+              volume = 0.45
             }
           },
         },
