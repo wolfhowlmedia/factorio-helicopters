@@ -3,6 +3,8 @@ Version: 0.2.2
 Date: ??.??.????
   Fixes:
     - Changelog date / credit fixes
+    - Don't enable anti-material-gun if the ammo for it is missing (K2)
+    - LEFD: Lower Volume of heli gun (K2)
   Changes:
     - Add support for vtk-armor-plating
 ---------------------------------------------------------------------------------------------------
