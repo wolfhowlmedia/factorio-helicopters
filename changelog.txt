@@ -3,9 +3,12 @@ Version: 0.2.2
 Date: ??.??.????
   Fixes:
     - Changelog date / credit fixes
-    - Don't enable anti-material-gun if the ammo for it is missing (K2)
+    - Don't enable anti-material-gun if the ammo for it is missing or disabled in config (K2)
+    - Don't crash if the tile under the helicopter was removed
     - LEFD: Lower Volume of heli gun (K2)
+    - AirwaveRaptor: When loading HelicopterRevival with Bob's Vehicle Equipment mod and Vehicle Grid, the helicopter only accepts armor equipment, instead of taking vehicle equipment like it's probably supposed to.
   Changes:
+    - Add support for SeaBlock's fuel arrangement
     - Add support for vtk-armor-plating
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.1

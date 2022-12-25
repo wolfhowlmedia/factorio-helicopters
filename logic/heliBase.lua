@@ -454,8 +454,11 @@ heliBase = {
 	end,
 
 	OnTick = function(self)
-		if not self.baseEnt.valid then
-			self:destroy()
+		if not self.baseEnt.valid or (self.childs.collisionEnt and not self.childs.collisionEnt.valid) then
+			self:destroy() --Destroy child entities first
+			if self.baseEnt and self.baseEnt.valid then
+				self.baseEnt.destroy() --Re-check if the base entity is also valid, and destroy that as well
+			end
 			return
 		end
 
