@@ -398,6 +398,8 @@ heliBase = {
 		for k,v in pairs(obj.childs) do
 			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+			elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+				v.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
 			else
 				v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 			end
@@ -763,6 +765,8 @@ heliBase = {
 		if self.childs.collisionEnt then
 			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+			elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
 			else
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 			end
@@ -776,6 +780,8 @@ heliBase = {
 				self.childs.floodlightEnt = self.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = self.baseEnt.position}
 				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+				elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+					self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
 				else
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 				end
@@ -844,6 +850,8 @@ heliBase = {
 
 		if game.active_mods["Krastorio2"] then
 			remainingFuel = remainingFuel * 16
+		elseif game.active_mods["SeaBlock"] then
+			remainingFuel = remainingFuel * 9
 		end
 
 		local burner = self.baseEnt.burner
@@ -909,6 +917,8 @@ heliBase = {
 			if self.childs.burnerEnt.burner.remaining_burning_fuel < 1000 then
 				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 1})
+				elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 1})
 				else
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
 				end
