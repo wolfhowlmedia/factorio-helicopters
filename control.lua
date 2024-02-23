@@ -390,6 +390,19 @@ function OnRuntimeSettingsChanged(e)
   end
 end
 
+-- raised when a helicopter is damaged
+function OnHeliDamaged(e)
+  local ent = e.entity
+
+  if ent.valid then
+    local entName = ent.name
+
+    if entName == "heli-entity-_-" then
+      getHeliFromBaseEntity(ent):OnDamaged(e)
+    end
+  end
+end
+
 script.on_event(defines.events.on_built_entity, OnBuilt)
 script.on_event(defines.events.on_robot_built_entity, OnBuilt)
 
@@ -400,6 +413,9 @@ script.on_event(defines.events.on_tick, OnTick)
 script.on_event(defines.events.on_player_mined_entity, OnRemoved)
 script.on_event(defines.events.on_robot_mined_entity, OnRemoved)
 script.on_event(defines.events.on_entity_died, OnRemoved)
+
+script.on_event(defines.events.on_entity_damaged, OnHeliDamaged)
+script.set_event_filter(defines.events.on_entity_damaged, {{filter = "name", name = "heli-entity-_-"}})
 
 script.on_event("heli-up", OnHeliUp)
 script.on_event("heli-down", OnHeliDown)
