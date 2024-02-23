@@ -100,14 +100,14 @@ data:extend({
 gauge_pointers = {}
 
 for i = 0, 127 do
-	table.insert(gauge_pointers, {
-		type = "sprite",
+  table.insert(gauge_pointers, {
+    type = "sprite",
     name = "heli_gauge_pointer_" .. tostring(i),
     filename = "__HelicopterRevival__/graphics/gui/gauges/pointers/pointer-" .. tostring(i) .. ".png",
     priority = "medium",
     width = 128,
     height = 128,
-	})
+  })
 end
 
 data:extend(gauge_pointers)
