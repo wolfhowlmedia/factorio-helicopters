@@ -56,7 +56,27 @@ data:extend({
         default_value = 70,
         minimum_value = 0,
     },
-
+    ------------------------------
+    -- Take damage settings
+    ------------------------------
+    {
+        type = "bool-setting",
+        name = "heli-disable-biters-damage",
+        setting_type = "runtime-global",
+        default_value = true,
+    },
+    {
+        type = "bool-setting",
+        name = "heli-disable-acid-splash-damage",
+        setting_type = "runtime-global",
+        default_value = true,
+    },
+    {
+        type = "bool-setting",
+        name = "heli-disable-direct-spitter-damage",
+        setting_type = "runtime-global",
+        default_value = false,
+    },
     ------------------------------
     {
         type = "string-setting",
