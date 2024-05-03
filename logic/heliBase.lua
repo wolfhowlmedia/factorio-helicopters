@@ -398,6 +398,8 @@ heliBase = {
 		for k,v in pairs(obj.childs) do
 			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+			elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+				v.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
 			else
 				-- v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 				v.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
@@ -453,8 +455,11 @@ heliBase = {
 	end,
 
 	OnTick = function(self)
-		if not self.baseEnt.valid then
-			self:destroy()
+		if not self.baseEnt.valid or (self.childs.collisionEnt and not self.childs.collisionEnt.valid) then
+			self:destroy() --Destroy child entities first
+			if self.baseEnt and self.baseEnt.valid then
+				self.baseEnt.destroy() --Re-check if the base entity is also valid, and destroy that as well
+			end
 			return
 		end
 
@@ -764,6 +769,8 @@ heliBase = {
 		if self.childs.collisionEnt then
 			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+			elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
 			else
 				-- self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
@@ -778,6 +785,8 @@ heliBase = {
 				self.childs.floodlightEnt = self.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = self.baseEnt.position}
 				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
+				elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+					self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
 				else
 					-- self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
@@ -847,6 +856,8 @@ heliBase = {
 
 		if game.active_mods["Krastorio2"] then
 			remainingFuel = remainingFuel * 16
+		elseif game.active_mods["SeaBlock"] then
+			remainingFuel = remainingFuel * 9
 		end
 
 		local burner = self.baseEnt.burner
@@ -912,6 +923,8 @@ heliBase = {
 			if self.childs.burnerEnt.burner.remaining_burning_fuel < 1000 then
 				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 1})
+				elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 1})
 				else
 					-- self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 1})
@@ -1012,8 +1025,8 @@ heliBase = {
 		self.childs.bodyEnt.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.bodyOffset - self.curBobbing})
 		self.childs.rotorEnt.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.rotorOffset - self.curBobbing})
 
-		self.childs.rotorEntShadow.teleport({x = basePos.x - vec[1] + self.height, y = basePos.y - vec[2] + self.height})
-		self.childs.bodyEntShadow.teleport({x = basePos.x - vec[1] + self.height, y = basePos.y - vec[2] + self.height})
+		self.childs.rotorEntShadow.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] +self.height})
+		self.childs.bodyEntShadow.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.height})
 
 		if self.childs.floodlightEnt then
 			local lightOffsetVec = math3d.vector2.mul(baseVec, self.height)

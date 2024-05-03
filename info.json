@@ -1,12 +1,12 @@
  {
      "name": "HelicopterRevival",
-     "version": "0.2.0",
+     "version": "0.2.2",
      "title": "HelicopterRevival",
-     "author": "Kumpu, blueh00f, twilightthepony, HR contribs",
+     "author": "twilightthepony",
      "factorio_version": "1.1",
      "dependencies": [
          "base >= 1.1",
          "(?) Krastorio2 >= 1.2.7"
      ],
-     "description": "Adds a fully animated attack helicopter to the game. Ideal for getting from A to B quickly, exploring the map, building islands and nuking biters from the sky. Now 84% less buggier! Forked from Kumpu for updates beyond Factorio 0.17."
+     "description": "Adds a fully animated attack helicopter to the game. Ideal for getting from A to B quickly, exploring the map, building islands and nuking biters from the sky. Now 84% less buggier! Forked from Kumpu with updates beyond Factorio 0.17."
  }

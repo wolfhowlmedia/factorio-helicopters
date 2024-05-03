@@ -1,4 +1,4 @@
-if not mods["Krastorio2"] then
+if not mods["Krastorio2"] or not data.raw["ammo-category"]["anti-material-rifle-ammo"] then
     return
 end
 

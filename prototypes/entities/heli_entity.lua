@@ -3,7 +3,7 @@ local inventory_slots = 80
 
 gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower"}
 
-if mods["Krastorio2"] then
+if mods["Krastorio2"] and data.raw["ammo-category"]["anti-material-rifle-ammo"] then
   -- Override  gun slots for K2
   gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower", "heli-k2-anti-material-gun"}
 end
@@ -39,6 +39,7 @@ data:extend({
 
     rotation_speed = 0.005,
     inventory_size = 0,
+    equipment_grid = nil,
 
     animation = {
       layers = {
@@ -105,9 +106,7 @@ data:extend({
       effectivity = 0.5,
       emissions = 0.005,
       fuel_inventory_size = fuel_slots,
-
     },
-    equipment_grid = "heli-equipment-grid",
     consumption = settings.startup["heli-consumption"].value,
     braking_power = settings.startup["heli-braking-power"].value,
     friction = 0.002,
@@ -117,6 +116,7 @@ data:extend({
     rotation_speed = 0.005,
     tank_driving = true,
     inventory_size = inventory_slots,
+    equipment_grid = "heli-equipment-grid",
 
     animation = {
       layers = {

@@ -1,12 +1,31 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 25.12.2022
+  Fixes:
+    - Changelog date / credit fixes
+    - Don't enable anti-material-gun if the ammo for it is missing or disabled in config (K2)
+    - Don't crash if the tile under the helicopter was removed
+    - LEFD: Lower Volume of heli gun (K2)
+    - AirwaveRaptor: When loading HelicopterRevival with Bob's Vehicle Equipment mod and Vehicle Grid, the helicopter only accepts armor equipment, instead of taking vehicle equipment like it's probably supposed to.
+  Changes:
+    - Add support for SeaBlock's fuel arrangement
+    - Add support for vtk-armor-plating
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 21.04.2022
+  Fixes:
+    - Fixed a potential crash when unloading GaugeGUI
+    - Restore shadow positioning when auto-landing
+---------------------------------------------------------------------------------------------------
 Version: 0.2.0
-Date: 02.12.2021
+Date: 13.04.2022
   Fixes:
     - Fixed default up / down keys (thanks to Keysivi / Pi-C from Discussion thread)
     - Updated K2 anti-material sounds thanks to RafaelFuchs
     - Fixed crash when attempting to load with newer version of Krastorio
     - Bump optional K2 requirements to 1.2.7 due to assets splitting into its own mod...
   Changes:
+    - shelaf: Update japanese locale 
     - snouz: HR version of the helicopter entity.
     - snouz: New (hd) icons (technologies, items, equipment).
     - snouz: Shifting shadow to the right as helicopter rises (like other entities).
