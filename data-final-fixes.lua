@@ -36,4 +36,3 @@ if ir3car and ir3car.burner then
 		-- data.raw["heli-item"].burner.burnt_inventory_size = ir3car.burner.burnt_inventory_size
 	end
 end
->>>>>>> Stashed changes
