@@ -399,7 +399,8 @@ heliBase = {
 			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 			else
-				v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+				-- v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+				v.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 			end
 			v.destructible = false
 		end
@@ -764,7 +765,8 @@ heliBase = {
 			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 			else
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+				-- self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 			end
 			self.childs.collisionEnt.operable = false
 		end
@@ -777,7 +779,8 @@ heliBase = {
 				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 				else
-					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+					-- self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 				end
 			end
 			self.childs.floodlightEnt.orientation = self.baseEnt.orientation
@@ -910,7 +913,8 @@ heliBase = {
 				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 1})
 				else
-					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
+					-- self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
+					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 1})
 				end
 			end
 		end
