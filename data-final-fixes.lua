@@ -12,6 +12,23 @@ if mods["VehicleGrid"] then
 	end
 end
 
+-- VTK armor
 if mods["vtk-armor-plating"] then
 	table.insert(data.raw["equipment-grid"]["heli-equipment-grid"].equipment_categories, "vtk-armor-plating")
-  end
+end
+
+-- data.raw["equipment-grid"]["heli-equipment-grid"].equipment_categories = data.raw["equipment-grid"]["kr-car-grid"].equipment_categories
+if mods["IndustrialRevolution3"] then
+	local ir3car = data.raw["car"]["car"]
+	if ir3car and ir3car.burner then
+		local heli_entities = {"heli-placement-entity-_-", "heli-entity-_-", "heli-flying-collision-entity-_-",
+							"heli-landed-collision-side-entity-_-", "heli-landed-collision-end-entity-_-",
+							"heli-body-entity-_-", "heli-shadow-entity-_-", "heli-burner-entity-_-", "heli-floodlight-entity-_-",
+							"rotor-entity-_-", "rotor-shadow-entity-_-"}
+		for _, heli_entity in ipairs(heli_entities) do
+			data.raw["car"][heli_entity].burner.fuel_category = ir3car.burner.fuel_category
+			data.raw["car"][heli_entity].burner.fuel_categories = ir3car.burner.fuel_categories
+			data.raw["car"][heli_entity].burner.burnt_inventory_size = ir3car.burner.burnt_inventory_size
+		end
+	end
+end
