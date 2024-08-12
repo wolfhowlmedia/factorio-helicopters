@@ -1,11 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.3
-Date: ??.??.????
+Date: 12.08.2024
   Changes:
     - Add support IR3's fuel arrangement
     - umanamente: Option to ignore biter's annoyances during the flight
     - LUISDASARTIMANHAS: Brazilian / Portugese translations
-
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.2
 Date: 25.12.2022
