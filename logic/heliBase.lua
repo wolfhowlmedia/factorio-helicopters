@@ -400,9 +400,10 @@ heliBase = {
 				v.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 			elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			else
-				-- v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+			elseif game.active_mods["IndustrialRevolution3"] then --IR3 workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
+			else
+				v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 			end
 			v.destructible = false
 		end
@@ -844,9 +845,10 @@ heliBase = {
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 			elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			else
-				-- self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+			elseif game.active_mods["IndustrialRevolution3"] then --IR3 workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
+			else
+				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 			end
 			self.childs.collisionEnt.operable = false
 		end
@@ -860,9 +862,10 @@ heliBase = {
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 				elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
 					self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-				else
-					-- self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+				elseif game.active_mods["IndustrialRevolution3"] then --IR3 workaround
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
+				else
+					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 				end
 			end
 			self.childs.floodlightEnt.orientation = self.baseEnt.orientation
@@ -998,9 +1001,10 @@ heliBase = {
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 1})
 				elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 1})
-				else
-					-- self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
+				elseif game.active_mods["IndustrialRevolution3"] then --IR3 workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 1})
+				else
+					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
 				end
 			end
 		end
