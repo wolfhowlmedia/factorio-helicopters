@@ -91,6 +91,7 @@ data:extend({
     icon = "__HelicopterRevival__/graphics/icons/heli.png",
     icon_size = 64,
     flags = {"placeable-off-grid", "player-creation"},
+    trigger_target_mask = { "common" },
     has_belt_immunity = true,
     minable = {mining_time = 1, result = "heli-item"},
     max_health = 2500,
