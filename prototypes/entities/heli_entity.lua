@@ -91,6 +91,8 @@ data:extend({
     icon = "__HelicopterRevival__/graphics/icons/heli.png",
     icon_size = 64,
     flags = {"placeable-off-grid", "player-creation"},
+    -- The default for "car" type includes "ground-unit",
+    -- which causes acid puddle DOT moving over a puddle.
     trigger_target_mask = { "common" },
     has_belt_immunity = true,
     minable = {mining_time = 1, result = "heli-item"},
