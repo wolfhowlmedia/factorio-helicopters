@@ -551,16 +551,8 @@ heliBase = {
 					-- unit doesn't have attack_parameters, that is strange          
 				end
 		else
-			-- not a unit, could be an acid puddle
-			if string.find(cause.name, "acid-splash-fire", 1, true) then
-				-- stepped on an acid puddle
-				if settings.global["heli-disable-acid-splash-damage"].value then
-					cancelDamage = true
-				end
-	        else
-				-- unknown entity, which is not a unit
-				-- game.print("NOT UNIT ("..damage_type..") - Heli damaged by: " .. cause.name .. " (type: " .. cause.type .. ")" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
-			end
+			-- unknown entity, which is not a unit
+			-- game.print("NOT UNIT ("..damage_type..") - Heli damaged by: " .. cause.name .. " (type: " .. cause.type .. ")" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
 		end
     else
 		if damage_type == "acid" then

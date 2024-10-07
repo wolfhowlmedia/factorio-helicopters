@@ -67,12 +67,6 @@ data:extend({
     },
     {
         type = "bool-setting",
-        name = "heli-disable-acid-splash-damage",
-        setting_type = "runtime-global",
-        default_value = true,
-    },
-    {
-        type = "bool-setting",
         name = "heli-disable-direct-spitter-damage",
         setting_type = "runtime-global",
         default_value = false,
