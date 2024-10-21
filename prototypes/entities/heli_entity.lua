@@ -22,14 +22,16 @@ data:extend({
     dying_explosion = "medium-explosion",
     selection_box = {{-1.5, -1.8}, {0.9, 3}},
     collision_box = {{-1.5, -1.8}, {0.9, 3}},
-    collision_mask = {"object-layer", "water-tile", "player-layer"},
+    -- collision_mask = {layers = {"object-layer", "water-tile", "player-layer"}},
     energy_per_hit_point = 1,
     effectivity = 0.3,
-    burner = {
+    energy_source = {
+      type = "burner",
+      consumption = "3MW",
+      braking_power = "1MW",
       effectivity = 0.5,
       emissions = 0,
       fuel_inventory_size = 0,
-
     },
     consumption = "3MW",
     braking_power = "1MW",
@@ -99,10 +101,11 @@ data:extend({
     selection_box = {{-1.8, -1.8}, {1.2, 3}},
     collision_box = {{-1.8, -1.8}, {1.2, 3}},
     alert_icon_shift = {-0.25, -0.5},
-    collision_mask = {},
+    -- collision_mask = {},
     energy_per_hit_point = 1,
     effectivity = 0.4,
-    burner = {
+    energy_source = {
+      type = "burner",
       effectivity = 0.5,
       emissions = 0.005,
       fuel_inventory_size = fuel_slots,
@@ -116,7 +119,7 @@ data:extend({
     rotation_speed = 0.005,
     tank_driving = true,
     inventory_size = inventory_slots,
-    equipment_grid = "heli-equipment-grid",
+    -- equipment_grid = "heli-equipment-grid",
 
     animation = {
       layers = {
@@ -184,7 +187,8 @@ data:extend({
     collision_box = {{-1.8, -0.2}, {1.2, 0.2}},
     energy_per_hit_point = 1,
     effectivity = 0.3,
-    burner = {
+    energy_source = {
+      type = "burner",
       effectivity = 0.5,
       emissions = 0,
       fuel_inventory_size = 1,
@@ -250,7 +254,8 @@ data:extend({
     collision_box = {{-0.1, -2.4}, {0.1, 2.4}}, --{{-0.1, -1.8}, {0.1, 3}},
     energy_per_hit_point = 1,
     effectivity = 0.3,
-    burner = {
+    energy_source = {
+      type = "burner",
       effectivity = 0.5,
       emissions = 0,
       fuel_inventory_size = 1,
@@ -314,7 +319,8 @@ data:extend({
     collision_box = {{-1.5, -0.1}, {1.5, 0.1}}, --{{-1.8, -0.1}, {1.2, 0.1}} --{{-1.8, -1.8}, {1.2, 3}}
     energy_per_hit_point = 1,
     effectivity = 0.3,
-    burner = {
+    energy_source = {
+      type = "burner",
       effectivity = 0.5,
       emissions = 0,
       fuel_inventory_size = 1,
@@ -387,11 +393,12 @@ data:extend({
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
-    collision_mask = {},
+    -- collision_mask = {},
     energy_per_hit_point = 1,
     effectivity = 0.5,
     braking_power = "100kW",
-    burner = {
+    energy_source = {
+      type = "burner",
       effectivity = 1,
       emissions = 0,
       fuel_inventory_size = 1,
@@ -495,11 +502,12 @@ data:extend({
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
-    collision_mask = {},
+    -- collision_mask = {},
     energy_per_hit_point = 1,
     effectivity = 0.5,
     braking_power = "100kW",
-    burner = {
+    energy_source = {
+      type = "burner",
       effectivity = 1,
       emissions = 0,
       fuel_inventory_size = 1,
@@ -605,10 +613,11 @@ data:extend({
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
-    collision_mask = {},
+    -- collision_mask = {},
     energy_per_hit_point = 1,
     effectivity = 0.01,
-    burner = {
+    energy_source = {
+      type = "burner",
       effectivity = 0.01,
       emissions = 0.002,
       fuel_inventory_size = 1,
@@ -699,10 +708,11 @@ data:extend({
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
-    collision_mask = {},
+    -- collision_mask = {},
     energy_per_hit_point = 1,
     effectivity = 0.3,
-    burner = {
+    energy_source = {
+      type = "burner",
       effectivity = 0.5,
       emissions = 0,
       fuel_inventory_size = 1,

@@ -22,8 +22,8 @@ function playerIsInHeli(p)
 end
 
 function OnLoad(e)
-	if global.helis then
-		for _, heli in pairs(global.helis) do
+	if storage.helis then
+		for _, heli in pairs(storage.helis) do
 			if not heli.type or heli.type == "heliAttack" then
 				setmetatable(heli, {__index = heliAttack})
 			end
@@ -34,8 +34,8 @@ function OnLoad(e)
 	setMetatablesInGlobal("heliControllers", {__index = heliController})
 
 	--restore gui metatables
-	if global.remoteGuis then
-		for _,remotegui in pairs(global.remoteGuis) do
+	if storage.remoteGuis then
+		for _,remotegui in pairs(storage.remoteGuis) do
 			for _,gui in pairs(remotegui.guis) do
 				if gui.prefix then
 					local n = string.gsub(gui.prefix, "heli_(%a+)_.*", "%1")
@@ -53,8 +53,8 @@ function OnLoad(e)
 end
 
 function OnConfigChanged(e)
-	if global.helis then
-		for k, curHeli in pairs(global.helis) do
+	if storage.helis then
+		for k, curHeli in pairs(storage.helis) do
 			if not curHeli.curState then
 				if curHeli.goUp then
 					curHeli:changeState(curHeli.engineStarting)
@@ -83,8 +83,8 @@ function OnConfigChanged(e)
 		end
 	end
 
-	if global.heliPads then
-		for k, curPad in pairs(global.heliPads) do
+	if storage.heliPads then
+		for k, curPad in pairs(storage.heliPads) do
 			if not curPad.surface then
 				curPad.surface = curPad.baseEnt.surface
 			end
@@ -102,8 +102,8 @@ function OnConfigChanged(e)
 		reSetGaugeGui(p)
 	end
 
-	if global.heliControllers then
-		for k, curController in pairs(global.heliControllers) do
+	if storage.heliControllers then
+		for k, curController in pairs(storage.heliControllers) do
 			if not curController.heli.remoteController then
 				curController.heli.remoteController = curController
 			end
@@ -111,8 +111,8 @@ function OnConfigChanged(e)
 	end
 
 	--fixing left open guis when saved
-	if global.remoteGuis then
-		global.remoteGuis = {}
+	if storage.remoteGuis then
+		storage.remoteGuis = {}
 		for _,p in pairs(game.players) do
 			local flow = mod_gui.get_frame_flow(p)
 			if flow["heli_heliSelectionGui_rootFrame"] then
@@ -131,13 +131,13 @@ function OnTick(e)
 end
 
 function OnBuilt(e)
-	local ent = e.created_entity
+	local ent = e.entity
 
 	if ent.name == "heli-placement-entity-_-" then
 		local newHeli = insertInGlobal("helis", heliAttack.new(ent))
 
-		if global.remoteGuis then
-			for _,rg in pairs(global.remoteGuis) do
+		if storage.remoteGuis then
+			for _,rg in pairs(storage.remoteGuis) do
 				rg:OnHeliBuilt(newHeli)
 			end
 		end
@@ -158,13 +158,13 @@ function OnRemoved(e)
 		local entName = ent.name
 
 		if string.find(heliEntityNames, entName .. ",", 1, true) then
-			for i,val in ipairs(global.helis) do
+			for i,val in ipairs(storage.helis) do
 				if val:isBaseOrChild(ent) then
 					val:destroy()
-					table.remove(global.helis, i)
+					table.remove(storage.helis, i)
 
-					if global.remoteGuis then
-						for _,rg in pairs(global.remoteGuis) do
+					if storage.remoteGuis then
+						for _,rg in pairs(storage.remoteGuis) do
 							rg:OnHeliRemoved(val)
 						end
 					end
@@ -175,10 +175,10 @@ function OnRemoved(e)
 		if entName == "heli-pad-entity" then
 			local i = getHeliPadIndexFromBaseEntity(ent)
 			if i then
-				global.heliPads[i]:destroy()
+				storage.heliPads[i]:destroy()
 
-				callInGlobal("remoteGuis", "OnHeliPadRemoved", global.heliPads[i])
-				table.remove(global.heliPads, i)
+				callInGlobal("remoteGuis", "OnHeliPadRemoved", storage.heliPads[i])
+				table.remove(storage.heliPads, i)
 			end
 		end
 	end
@@ -278,17 +278,17 @@ function OnGuiClick(e)
 			toggleRemoteGui(p)
 
 		elseif gaugeGui.hasMyPrefix(name) then
-			local i = searchIndexInTable(global.gaugeGuis, p, "player")
+			local i = searchIndexInTable(storage.gaugeGuis, p, "player")
 
 			if i then
-				global.gaugeGuis[i]:OnGuiClick(e)
+				storage.gaugeGuis[i]:OnGuiClick(e)
 			end
 
 		elseif remoteGui.hasMyPrefix(name) then
-			local i = searchIndexInTable(global.remoteGuis, p, "player")
+			local i = searchIndexInTable(storage.remoteGuis, p, "player")
 
 			if i then
-				global.remoteGuis[i]:OnGuiClick(e)
+				storage.remoteGuis[i]:OnGuiClick(e)
 			end
 		end
 	end
@@ -299,10 +299,10 @@ function OnGuiTextChanged(e)
 
 	if name:match("^heli_") then
 		local p = game.players[e.player_index]
-		local i = searchIndexInTable(global.remoteGuis, p, "player")
+		local i = searchIndexInTable(storage.remoteGuis, p, "player")
 
 		if i then
-			global.remoteGuis[i]:OnGuiTextChanged(e)
+			storage.remoteGuis[i]:OnGuiTextChanged(e)
 		end
 	end
 end
@@ -323,11 +323,11 @@ end
 
 function OnPlayerLeft(e)
 	local p = game.players[e.player_index]
-	local i = searchIndexInTable(global.remoteGuis, p, "player")
+	local i = searchIndexInTable(storage.remoteGuis, p, "player")
 
 	if i then
-		global.remoteGuis[i]:destroy()
-		table.remove(global.remoteGuis, i)
+		storage.remoteGuis[i]:destroy()
+		table.remove(storage.remoteGuis, i)
 	end
 
 	callInGlobal("remoteGuis", "OnPlayerLeft", p)
@@ -346,7 +346,7 @@ function OnDrivingStateChanged(e)
 
 		if string.find(heliEntityNames, entName .. ",", 1, true)  then
 			local heli
-			for i, curHeli in ipairs(global.helis) do
+			for i, curHeli in ipairs(storage.helis) do
 				if curHeli:isBaseOrChild(ent) then
 					heli = curHeli
 					break

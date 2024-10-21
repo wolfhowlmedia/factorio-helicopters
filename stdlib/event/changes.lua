@@ -36,7 +36,7 @@ end
 --[Mark all migrations as complete during Init]--
 function Changes.on_init()
     local list = {}
-    local cur_version = game.active_mods[script.mod_name]
+    local cur_version = script.active_mods[script.mod_name]
     for ver in pairs(Changes.versions) do
         list[ver] = cur_version
     end

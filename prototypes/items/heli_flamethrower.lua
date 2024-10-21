@@ -4,7 +4,7 @@ data:extend({
         name = "heli-flamethrower",
         icon = "__base__/graphics/icons/flamethrower.png",
         icon_size = 64,
-        flags = {"hidden"},
+        flags = {},
         subgroup = "gun",
         order = "a[basic-clips]-b[tank-machine-gun]-c[flamethrower-ammo]",
         attack_parameters =

@@ -83,46 +83,46 @@ function searchInTable(table, obj, field)
 end
 
 function setMetatablesInGlobal(name, mt)
-	if global[name] then
-		for k, v in pairs(global[name]) do
+	if storage[name] then
+		for k, v in pairs(storage[name]) do
 			setmetatable(v, mt)
 		end
 	end
 end
 
 function checkAndTickInGlobal(name)
-	if global[name] then
-		for i = #global[name], 1, -1 do
-			local v = global[name][i]
+	if storage[name] then
+		for i = #storage[name], 1, -1 do
+			local v = storage[name][i]
 
 			if v.valid then
 				v:OnTick()
 			else
-				table.remove(global[name], i)
+				table.remove(storage[name], i)
 			end
 		end
 	end
 end
 
 function callInGlobal(gName, kName, ...)
-	if global[gName] then
-		for k,v in pairs(global[gName]) do
+	if storage[gName] then
+		for k,v in pairs(storage[gName]) do
 			if v[kName] then v[kName](v, ...) end
 		end
 	end
 end
 
 function insertInGlobal(gName, val)
-	if not global[gName] then global[gName] = {} end
-	table.insert(global[gName], val)
+	if not storage[gName] then storage[gName] = {} end
+	table.insert(storage[gName], val)
 	return val
 end
 
 function removeInGlobal(gName, val)
-	if global[gName] then
-		for i, v in ipairs(global[gName]) do
+	if storage[gName] then
+		for i, v in ipairs(storage[gName]) do
 			if v == val then
-				table.remove(global[gName], i)
+				table.remove(storage[gName], i)
 				return v
 			end
 		end

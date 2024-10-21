@@ -3,7 +3,7 @@ require("logic.basicState")
 require("logic.emptyBoxCollider")
 
 function getHeliFromBaseEntity(ent)
-	for k,v in pairs(global.helis) do
+	for k,v in pairs(storage.helis) do
 		if v.baseEnt == ent then
 			return v
 		end
@@ -16,8 +16,8 @@ function findNearestAvailableHeli(pos, force, requestingPlayer)
 	local nearestHeli = nil
 	local nearestDist = nil
 
-	if global.helis then
-		for k, curHeli in pairs(global.helis) do
+	if storage.helis then
+		for k, curHeli in pairs(storage.helis) do
 			if curHeli.baseEnt.valid and
 				curHeli.baseEnt.force == force and
 					(not curHeli.baseEnt.get_driver() or (curHeli.hasRemoteController and curHeli.remoteController.driverIsBot)) then
@@ -104,7 +104,7 @@ local frameFixes = {
 	0.984375, 	--64
 }
 
---local modVersion = versionStrToInt(game.active_mods.HelicopterRevival)
+--local modVersion = versionStrToInt(script.active_mods.HelicopterRevival)
 
 maxCollisionHeight = 2
 
@@ -379,7 +379,7 @@ heliBase = {
 		baseEnt.health = placementEnt.health
 
 		local obj = {
-			version = versionStrToInt(game.active_mods.HelicopterRevival),
+			version = versionStrToInt(script.active_mods.HelicopterRevival),
 
 			lockedBaseOrientation = baseEnt.orientation,
 
@@ -396,11 +396,11 @@ heliBase = {
 		obj.baseEnt.effectivity_modifier = 0
 
 		for k,v in pairs(obj.childs) do
-			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
+			if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
-			elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			elseif game.active_mods["IndustrialRevolution3"] then --IR3 workaround
+			elseif script.active_mods["IndustrialRevolution3"] then --IR3 workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 			else
 				v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
@@ -841,11 +841,11 @@ heliBase = {
 		end
 
 		if self.childs.collisionEnt then
-			if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
+			if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
-			elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			elseif game.active_mods["IndustrialRevolution3"] then --IR3 workaround
+			elseif script.active_mods["IndustrialRevolution3"] then --IR3 workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 			else
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
@@ -858,11 +858,11 @@ heliBase = {
 		if enabled then
 			if not (self.childs.floodlightEnt and self.childs.floodlightEnt.valid) then
 				self.childs.floodlightEnt = self.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = self.baseEnt.position}
-				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
+				if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
-				elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 					self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-				elseif game.active_mods["IndustrialRevolution3"] then --IR3 workaround
+				elseif script.active_mods["IndustrialRevolution3"] then --IR3 workaround
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 				else
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
@@ -930,9 +930,9 @@ heliBase = {
 			end
 		end
 
-		if game.active_mods["Krastorio2"] then
+		if script.active_mods["Krastorio2"] then
 			remainingFuel = remainingFuel * 16
-		elseif game.active_mods["SeaBlock"] then
+		elseif script.active_mods["SeaBlock"] then
 			remainingFuel = remainingFuel * 9
 		end
 
@@ -997,11 +997,11 @@ heliBase = {
 		if self.burnerDriver and self.burnerDriver.valid then
 			self.burnerDriver.riding_state = {acceleration = defines.riding.acceleration.accelerating, direction = defines.riding.direction.straight}
 			if self.childs.burnerEnt.burner.remaining_burning_fuel < 1000 then
-				if game.active_mods["Krastorio2"] then --Krastorio 2 workaround
+				if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 1})
-				elseif game.active_mods["SeaBlock"] then --SeaBlock workaround
+				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 1})
-				elseif game.active_mods["IndustrialRevolution3"] then --IR3 workaround
+				elseif script.active_mods["IndustrialRevolution3"] then --IR3 workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 1})
 				else
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})

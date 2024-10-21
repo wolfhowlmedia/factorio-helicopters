@@ -1,5 +1,5 @@
 function reSetGaugeGui(p)
-	local gg = searchInTable(global.gaugeGuis, p, "player")
+	local gg = searchInTable(storage.gaugeGuis, p, "player")
 
 	local shouldHaveGG = playerIsInHeli(p) and p.mod_settings["heli-gaugeGui-show"].value
 

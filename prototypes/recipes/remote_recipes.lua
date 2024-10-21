@@ -5,12 +5,12 @@ data:extend({
 		enabled = false,
 		energy_required = 15,
 		ingredients = {
-			{"processing-unit", 125},
-			{"battery", 50},
-			{"plastic-bar", 40},
-			{"iron-stick", 2},
+			{type = "item", name = "processing-unit", amount = 125},
+			{type = "item", name = "battery", amount = 50},
+			{type = "item", name = "plastic-bar", amount = 40},
+			{type = "item", name = "iron-stick", amount = 2},
 		},
-		result = "heli-remote-equipment",
+		results = {{type = "item", name = "heli-remote-equipment", amount = 1},}
 	},
 	{
 		type = "recipe",
@@ -18,8 +18,8 @@ data:extend({
 		enabled = false,
 		energy_required = 5,
 		ingredients = {
-			{"refined-concrete", 50},
+			{type = "item", name = "refined-concrete", amount = 50},
 		},
-		result = "heli-pad-item",
+		results = {{type = "item", name = "heli-pad-item", amount = 1},},
 	},
 })
