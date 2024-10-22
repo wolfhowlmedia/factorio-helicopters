@@ -8,7 +8,7 @@ function getHeliFromBaseEntity(ent)
 			return v
 		end
 	end
-
+	
 	return nil
 end
 
@@ -400,8 +400,6 @@ heliBase = {
 				v.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			elseif script.active_mods["IndustrialRevolution3"] then --IR3 workaround
-				v.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 			else
 				v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 			end
@@ -845,8 +843,6 @@ heliBase = {
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			elseif script.active_mods["IndustrialRevolution3"] then --IR3 workaround
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 			else
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 			end
@@ -862,8 +858,6 @@ heliBase = {
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 200})
 				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 					self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-				elseif script.active_mods["IndustrialRevolution3"] then --IR3 workaround
-					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 100})
 				else
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
 				end
@@ -939,7 +933,7 @@ heliBase = {
 		local burner = self.baseEnt.burner
 		local full_value = 0
 		if burner.currently_burning then
-			full_value = burner.currently_burning.fuel_value * burner.currently_burning.stack_size * #burner.inventory
+			full_value = burner.currently_burning.name.fuel_value * burner.currently_burning.name.stack_size * #burner.inventory
 		end
 		if full_value > 0 then
 			return remainingFuel / full_value
@@ -1001,8 +995,6 @@ heliBase = {
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "fuel", count = 1})
 				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 1})
-				elseif script.active_mods["IndustrialRevolution3"] then --IR3 workaround
-					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "steam-cell", count = 1})
 				else
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
 				end
