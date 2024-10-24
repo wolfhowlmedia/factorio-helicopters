@@ -5,6 +5,7 @@ data:extend({
         icon = "__base__/graphics/icons/submachine-gun.png",
         icon_size = 64,
         flags = {},
+        hidden = true,
         subgroup = "gun",
         order = "a[basic-clips]-b[tank-machine-gun]-c[flamethrower-ammo]",
         attack_parameters =

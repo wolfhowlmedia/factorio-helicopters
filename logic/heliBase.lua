@@ -924,6 +924,8 @@ heliBase = {
 			end
 		end
 
+		log(remainingFuel)
+
 		if script.active_mods["Krastorio2"] then
 			remainingFuel = remainingFuel * 16
 		elseif script.active_mods["SeaBlock"] then
@@ -1002,7 +1004,7 @@ heliBase = {
 		end
 	end,
 
-	updateRotor = function(self)
+		updateRotor = function(self)
 		if self.rotorRPF ~= self.rotorTargetRPF then
 			if self.rotorRPF < self.rotorTargetRPF then
 				self.rotorRPF = math.min(self.rotorRPF + self.rotorRPFacceleration, self.rotorTargetRPF)

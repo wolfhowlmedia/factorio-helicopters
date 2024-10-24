@@ -131,6 +131,7 @@ function OnTick(e)
 end
 
 function OnBuilt(e)
+	log("control.heliBuilt")
 	local ent = e.entity
 
 	if ent.name == "heli-placement-entity-_-" then
@@ -152,6 +153,7 @@ function OnBuilt(e)
 end
 
 function OnRemoved(e)
+	log("control.heliDestroyed")
 	local ent = e.entity
 
 	if ent.valid then
@@ -185,6 +187,7 @@ function OnRemoved(e)
 end
 
 function OnHeliUp(e)
+	log("onHeliUp")
 	local p = game.players[e.player_index]
 	if playerIsInHeli(p) then
 		getHeliFromBaseEntity(p.vehicle):OnUp()
@@ -192,6 +195,7 @@ function OnHeliUp(e)
 end
 
 function OnHeliDown(e)
+	log("onHeliDown")
 	local p = game.players[e.player_index]
 	if playerIsInHeli(p) then
 		getHeliFromBaseEntity(p.vehicle):OnDown()
