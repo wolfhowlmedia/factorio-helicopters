@@ -5,6 +5,7 @@ Date: ??.??.????
     - Rendering below the power wires
   Changes:
     - Factorio 2.0
+    - Adjust some research ratios
     - Remove IR3 support (there won't be IR3 for factorio 2.0)
     - Remove equpment grid (for now, at least)
 ---------------------------------------------------------------------------------------------------

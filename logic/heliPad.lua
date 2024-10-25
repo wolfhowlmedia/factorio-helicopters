@@ -1,5 +1,5 @@
 function getHeliPadIndexFromBaseEntity(ent)
-	for i, v in ipairs(global.heliPads) do
+	for i, v in ipairs(storage.heliPads) do
 		if v.baseEnt == ent then
 			return i
 		end

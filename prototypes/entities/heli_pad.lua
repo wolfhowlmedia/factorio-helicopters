@@ -8,7 +8,7 @@ data:extend({
     subgroup = "grass",
     order = "b[decorative]-k[stone-rock]-a[big]",
     collision_box = {{-3.5, -3.5}, {3.5, 3.5}},
-    -- collision_mask = {"object-layer", "water-tile"},
+    collision_mask = {layers = {object=true, water_tile=true}},
     selection_box = {{-3.5, -3.5}, {3.5, 3.5}},
 
     minable =
@@ -56,7 +56,7 @@ data:extend({
     subgroup = "grass",
     order = "b[decorative]-k[stone-rock]-a[big]",
     collision_box = {{-3.5, -3.5}, {3.5, 3.5}},
-    -- collision_mask = {},--{"object-layer"},
+    collision_mask = {layers = {}},--{"object-layer"},
     selection_box = {{-2, -2}, {2, 2}},
 
     minable =
