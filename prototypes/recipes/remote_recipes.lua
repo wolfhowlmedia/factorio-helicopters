@@ -6,9 +6,9 @@ data:extend({
 		energy_required = 15,
 		ingredients = {
 			{type = "item", name = "processing-unit", amount = 125},
-			{type = "item", name = "battery", amount = 50},
+			{type = "item", name = "battery", amount = 20},
 			{type = "item", name = "plastic-bar", amount = 40},
-			{type = "item", name = "iron-stick", amount = 2},
+			{type = "item", name = "iron-stick", amount = 20},
 		},
 		results = {{type = "item", name = "heli-remote-equipment", amount = 1},}
 	},
