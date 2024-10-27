@@ -33,7 +33,7 @@ end
 function Entity.get_data(entity, field)
     Is.Assert(entity, 'missing entity argument')
 
-    if not global._entity_data then
+    if not storage._entity_data then
         return nil
     end
 
@@ -41,14 +41,14 @@ function Entity.get_data(entity, field)
 
     local code, unit_number = pcall(function() return entity.unit_number end)
     if code then
-        dest = global._entity_data[unit_number]
+        dest = storage._entity_data[unit_number]
     else
         local prototype_name = entity.name
-        if not global._entity_data[prototype_name] then
+        if not storage._entity_data[prototype_name] then
             return nil
         end
 
-        local prototype_category = global._entity_data[prototype_name]
+        local prototype_category = storage._entity_data[prototype_name]
 
         for i = #prototype_category, 1, -1 do
             local cur_entity_data = prototype_category[i]
@@ -84,25 +84,25 @@ end
 function Entity.set_data(entity, data, field)
     Is.Assert(entity, 'missing entity argument')
 
-    if not global._entity_data then
-        global._entity_data = {}
+    if not storage._entity_data then
+        storage._entity_data = {}
     end
 
     local dest_table, dest_key
 
     local code, unit_number = pcall(function() return entity.unit_number end)
     if code then
-        dest_table = global._entity_data
+        dest_table = storage._entity_data
         dest_key = unit_number
     else
         local prototype_name = entity.name
         dest_key = "data"
 
-        if not global._entity_data[prototype_name] then
-            global._entity_data[prototype_name] = {}
+        if not storage._entity_data[prototype_name] then
+            storage._entity_data[prototype_name] = {}
         end
 
-        local prototype_category = global._entity_data[prototype_name]
+        local prototype_category = storage._entity_data[prototype_name]
 
         for i = #prototype_category, 1, -1 do
             local cur_entity_data = prototype_category[i]

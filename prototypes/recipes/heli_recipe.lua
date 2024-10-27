@@ -4,13 +4,13 @@ data:extend({
 		name = "heli-recipe",
 		enabled = false,
 		ingredients = {
-			{"engine-unit", 150},
-			{"steel-plate", 150},
-			{"iron-gear-wheel", 250},
-			{"processing-unit", 250},
-			{"gun-turret", 10},
-			{"rocket-launcher", 10},
+			{type = "item", name = "engine-unit", amount = 150},
+			{type = "item", name = "steel-plate", amount = 150},
+			{type = "item", name = "iron-gear-wheel", amount = 250},
+			{type = "item", name = "processing-unit", amount = 250},
+			{type = "item", name = "gun-turret", amount = 10},
+			{type = "item", name = "rocket-launcher", amount = 10},
 		},
-		result = "heli-item",
+		results = {{type = "item", name = "heli-item", amount = 1},},
 	}
 })

@@ -15,18 +15,18 @@ data:extend({
         recipe = "heli-pad-recipe"
       },
     },
-    prerequisites = {"heli-technology", "concrete", "advanced-electronics-2", "battery", "modular-armor"},
+    prerequisites = {"heli-technology", "concrete", "processing-unit", "battery", "modular-armor"},
     unit =
     {
       count = 450,
       ingredients =
       {
-		{"automation-science-pack", 1},
-		{"logistic-science-pack", 1},
-		{"chemical-science-pack", 2},
-        {"utility-science-pack", 2},
+        {"automation-science-pack", 1},
+        {"logistic-science-pack", 1},
+        {"chemical-science-pack", 1},
+        {"utility-science-pack", 1},
       },
-      time = 35
+      time = 45
     },
     order = "e-d"
   },

@@ -280,7 +280,7 @@ function quickstart.on_player_created(event)
             end
         end
 
-        if QS.get('setup_creative_mode', false) and game.active_mods['creative-mode'] then
+        if QS.get('setup_creative_mode', false) and script.active_mods['creative-mode'] then
             local radar = surface.create_entity {name = 'creative-mode_super-radar', position = {3.5, -34.5}, force = force}
             script.raise_event(defines.events.on_built_entity, {created_entity = radar, player_index = player.index})
             local rb = surface.create_entity {name = 'creative-mode_super-roboport', position = {-4, -35}, force = force}

@@ -40,7 +40,7 @@ function setInterval(func, frames, timerData)
 end
 
 function OnTimerTick()
-	local timers = global.timers
+	local timers = storage.timers
 
 	if timers then
 		for i = #timers, 1, -1 do

@@ -54,9 +54,9 @@ mtMgr =
 	--it sets the metatable assigned to the type on that table.
 	--Circular references are safe.
 	OnLoad = function(t)
-		t = t or global
+		t = t or storage
 
-		mtMgr.crawl(global, function(t)
+		mtMgr.crawl(storage, function(t)
 			local mt = mtMgr.assignments[t.__mtMgr_type]
 			if mt then
 				setmetatable(t, mt)
