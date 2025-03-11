@@ -1,6 +1,6 @@
 --- Force global creation.
--- <p>All new forces will be added to the `global.forces` table.
--- <p>This modules events should be registered after any other Init functions but before any scripts needing `global.players`.
+-- <p>All new forces will be added to the `storage.forces` table.
+-- <p>This modules events should be registered after any other Init functions but before any scripts needing `storage.players`.
 -- <p>This modules can register the following events: `on_force_created`, and `on_forces_merging`.
 -- @module Force
 -- @usage
@@ -46,7 +46,7 @@ function Force.additional_data(func_or_table)
     return Force
 end
 
---- Get `game.forces[name]` & `global.forces[name]`, or create `global.forces[name]` if it doesn't exist.
+--- Get `game.forces[name]` & `storage.forces[name]`, or create `storage.forces[name]` if it doesn't exist.
 -- @tparam string|LuaForce force the force to get data for
 -- @treturn LuaForce the force instance
 -- @treturn table the force's global data
@@ -58,17 +58,17 @@ end
 function Force.get(force)
     force = Game.get_force(force)
     Is.Assert(force, 'force is missing')
-    return game.forces[force.name], global.forces[force.name] or Force.init(force.name)
+    return game.forces[force.name], storage.forces[force.name] or Force.init(force.name)
 end
 
---- Merge a copy of the passed data to all forces in `global.forces`.
+--- Merge a copy of the passed data to all forces in `storage.forces`.
 -- @tparam table data a table containing variables to merge
 -- @usage
 -- local data = {a = "abc", b = "def"}
 -- Force.add_data_all(data)
 function Force.add_data_all(data)
     table.each(
-        global.forces,
+        storage.forces,
         function(v)
             table.merge(v, table.deepcopy(data))
         end
@@ -80,19 +80,19 @@ end
 -- @tparam[opt] string|table event table or a string containing force name
 -- @tparam[opt=false] boolean overwrite the force data
 function Force.init(event, overwrite)
-    global.forces = global.forces or {}
+    storage.forces = storage.forces or {}
 
     local force = Game.get_force(event)
 
     if force then
-        if not global.forces[force.name] or (global.forces[force.name] and overwrite) then
-            global.forces[force.name] = new(force.name)
-            return global.forces[force.name]
+        if not storage.forces[force.name] or (storage.forces[force.name] and overwrite) then
+            storage.forces[force.name] = new(force.name)
+            return storage.forces[force.name]
         end
     else
         for name in pairs(game.forces) do
-            if not global.forces[name] or (global.forces[name] and overwrite) then
-                global.forces[name] = new(name)
+            if not storage.forces[name] or (storage.forces[name] and overwrite) then
+                storage.forces[name] = new(name)
             end
         end
     end

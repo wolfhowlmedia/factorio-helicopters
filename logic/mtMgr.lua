@@ -1,6 +1,6 @@
 --Metatable manager v1.1 by kumpu
 --Takes care of reassigning metatables during load.
---Use for tables stored in global.
+--Use for tables stored in storage.
 
 -------Basic usage--------
 -- mtMgr.assign on file level

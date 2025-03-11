@@ -19,22 +19,23 @@ function setRemoteBtn(p, show)
 	elseif (not show) and flow.heli_remote_btn and flow.heli_remote_btn.valid then
 		flow.heli_remote_btn.destroy()
 
-		local i = searchIndexInTable(global.remoteGuis, p, "player")
+		local i = searchIndexInTable(storage.remoteGuis, p, "player")
 		if i then
-			global.remoteGuis[i]:destroy()
-			table.remove(global.remoteGuis, i)
+			storage.remoteGuis[i]:destroy()
+			table.remove(storage.remoteGuis, i)
 		end
 	end
 end
 
 function toggleRemoteGui(player)
-	local i = searchIndexInTable(global.remoteGuis, player, "player")
+	local i = searchIndexInTable(storage.remoteGuis, player, "player")
+
 
 	if not i then
 		insertInGlobal("remoteGuis", remoteGui.new(player))
 	else
-		global.remoteGuis[i]:destroy()
-		table.remove(global.remoteGuis, i)
+		storage.remoteGuis[i]:destroy()
+		table.remove(storage.remoteGuis, i)
 	end
 end
 
@@ -59,7 +60,6 @@ remoteGui =
 		}
 
 		setmetatable(obj, {__index = remoteGui})
-	
 		obj.guis.heliSelection = heliSelectionGui.new(obj, p)
 		return obj
 	end,

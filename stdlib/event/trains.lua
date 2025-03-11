@@ -98,7 +98,7 @@ end
 function Trains._on_locomotive_changed()
     -- For all the known trains
     local renames = {}
-    for id, train in pairs(global._train_registry) do
+    for id, train in pairs(storage._train_registry) do
         -- Check if their known ID is the same as the LuaTrain's dervied id
         local derived_id = Trains.get_train_id(train)
         -- If it's not
@@ -112,8 +112,8 @@ function Trains._on_locomotive_changed()
     for _, renaming in pairs(renames) do
         -- Rename it in the registry
         -- and dispatch a renamed event
-        global._train_registry[renaming.new_id] = renaming.train
-        global._train_registry[renaming.old_id] = nil
+        storage._train_registry[renaming.new_id] = renaming.train
+        storage._train_registry[renaming.old_id] = nil
 
         local event_data = {
             old_id = renaming.old_id,
@@ -178,19 +178,19 @@ end
 -- Creates a registry of known trains.
 -- @return table a mapping of train id to LuaTrain object
 function Trains.create_train_registry()
-    global._train_registry = global._train_registry or {}
+    storage._train_registry = storage._train_registry or {}
 
     local all_trains = Trains.find_filtered()
     for _, trainInfo in pairs(all_trains) do
-        global._train_registry[tonumber(trainInfo.id)] = trainInfo.train
+        storage._train_registry[tonumber(trainInfo.id)] = trainInfo.train
     end
 
-    return global._train_registry
+    return storage._train_registry
 end
 
 function Trains.on_train_created(event)
     local train_id = Trains.get_train_id(event.train)
-    global._train_registry[train_id] = event.train
+    storage._train_registry[train_id] = event.train
 end
 
 --- This needs to be called to register events for this module

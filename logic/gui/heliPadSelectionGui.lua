@@ -199,8 +199,8 @@ heliPadSelectionGui =
 					els.cams = {}
 
 					local hasCams = false
-					if global.heliPads then
-						for k, curPad in pairs(global.heliPads) do
+					if storage.heliPads then
+						for k, curPad in pairs(storage.heliPads) do
 							if curPad.baseEnt.force == self.player.force then
 								hasCams = true
 								table.insert(els.cams, 

@@ -924,8 +924,6 @@ heliBase = {
 			end
 		end
 
-		log(remainingFuel)
-
 		if script.active_mods["Krastorio2"] then
 			remainingFuel = remainingFuel * 16
 		elseif script.active_mods["SeaBlock"] then

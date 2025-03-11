@@ -37,11 +37,11 @@ local function __call(self, ...)
     end
 end
 
---- Load global.queue or queues during on_load, as metatables are not persisted.
--- <p>This is only needed if you are using the queue as an object and storing it in global.
+--- Load storage.queue or queues during on_load, as metatables are not persisted.
+-- <p>This is only needed if you are using the queue as an object and storing it in storage.
 -- @param ... (<span class="types">@{Queue}</span>,...)
--- @usage global.myqueue1 = Queue.new()
--- global.myqueue2 = Queue.new()
+-- @usage storage.myqueue1 = Queue.new()
+-- storage.myqueue2 = Queue.new()
 -- script.on_load(function() Queue.load(myqueue1, myqueue2))
 function Queue.load(...)
     if not ... then
