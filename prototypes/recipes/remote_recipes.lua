@@ -20,6 +20,6 @@ data:extend({
 		ingredients = {
 			{type = "item", name = "refined-concrete", amount = 50},
 		},
-		results = {{type = "item", name = "heli-pad-item", amount = 1},},
+		results = {{type = "item", name = "heli-pad-item", amount = 1}},
 	},
 })
