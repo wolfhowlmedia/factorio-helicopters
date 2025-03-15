@@ -3,8 +3,8 @@ require("logic.heliBase")
 require("logic.heliAttack")
 require("logic.heliPad")
 
-global.helis = {}
-global.heliPads = {}
+storage.helis = {}
+storage.heliPads = {}
 
 for _,surface in pairs(game.surfaces) do
     cars = surface.find_entities_filtered{type = "car"}

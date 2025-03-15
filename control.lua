@@ -18,38 +18,29 @@ Entity = require("stdlib.entity.entity")
 mod_gui = require("mod-gui")
 
 function playerIsInHeli(p)
-	return p.driving and string.find(heliBaseEntityNames, p.vehicle.name .. ",", 1, true)
+    return p.driving and string.find(heliBaseEntityNames, p.vehicle.name .. ",", 1, true)
 end
 
 function OnLoad(e)
-	if storage.helis then
-		for _, heli in pairs(storage.helis) do
-			if not heli.type or heli.type == "heliAttack" then
-				setmetatable(heli, {__index = heliAttack})
-			end
-		end
-	end
-	setMetatablesInGlobal("remoteGuis", {__index = remoteGui})
-	setMetatablesInGlobal("heliPads", {__index = heliPad})
-	setMetatablesInGlobal("heliControllers", {__index = heliController})
+    if storage.helis then
+        for _, heli in pairs(storage.helis) do
+            if not heli.type or heli.type == "heliAttack" then
+                setmetatable(heli, {__index = heliAttack})
+            end
+        end
+    end
+    setMetatablesInGlobal("remoteGuis", {__index = remoteGui})
+    setMetatablesInGlobal("heliPads", {__index = heliPad})
+    setMetatablesInGlobal("heliControllers", {__index = heliController})
 
-	--restore gui metatables
-	if storage.remoteGuis then
-		for _,remotegui in pairs(storage.remoteGuis) do
-			for _,gui in pairs(remotegui.guis) do
-				if gui.prefix then
-					local n = string.gsub(gui.prefix, "heli_(%a+)_.*", "%1")
-					if _G[n] then
-						setmetatable(gui, {__index = _G[n]})
-					end
-				end
-			end
-		end
-	end
-
-	callInGlobal("helis", "OnLoad")
-
-	mtMgr.OnLoad()
+    -- restore gui metatables
+    if storage.remoteGuis then
+        for _, remotegui in pairs(storage.remoteGuis) do
+            for _, gui in pairs(remotegui) do
+                setmetatable(gui, {__index = remoteGui})
+            end
+        end
+    end
 end
 
 function OnConfigChanged(e)
