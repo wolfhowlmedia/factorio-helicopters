@@ -87,7 +87,6 @@ data:extend({
       }
     },
   },
-
   ---------------------base entity---------------------
   {
     type = "car",
@@ -171,11 +170,6 @@ data:extend({
       scale = 0.5
     },
   },
-
-
-
-
-
 ----------------------flying collision--------------------
   {
     type = "car",
@@ -243,8 +237,6 @@ data:extend({
     },
     vehicle_impact_sound = { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
   },
-
-
 ----------------------landed collision--------------------
   {
     type = "car",
@@ -379,17 +371,6 @@ data:extend({
     },
     vehicle_impact_sound = { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
   },
-
-
-
-
-
-
-
-
-
-
-
   ---------------body--------------
   {
     type = "car",
@@ -493,14 +474,6 @@ data:extend({
     rotation_speed = 0.005,
     weight = 50,
   },
-
-
-
-
-
-
-
-
   ---------------shadow------------
   {
     type = "car",
@@ -606,14 +579,6 @@ data:extend({
     rotation_speed = 0.005,
     weight = 50,
   },
-
-
-
-
-
-
-
-
 ----------------------smoke and sound--------------------
   {
     type = "car",
@@ -705,12 +670,6 @@ data:extend({
       --match_speed_to_activity = true,
     },
   },
-
-
-
-
-
-
 ----------------------flashlight--------------------
   {
     type = "car",

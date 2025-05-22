@@ -13,7 +13,7 @@ require("logic.heliController")
 require("logic.gui.remoteGui")
 require("logic.gui.gaugeGui")
 
-Entity = require("stdlib.entity.entity")
+Entity = require("__jalm__.stdlib.entity.entity")
 
 mod_gui = require("mod-gui")
 

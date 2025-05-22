@@ -25,6 +25,6 @@ require("prototypes.signals.signals")
 
 require("input.input")
 
-if alien_biomes_priority_tiles then
+if mods["alien-biomes"] and alien_biomes_priority_tiles then
     table.insert(alien_biomes_priority_tiles, "heli-pad-entity")
 end
