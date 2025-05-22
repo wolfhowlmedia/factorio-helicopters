@@ -36,7 +36,8 @@ function Entity.get_data(entity)
         return nil
     end
 
-    local unit_number = entity.unit_number
+    -- local unit_number = entity.unit_number
+    local code, unit_number = pcall(function() return entity.unit_number end)
     if unit_number then
         return storage._entity_data[unit_number]
     else
