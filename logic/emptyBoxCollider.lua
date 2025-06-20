@@ -52,9 +52,9 @@ emptyBoxCollider =
 	end,
 
 	destroy = function(self)
-		for k,v in pairs(self.childColliders) do
-			if v.valid then
-				v.destroy()
+		for _, entity in pairs(self.childColliders) do
+			if entity.valid then
+				entity.destroy()
 			end
 		end
 	end,
@@ -62,8 +62,8 @@ emptyBoxCollider =
 	valid = function(self)
 		local val = true
 
-		for k,v in pairs(self.childColliders) do
-			if not v.valid then
+		for _, entity in pairs(self.childColliders) do
+			if not entity.valid then
 				val = false
 				break
 			end
@@ -90,8 +90,8 @@ emptyBoxCollider =
 		self.childColliderOffsets.up = math3d.vector2.rotate({0,self.boxHalfs.sides}, math.pi * 2 * orient)
 		self.childColliderOffsets.right = math3d.vector2.rotate({self.boxHalfs.ends,0}, math.pi * 2 * orient)
 
-		for k,v in pairs(self.childColliders) do
-			v.orientation = orient
+		for _, entity in pairs(self.childColliders) do
+			entity.orientation = orient
 		end
 
 		self.moveChildColliders()
@@ -106,9 +106,9 @@ emptyBoxCollider =
 	getHealth = function(self)
 		local lowest = self.childColliders.top.health
 
-		for k,v in pairs(self.childColliders) do
-			if v.health < lowest then
-				lowest = v.health
+		for _, entity in pairs(self.childColliders) do
+			if entity.health < lowest then
+				lowest = entity.health
 			end
 		end
 
@@ -116,17 +116,17 @@ emptyBoxCollider =
 	end,
 
 	setHealth = function(self, health)
-		for k,v in pairs(self.childColliders) do
-			v.health = health
+		for _, entity in pairs(self.childColliders) do
+			entity.health = health
 		end
 	end,
 
 	getSpeed = function(self)
 		local highest = self.childColliders.top.speed
 
-		for k,v in pairs(self.childColliders) do
-			if v.speed > highest then
-				speed = v.speed
+		for _, entity in pairs(self.childColliders) do
+			if entity.speed > highest then
+				speed = entity.speed
 			end
 		end
 
@@ -134,20 +134,20 @@ emptyBoxCollider =
 	end,
 
 	setSpeed = function(self, speed)
-		for k,v in pairs(self.childColliders) do
-			v.speed = speed
+		for _, entity in pairs(self.childColliders) do
+			entity.speed = speed
 		end
 	end,
 
 	setOperable = function(self, operable)
-		for k,v in pairs(self.childColliders) do
-			v.operable = operable
+		for _, entity in pairs(self.childColliders) do
+			entity.operable = operable
 		end
 	end,
 
 	get_driver = function(self)
-		for k,v in pairs(self.childColliders) do
-			local driver = v.get_driver()
+		for _, entity in pairs(self.childColliders) do
+			local driver = entity.get_driver()
 			if driver then
 				return driver
 			end
@@ -158,15 +158,15 @@ emptyBoxCollider =
 
 	set_driver = function(self, driver)
 		if driver == nil then
-			for k,v in pairs(self.childColliders) do
-				v.set_driver(nil)
+			for _, entity in pairs(self.childColliders) do
+				entity.set_driver(nil)
 			end
 		end
 	end,
 
 	get_passenger = function(self)
-		for k,v in pairs(self.childColliders) do
-			local passenger = v.get_passenger()
+		for _, entity in pairs(self.childColliders) do
+			local passenger = entity.get_passenger()
 			if passenger then
 				return passenger
 			end
@@ -177,8 +177,8 @@ emptyBoxCollider =
 
 	set_passenger = function(self, passenger)
 		if passenger == nil then
-			for k,v in pairs(self.childColliders) do
-				v.set_passenger(nil)
+			for _, entity in pairs(self.childColliders) do
+				entity.set_passenger(nil)
 			end
 		end
 	end,
@@ -247,8 +247,8 @@ emptyBoxCollider =
 	end,
 
 	isChildEntity = function(self, ent)
-		for k,v in pairs(self.childColliders) do
-			if v == ent then
+		for _, entity in pairs(self.childColliders) do
+			if entity == ent then
 				return true
 			end
 		end

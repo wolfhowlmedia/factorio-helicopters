@@ -42,7 +42,7 @@ heliPad =
 			name = "small-scorchmark",
 		}
 
-		for k,v in pairs(scorches) do
+		for _, v in pairs(scorches) do
 			v.destroy()
 		end
 

@@ -116,7 +116,7 @@ markerSelectionGui =
 
 		local numNewTags = #allTags
 		local newTags = {}
-		for k,v in pairs(allTags) do
+		for k, v in pairs(allTags) do
 			newTags[v.tag_number] = v
 		end
 

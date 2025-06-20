@@ -40,7 +40,7 @@ mtMgr =
 		if not t.__self then
 			f(t)
 
-			for k,v in pairs(t) do
+			for _, v in pairs(t) do
 				if type(v) == "table" and not lookup[v] then
 					mtMgr.crawl(v, f, lookup)
 				end

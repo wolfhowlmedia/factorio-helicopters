@@ -3,7 +3,7 @@ require("logic.basicState")
 require("logic.emptyBoxCollider")
 
 function getHeliFromBaseEntity(ent)
-	for k,v in pairs(storage.helis) do
+	for _, v in pairs(storage.helis) do
 		if v.baseEnt == ent then
 			return v
 		end
@@ -17,7 +17,7 @@ function findNearestAvailableHeli(pos, force, requestingPlayer)
 	local nearestDist = nil
 
 	if storage.helis then
-		for k, curHeli in pairs(storage.helis) do
+		for _, curHeli in pairs(storage.helis) do
 			if curHeli.baseEnt.valid and
 				curHeli.baseEnt.force == force and
 					(not curHeli.baseEnt.get_driver() or (curHeli.hasRemoteController and curHeli.remoteController.driverIsBot)) then
@@ -144,7 +144,7 @@ stateFuncs = {
 
 			heli:setFloodlightEntities(false)
 
-			for k, curGG in pairs(heli.gaugeGuis) do
+			for _, curGG in pairs(heli.gaugeGuis) do
 				curGG:setPointerNoise("gauge_fs", "speed", false)
 				curGG:setPointerNoise("gauge_hr", "height", false)
 				curGG:setPointerNoise("gauge_hr", "rpm", false)
@@ -200,7 +200,7 @@ stateFuncs = {
 				heli:setFloodlightEntities(true)
 			end
 
-			for k, curGG in pairs(heli.gaugeGuis) do
+			for _, curGG in pairs(heli.gaugeGuis) do
 				curGG:setPointerNoise("gauge_fs", "speed", true, 5)
 				curGG:setPointerNoise("gauge_hr", "height", true, 0.5, 0.2, 12, 18)
 				curGG:setPointerNoise("gauge_hr", "rpm", true, 50)
@@ -395,7 +395,7 @@ heliBase = {
 
 		obj.baseEnt.effectivity_modifier = 0
 
-		for k,v in pairs(obj.childs) do
+		for _, v in pairs(obj.childs) do
 			if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 200})
 			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
@@ -419,7 +419,7 @@ heliBase = {
 			--self.baseEnt.destroy()
 		end
 
-		for k,v in pairs(self.childs) do
+		for _, v in pairs(self.childs) do
 			if v and v.valid then
 				v.destroy()
 			end
@@ -434,7 +434,7 @@ heliBase = {
 
 		self:reactivateAllInserters()
 
-		for k, curGG in pairs(self.gaugeGuis) do
+		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:destroy()
 		end
 	end,
@@ -613,7 +613,7 @@ heliBase = {
 	---------------- utility ---------------
 
 	reactivateAllInserters = function(self)
-		for k, curInserter in pairs(self.deactivatedInserters) do
+		for _, curInserter in pairs(self.deactivatedInserters) do
 			if curInserter.valid then
 				curInserter.active = true
 			end
@@ -645,7 +645,7 @@ heliBase = {
 			area = area,
 		}
 
-		for k, curInserter in pairs(inserters) do
+		for _, curInserter in pairs(inserters) do
 			if curInserter.active then
 				curInserter.active = false
 				table.insert(self.deactivatedInserters, curInserter)
@@ -686,7 +686,7 @@ heliBase = {
 
 			if alert then
 				local players = getCarPlayers(self.baseEnt)
-				for k, curPlayer in pairs(players) do
+				for _, curPlayer in pairs(players) do
 					if curPlayer.mod_settings["heli-fuel-alert"].value then
 						curPlayer.add_custom_alert(self.baseEnt, {type = "virtual", name = alert.name}, alert.str, false)
 					end
@@ -733,7 +733,7 @@ heliBase = {
 
 	changeState = function(self, newState)
 		--[[
-		for k,v in pairs(heli) do
+		for k, v in pairs(heli) do
 			if v == newState then
 				printA("change state: " .. k)
 				break
@@ -885,7 +885,7 @@ heliBase = {
 	end,
 
 	dealCrashDamage = function(self, players, speed)
-		for k, curPlayer in pairs(players) do
+		for _, curPlayer in pairs(players) do
 			if curPlayer.character and curPlayer.character.valid then
 				curPlayer.character.damage((150 + speed * 175) * settings.global["heli-crash-dmg-mult"].value, game.forces.neutral)
 			end
@@ -1022,7 +1022,7 @@ heliBase = {
 		end
 
 
-		for k, curGG in pairs(self.gaugeGuis) do
+		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_hr", "rpm", self.rotorRPF * 3600 * self.engineReduction + math.abs(self.baseEnt.speed) * 100)
 		end
 	end,
@@ -1052,7 +1052,7 @@ heliBase = {
 			end
 		end
 
-		for k, curGG in pairs(self.gaugeGuis) do
+		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_hr", "height", self.height)
 		end
 	end,
@@ -1067,7 +1067,7 @@ heliBase = {
 			end
 		end
 
-		for k, curGG in pairs(self.gaugeGuis) do
+		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_fs", "fuel", self.fuelGaugeVal)
 			if self.curState.name ~= "landed" then
 				if self.fuelGaugeTargetVal <= self.tankCriticalWarningRatio then
@@ -1133,7 +1133,7 @@ heliBase = {
 
 		self.childs.burnerEnt.teleport({x = center.x + vec[1], y = center.y + vec[2] - self.curBobbing})
 
-		for k, curGG in pairs(self.gaugeGuis) do
+		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_fs", "speed", math.abs(self.baseEnt.speed) * 216) --speed * 60 = m/s, * 3.6 = km/h
 		end
 	end,
@@ -1157,7 +1157,7 @@ heliBase = {
 			return true
 		end
 
-		for k,v in pairs(self.childs) do
+		for _, v in pairs(self.childs) do
 			if v == ent then
 				return true
 			end
@@ -1179,9 +1179,9 @@ heliBase = {
 	end,
 
 	removeGaugeGui = function(self, gg)
-		for i, curGG in ipairs(self.gaugeGuis) do
+		for k, curGG in ipairs(self.gaugeGuis) do
 			if curGG == gg then
-				table.remove(self.gaugeGuis, i)
+				table.remove(self.gaugeGuis, k)
 				return
 			end
 		end

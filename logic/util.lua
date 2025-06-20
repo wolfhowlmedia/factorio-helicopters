@@ -1,6 +1,6 @@
 function tableToString(table)
 	local s = ""
-	for k,v in pairs(table) do
+	for k, v in pairs(table) do
 		s = s .. type(v) .. " '" .. k .. "': " .. tostring(v) .. "\n"
 	end
 	return s
@@ -11,7 +11,7 @@ function printTable(t, prefix)
 		prefix = ""
 	end
 
-	for k,v in pairs(t) do
+	for k, v in pairs(t) do
 		local typ = "[" .. type(v) .. "] "
 		local name = "'" .. k .. "' ="
 		local val = " " .. tostring(v)
@@ -36,7 +36,7 @@ function printA(...)
 		end
 	end
 
-	for k,v in pairs(game.players) do
+	for k, v in pairs(game.players) do
 		v.print(s)
 	end
 
@@ -106,7 +106,7 @@ end
 
 function callInGlobal(gName, kName, ...)
 	if storage[gName] then
-		for k,v in pairs(storage[gName]) do
+		for k, v in pairs(storage[gName]) do
 			if v[kName] then v[kName](v, ...) end
 		end
 	end
@@ -148,7 +148,7 @@ end
 
 function concatStrTable(t, c)
 	local s = ""
-	for k,v in pairs(t) do
+	for k, v in pairs(t) do
 		s = s .. v .. c
 	end
 

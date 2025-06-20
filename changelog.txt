@@ -6,11 +6,13 @@ Date: ??.??.????
     - update stdlib to stdlib2 (with minor fixes)
     - cleanup the log spam
   Changes:
-    - roland77: added scripts/build_package.py for easy deployment
-    - roland77: added Krastorio2, SeaBlock as optional dependency as it was found in code
-    - roland77: removed self-advertisement in Korean locale file
-    - roland77: added some missing POSIX-compliant new-line character
-    - roland77: best is to test `script.active_mods["foo"]`` or `mods["foo"]` instead of `foo_something`
+    - added scripts/build_package.py for easy deployment
+    - added Krastorio2, SeaBlock as optional dependency as it was found in code
+    - removed self-advertisement in Korean locale file
+    - added some missing POSIX-compliant new-line character
+    - best is to test `script.active_mods["foo"]`` or `mods["foo"]` instead of `foo_something`
+    - naming-convention: `k` for used key in loops, `_` if key is ignored
+    - renamed some `v` into `entity` as the name fits better
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.0
 Date: 27.10.2024
