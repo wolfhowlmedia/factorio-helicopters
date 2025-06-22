@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.1
-Date: ??.??.????
+Date: 22.06.2025
   Fixes:
     - Krastorio2 2.0 support
     - update stdlib to stdlib2 (with minor fixes)

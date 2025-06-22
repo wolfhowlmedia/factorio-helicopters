@@ -7,8 +7,7 @@
     "dependencies": [
         "base >= 2.0",
         "?alien-biomes",
-        "?Krastorio2 >= 2.0",
-        "?SeaBlock"
+        "?Krastorio2 >= 2.0"
     ],
     "description": "Adds a fully animated attack helicopter to the game. Ideal for getting from A to B quickly, exploring the map, building islands and nuking biters from the sky. Now 84% less buggier! Forked from Kumpu with updates beyond Factorio 0.17."
 }
