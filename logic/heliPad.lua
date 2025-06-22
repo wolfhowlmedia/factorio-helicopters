@@ -8,10 +8,10 @@ function getHeliPadIndexFromBaseEntity(ent)
 	return nil
 end
 
-heliPad = 
+heliPad =
 {
 	new = function(placementEnt)
-		local obj = 
+		local obj =
 		{
 			valid = true,
 
@@ -23,13 +23,14 @@ heliPad =
 				name = "heli-pad-entity",
 				force = placementEnt.force,
 				position = placementEnt.position,
+				quality = placementEnt.quality,
 			}
 		}
 
 		--game.players[1].print("calc: ".. tostring(placementEnt.position.y - heli_pad_sprite_y_shift).. " real pos: "..tostring(obj.baseEnt.position.y))
 		--game.players[1].print(tostring(placementEnt.position.x) .. "|" .. tostring(placementEnt.position.y))
 
-		local boundingBox = 
+		local boundingBox =
 		{
 			left_top = {placementEnt.position.x - 3.5, placementEnt.position.y - 3.5},
 			right_bottom = {placementEnt.position.x + 3.5, placementEnt.position.y + 3.5}

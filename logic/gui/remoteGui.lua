@@ -48,7 +48,7 @@ function OnHeliControllerDestroyed(controller)
 end
 
 
-remoteGui = 
+remoteGui =
 {
 	new = function(p)
 		local obj = {

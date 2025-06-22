@@ -12,7 +12,7 @@ heliAttack =
 	fuelSlots = 5,
 
 	new = function(placementEnt)
-		local baseEnt = placementEnt.surface.create_entity{name = "heli-entity-_-", force = placementEnt.force, position = placementEnt.position}
+		local baseEnt = placementEnt.surface.create_entity { name = "heli-entity-_-", force = placementEnt.force, position = placementEnt.position, quality = placementEnt.quality}
 
 		local childs =
 		{
