@@ -1,5 +1,4 @@
-data:extend(
-{
+data:extend({
   {
     type = "font",
     name = "pixelated",

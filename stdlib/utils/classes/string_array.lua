@@ -3,28 +3,46 @@
 -- @classmod string_array
 
 local M = {
-    _module_name = 'string-array-class'
+    __class = 'string-array-class'
 }
-
-local Is = require('stdlib/utils/is')
+local metatable
 
 --- Does this array contain name.
 -- @tparam string name The string to find.
 -- @treturn boolean string is in array
 function M:has(name)
-    Is.Assert.String(name, 'name must be a string')
+    local type = type(name)
+    if type == 'table' then
+        for _, str in pairs(name) do
+            if not self:has(str) then
+                return false
+            end
+        end
+        return true
+    end
+
+    assert(type == 'string', 'name must be a string')
     for _, str in ipairs(self) do
         if str == name then
             return true
         end
     end
+    return false
 end
 
 --- Add a string to the array if it doesn't exist in the array.
 -- @tparam string name
 -- @treturn self
 function M:add(name)
-    Is.Assert.String(name, 'name must be a string')
+    local type = type(name)
+    if type == 'table' then
+        for _, str in pairs(name) do
+            self:add(str)
+        end
+        return self
+    end
+
+    assert(type == 'string', 'name must be a string')
     for _, str in ipairs(self) do
         if str == name then
             return self
@@ -38,7 +56,15 @@ end
 -- @tparam string name
 -- @treturn self
 function M:remove(name)
-    Is.Assert.String(name, 'name must be a string')
+    local type = type(name)
+    if type == 'table' then
+        for _, str in pairs(name) do
+            self:remove(str)
+        end
+        return self
+    end
+
+    assert(type == 'string', 'name must be a string')
     for i, str in ipairs(self) do
         if str == name then
             table.remove(self, i)
@@ -52,7 +78,15 @@ end
 -- @tparam string name
 -- @treturn self
 function M:toggle(name)
-    Is.Assert.String(name, 'name must be a string')
+    local type = type(name)
+    if type == 'table' then
+        for _, str in pairs(name) do
+            self:toggle(str)
+        end
+        return self
+    end
+
+    assert(type == 'string', 'name must be a string')
     for i, str in ipairs(self) do
         if str == name then
             table.remove(self, i)
@@ -82,27 +116,27 @@ end
 -- @tparam string|string-array rhs
 -- @treturn string-array
 function M:concat(rhs)
-    if type(self) == 'table' then
-        if type(rhs) == 'table' then
-            for _, str in ipairs(rhs) do
-                self:add(str)
-            end
-        elseif type(rhs) == 'string' then
-            self:add(rhs)
-        end
-        return self
-    elseif type(self) == 'string' then
+    if getmetatable(self) == metatable then
+        return self:add(rhs)
+    else
         return rhs:add(self)
     end
-    return self
 end
 
-return {
-    __index = M, -- Index to module
-    __tostring = M.tostring, -- tostring
-    __concat = M.concat, -- Concat
-    __add = M.add, -- Adds a string to the string-array object
-    __sub = M.remove, -- Removes a string from the string-array object
+--- The following metamethods are provided.
+-- @table metatable
+metatable = {
+    __index = M, -- Index to the string array class.
+    __tostring = M.tostring, -- tostring.
+    __concat = M.concat, -- adds the right hand side to the object.
+    __add = M.add, -- Adds a string to the string-array object.
+    __sub = M.remove, -- Removes a string from the string-array object.
     __unm = M.clear, -- Clears the array.
-    __call = M.has -- Has the flag
+    __call = M.has -- Array contains this string.
 }
+
+return function(array)
+    if type(array) == 'table' then
+        return setmetatable(array, metatable)
+    end
+end

@@ -1,88 +1,14 @@
 --- For working with inventories.
--- @module Inventory
+-- @module Entity.Inventory
 -- @usage local Inventory = require('stdlib/entity/inventory')
 
-local Inventory = {_module_name = 'Inventory'}
-setmetatable(Inventory, {__index = require('stdlib/core')})
+local Inventory = {
+    __class = 'Inventory',
+    __index = require('stdlib/core')
+}
+setmetatable(Inventory, Inventory)
 
-local Is = require('stdlib/utils/is')
-
---- Copies the contents of source inventory to destination inventory by using @{Concepts.SimpleItemStack}.
--- @tparam LuaInventory src the source inventory
--- @tparam LuaInventory dest the destination inventory
--- @tparam[opt=false] boolean clear clear the contents of the source inventory
--- @treturn {Concepts.SimpleItemStack,...} an array of left over items that could not be inserted into the destination
-function Inventory.copy_as_simple_stacks(src, dest, clear)
-    Is.Assert(src, 'missing source inventory')
-    Is.Assert(dest, 'missing destination inventory')
-
-    local left_over = {}
-    for i = 1, #src do
-        local stack = src[i]
-        if stack and stack.valid and stack.valid_for_read then
-            local simple_stack = {
-                name = stack.name,
-                count = stack.count,
-                health = stack.health or 1,
-                durability = stack.durability
-            }
-            -- ammo is a special case field, accessing it on non-ammo itemstacks causes an exception
-            simple_stack.ammo = stack.prototype.magazine_size and stack.ammo
-
-            --Insert simple stack into inventory, add to left_over if not all were inserted.
-            simple_stack.count = simple_stack.count - dest.insert(simple_stack)
-            if simple_stack.count > 0 then
-                table.insert(left_over, simple_stack)
-            end
-        end
-    end
-    if clear then
-        src.clear()
-    end
-    return left_over
-end
-
--- Remove all items inside an entity and return an array of SimpleItemStacks removed
--- @param entity: The entity object to remove items from
--- @return table: a table of SimpleItemStacks or nil if empty
--- local function get_all_items_inside(entity, existing_stacks)
---     local item_stacks = existing_stacks or {}
---     --Inserters need to check held_stack
---     if entity.type == "inserter" then
---         local stack = entity.held_stack
---         if stack.valid_for_read then
---             item_stacks[#item_stacks+1] = {name=stack.name, count=stack.count, health=stack.health}
---             stack.clear()
---         end
---         --Entities with transport lines only need to check each line individually
---     elseif transport_types[entity.type] then
---         for i=1, transport_types[entity.type] do
---             local lane = entity.get_transport_line(i)
---             for name, count in pairs(lane.get_contents()) do
---                 local cur_stack = {name=name, count=count, health=1}
---                 item_stacks[#item_stacks+1] = cur_stack
---                 lane.remove_item(cur_stack)
---             end
---         end
---     else
---         --Loop through regular inventories
---         for _, inv in pairs(defines.inventory) do
---             local inventory = entity.get_inventory(inv)
---             if inventory and inventory.valid then
---                 if inventory.get_item_count() > 0 then
---                     for i=1, #inventory do
---                         if inventory[i].valid_for_read then
---                             local stack = inventory[i]
---                             item_stacks[#item_stacks+1] = {name=stack.name, count=stack.count, health=stack.health or 1}
---                             stack.clear()
---                         end
---                     end
---                 end
---             end
---         end
---     end
---     return (item_stacks[1] and item_stacks) or {}
--- end
+local min = math.min
 
 --- Given a function, apply it to each slot in the given inventory.
 -- Passes the index of a slot as the second argument to the given function.
@@ -119,6 +45,113 @@ function Inventory.each_reverse(inventory, func, ...)
         end
     end
     return index and inventory[index]
+end
+
+--- Copies the contents of source inventory to destination inventory by using @{Concepts.SimpleItemStack}.
+-- @tparam LuaInventory src the source inventory
+-- @tparam LuaInventory dest the destination inventory
+-- @tparam[opt=false] boolean clear clear the contents of the source inventory
+-- @treturn {Concepts.SimpleItemStack,...} an array of left over items that could not be inserted into the destination
+function Inventory.copy_as_simple_stacks(src, dest, clear)
+    assert(src, 'missing source inventory')
+    assert(dest, 'missing destination inventory')
+
+    local left_over = {}
+    for i = 1, #src do
+        local stack = src[i]
+        if stack and stack.valid and stack.valid_for_read then
+            local simple_stack = {
+                name = stack.name,
+                count = stack.count,
+                health = stack.health or 1,
+                durability = stack.durability
+            }
+            -- ammo is a special case field, accessing it on non-ammo itemstacks causes an exception
+            simple_stack.ammo = stack.prototype.magazine_size and stack.ammo
+
+            --Insert simple stack into inventory, add to left_over if not all were inserted.
+            simple_stack.count = simple_stack.count - dest.insert(simple_stack)
+            if simple_stack.count > 0 then
+                table.insert(left_over, simple_stack)
+            end
+        end
+    end
+    if clear then
+        src.clear()
+    end
+    return left_over
+end
+
+--- Return a blueprint stack from either stack or blueprint_book
+-- @tparam LuaItemStack stack
+-- @tparam[opt] bool is_bp_setup
+-- @tparam[opt] bool no_book
+-- @treturn LuaItemStack
+function Inventory.get_blueprint(stack, is_bp_setup, no_book)
+    if stack and stack.valid and stack.valid_for_read then
+        if stack.is_blueprint then
+            return not is_bp_setup and stack or stack.is_blueprint_setup() and stack
+        elseif stack.is_blueprint_book and not no_book and stack.active_index then
+            local book = stack.get_inventory(defines.inventory.item_main)
+            if #book >= stack.active_index then
+                return Inventory.get_blueprint(book[stack.active_index], is_bp_setup)
+            end
+        end
+    end
+end
+
+--- Is the stack a blueprint with label?
+-- @tparam LuaItemStack stack
+-- @tparam string label
+-- @treturn bool
+function Inventory.is_named_bp(stack, label)
+    return stack and stack.valid_for_read and stack.is_blueprint and stack.label and stack.label:find('^' .. label)
+end
+
+--- Returns either the item at a position, or the filter at the position if there isn't an item there.
+-- @tparam LuaInventory inventory
+-- @tparam int idx
+-- @tparam[opt] bool item_only
+-- @tparam[opt] bool filter_only
+-- @return the item or filter
+function Inventory.get_item_or_filter(inventory, idx, item_only, filter_only)
+    local filter = not item_only and inventory.get_filter(idx)
+    return filter or (not filter_only and inventory[idx].valid_for_read and inventory[idx].name) or nil
+end
+
+--- Transfer items from 1 inventory to another.
+-- @tparam LuaInventory source
+-- @tparam LuaInventory destination
+-- @tparam[opt=nil] table source_filters the filters to use if the source is not filtered/filterable
+-- @treturn nil|table the filters if the destination does not support filters
+function Inventory.transfer_inventory(source, destination, source_filters)
+    local filtered = source.is_filtered()
+    local destination_filterable = destination.supports_filters()
+    local filters = {}
+    for i = 1, min(#destination, #source) do
+        destination[i].transfer_stack(source[i])
+        if filtered then
+            if destination_filterable then
+                destination.set_filter(i, source.get_filter(i))
+            else
+                filters[i] = source.get_filter(i)
+            end
+        elseif source_filters then
+            if destination_filterable then
+                destination.set_filter(i, source_filters[i])
+            end
+        end
+    end
+    return (filtered and not destination_filterable and filters) or nil
+end
+
+--- Swap items from 1 inventory to another.
+-- @tparam LuaInventory source
+-- @tparam LuaInventory destination
+function Inventory.swap_inventory(source, destination)
+    for i = 1, min(#destination, #source) do
+        destination[i].swap_stack(source[1])
+    end
 end
 
 return Inventory

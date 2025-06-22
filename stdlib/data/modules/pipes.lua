@@ -1,8 +1,8 @@
 --- Pipes
--- @module Pipes
+-- @module Data.Pipes
 
 local Pipes = {}
-setmetatable(Pipes, {__index = require('stdlib/data/modules/sprites')})
+local Sprites = require('stdlib/data/modules/sprites')
 
 --Define pipe connection pipe pictures, not all entities use these. This function needs some work though.
 function Pipes.pictures(pictures, shift_north, shift_south, shift_west, shift_east, replacements)
@@ -15,7 +15,7 @@ function Pipes.pictures(pictures, shift_north, shift_south, shift_west, shift_ea
                 height = 18,
                 shift = shift_north
             } or
-            Pipes.empty_picture(),
+            Sprites.empty_picture(),
         south = shift_south and
             {
                 filename = '__base__/graphics/entity/' .. pictures .. '/' .. pictures .. '-pipe-S.png',
@@ -24,7 +24,7 @@ function Pipes.pictures(pictures, shift_north, shift_south, shift_west, shift_ea
                 height = 31,
                 shift = shift_south
             } or
-            Pipes.empty_picture(),
+            Sprites.empty_picture(),
         west = shift_west and
             {
                 filename = '__base__/graphics/entity/' .. pictures .. '/' .. pictures .. '-pipe-W.png',
@@ -33,7 +33,7 @@ function Pipes.pictures(pictures, shift_north, shift_south, shift_west, shift_ea
                 height = 37,
                 shift = shift_west
             } or
-            Pipes.empty_picture(),
+            Sprites.empty_picture(),
         east = shift_east and
             {
                 filename = '__base__/graphics/entity/' .. pictures .. '/' .. pictures .. '-pipe-E.png',
@@ -42,7 +42,7 @@ function Pipes.pictures(pictures, shift_north, shift_south, shift_west, shift_ea
                 height = 38,
                 shift = shift_east
             } or
-            Pipes.empty_picture()
+            Sprites.empty_picture()
     }
     for direction, image in pairs(replacements or {}) do
         if not (new_pictures[direction].filename == '__core__/graphics/empty.png') then
@@ -62,7 +62,7 @@ function Pipes.covers(n, s, w, e)
     end
 
     n =
-        n and
+    n and
         {
             layers = {
                 {
@@ -95,9 +95,9 @@ function Pipes.covers(n, s, w, e)
                 }
             }
         } or
-        Pipes.empty_picture()
+        Sprites.empty_picture()
     e =
-        e and
+    e and
         {
             layers = {
                 {
@@ -130,9 +130,9 @@ function Pipes.covers(n, s, w, e)
                 }
             }
         } or
-        Pipes.empty_picture()
+        Sprites.empty_picture()
     s =
-        s and
+    s and
         {
             layers = {
                 {
@@ -165,9 +165,9 @@ function Pipes.covers(n, s, w, e)
                 }
             }
         } or
-        Pipes.empty_picture()
+        Sprites.empty_picture()
     w =
-        w and
+    w and
         {
             layers = {
                 {
@@ -200,9 +200,9 @@ function Pipes.covers(n, s, w, e)
                 }
             }
         } or
-        Pipes.empty_picture()
+        Sprites.empty_picture()
 
-    return {north = n, south = s, east = e, west = w}
+    return { north = n, south = s, east = e, west = w }
 end
 
 return Pipes

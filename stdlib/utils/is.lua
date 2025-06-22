@@ -1,5 +1,5 @@
 --- Is expression library
--- @module Is
+-- @module Utils.Is
 -- @usage
 -- local Is = require('stdlib/utils/is')
 -- Is.True(true)
@@ -50,8 +50,7 @@ local M = {}
 
 local type = type
 local floor = math.floor
-local INF_POS = math.huge
-local INF_NEG = -math.huge
+local huge = math.huge
 
 --- Returns the var if the passed variable is a table.
 -- @tparam mixed var The variable to check
@@ -140,7 +139,7 @@ M.falsy = M.Falsy
 -- @treturn boolean
 function M.Empty(var)
     if M.Table(var) then
-        return _G.table_size and _G.table_size(var) == 0 or next(var) == nil
+        return table_size and table_size(var) == 0 or next(var) == nil
     elseif M.String(var) then
         return #string == 0
     end
@@ -153,8 +152,7 @@ function M.None(var)
 end
 M.none = M.None
 
-
---- Returns the passed var if it is a positive number.
+--- Returns the passed var if it is positive.
 -- @tparam mixed var The variable to check
 -- @treturn mixed
 function M.Positive(var)
@@ -162,7 +160,21 @@ function M.Positive(var)
 end
 M.positive = M.Positive
 
---- Returns the passed var if it is a positive number.
+--- Returns the passed var if it is odd.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
+function M.odd(var)
+    return M.number(var) and (var % 2 ~= 0) and var
+end
+
+--- Returns the passed var if it is even.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
+function M.even(var)
+    return M.number(var) and (var % 2 == 0) and var
+end
+
+--- Returns the passed var if it is negative.
 -- @tparam mixed var The variable to check
 -- @treturn mixed
 function M.Negative(var)
@@ -170,60 +182,101 @@ function M.Negative(var)
 end
 M.negative = M.Negative
 
-function M.NaN(arg)
-    return arg ~= arg
+--- Returns the passed var if it is not a number.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
+function M.NaN(var)
+    return var ~= var
 end
 M.nan = M.NaN
 
+--- Returns the passed var if it is finite.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.Finite(var)
-    return M.Number(var) and (var < INF_POS and var > INF_NEG) and var
+    return M.Number(var) and (var < huge and var > -huge) and var
 end
 M.finite = M.Finite
 
+--- Returns the passed var if it is an int.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.Int(var)
     return M.Finite(var) and rawequal(floor(var), var) and var
 end
 M.int = M.Int
 
+--- Returns the passed var if it is an int8.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.Int8(var)
     return M.Int(var) and var >= -128 and var <= 127 and var
 end
 M.int8 = M.Int8
 
+--- Returns the passed var if it is an int16.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.Int16(var)
     return M.Int(var) and var >= -32768 and var <= 32767 and var
 end
 M.int16 = M.Int16
 
+--- Returns the passed var if it is an int32.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.Int32(var)
     return M.Int(var) and var >= -2147483648 and var <= 2147483647 and var
 end
 M.int32 = M.Int32
 
+--- Returns the passed var if it is an unsigned int.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.Unsigned(var)
-    return Is.Number(var) and (var < INF_POS and var >= 0) and var
+    return Is.Number(var) and (var < huge and var >= 0) and var
 end
 M.unsigned = M.Unsigned
 
+--- Returns the passed var if it is an unsigned int.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.UInt(var)
     return M.Unsigned(var) and rawequal(floor(var), var) and var
 end
 M.uint = M.UInt
 
+--- Returns the passed var if it is an unsigned int8.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.UInt8(var)
     return M.UInt(var) and var <= 255 and var
 end
 M.uint8 = M.UInt8
 
+--- Returns the passed var if it is an unsigned int16.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.UInt16(var)
     return M.UInt(var) and var <= 65535 and var
 end
 M.uint16 = M.UInt16
 
+--- Returns the passed var if it is an unsigned int32.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
 function M.UInt32(var)
     return M.UInt(var) and var <= 4294967295 and var
 end
 M.uint32 = M.UInt32
+
+--- Returns the passed var if it is a float.
+-- @tparam mixed var The variable to check
+-- @treturn mixed
+function M.Float(var)
+    return M.number(var) and var >= 0 and var < 1 and var
+end
+M.float = M.Float
 
 --- Returns the passed var if it is a full position.
 -- @tparam mixed var The variable to check
@@ -245,7 +298,7 @@ M.area = M.Area
 -- @tparam mixed var The variable to check
 -- @treturn mixed
 function M.Vector(var)
-    return M.Table(var) and (M.Number(var[1]) and M.Number(var[2])) and var
+    return M.Table(var) and ((M.Number(var[1]) and M.Number(var[2])) or M.Position(var)) and var
 end
 M.vector = M.Vector
 
@@ -296,21 +349,21 @@ M.Alpha = M.AlphanumWord
 M.alpha = M.AlphanumWord
 M.alphanumword = M.AlphanumWord
 
---- Is this factorio object valid
--- @tparam LuaObject var The variable to check
--- @treturn boolean true if this is a valid LuaObject
-function M.Valid(var)
-    return M.Table(var) and var.valid
-end
-M.valid = M.Valid
-
 --- Is this a factorio object
 -- @tparam LuaObject var The variable to check
--- @treturn boolean true if this is an LuaObject
+-- @treturn mixed the var if this is an LuaObject
 function M.Object(var)
-    return M.Table(var) and var.__self
+    return M.Table(var) and var.__self and var
 end
 M.object = M.Object
+
+--- Is this factorio object valid
+-- @tparam LuaObject var The variable to check
+-- @treturn mixed the var if this is a valid LuaObject
+function M.Valid(var)
+    return M.Object(var) and var.valid and var
+end
+M.valid = M.Valid
 
 --- Returns true if the passed variable is a callable function.
 -- @tparam mixed var The variable to check
@@ -327,8 +380,8 @@ setmetatable(
     {
         __index = function(_, k)
             return M[k] and function(_assert)
-                    return M[k](_assert)
-                end or nil
+                return M[k](_assert)
+            end or nil
         end,
         __call = function(_, ...)
             return (...)
@@ -341,17 +394,18 @@ setmetatable(
     {
         __index = function(_, k)
             return M[k] and function(_assert)
-                    return not M[k](_assert)
-                end or nil
+                return not M[k](_assert)
+            end or nil
         end,
         __call = function(_, ...)
             return not (...)
         end
     }
 )
+Is.is_not = Is.Not
 
 -- convenience function for un-lambda-ing deferred error messages
-local function safeinvoke(f)
+local function safe_invoke(f)
     local ok, msg = xpcall(f, debug.traceback)
     if not ok then
         -- ensure msg really is a string so there is theoretically no chance
@@ -370,31 +424,35 @@ setmetatable(
     {
         __index = function(_, k)
             return M[k] and function(_assert, _message, _level)
-                    _level = tonumber(_level) or 3
-                    return M[k](_assert) or error(type(_message) == 'function' and safeinvoke(_message) or _message, _level)
-                end or nil
+                _level = tonumber(_level) or 3 ---@type integer
+                return M[k](_assert) or error(type(_message) == 'function' and safe_invoke(_message) or _message or 'assertion failed', _level)
+            end or nil
         end,
         __call = function(_, ...)
-            local param = {...}
-            return param[1] or error(type(param[2]) == 'function' and safeinvoke(param[2]) or param[2], tonumber(param[3]) or 3)
+            local param = { ... }
+            local _level = tonumber(param[3]) or 3 --[[@as integer]]
+            return param[1] or error(type(param[2]) == 'function' and safe_invoke(param[2]) or param[2] or 'assertion failed', _level)
         end
     }
 )
+Is.assert = Is.Assert
 
 setmetatable(
     Is.Assert.Not,
     {
         __index = function(_, k)
             return M[k] and function(_assert, _message, _level)
-                    _level = tonumber(_level) or 3
-                    return not M[k](_assert) or error(type(_message) == 'function' and safeinvoke(_message) or _message, _level)
-                end or nil
+                _level = tonumber(_level) or 3 ---@type integer
+                return not M[k](_assert) or error(type(_message) == 'function' and safe_invoke(_message) or _message or 'assertion failed', _level)
+            end or nil
         end,
         __call = function(_, ...)
-            local param = {...}
-            return not param[1] or error(type(param[2]) == 'function' and safeinvoke(param[2]) or param[2], tonumber(param[3]) or 3)
+            local param = { ... }
+            local _level = tonumber(param[3]) or 3 --[[@as integer]]
+            return not param[1] or error(type(param[2]) == 'function' and safe_invoke(param[2]) or param[2] or 'assertion failed', _level)
         end
     }
 )
+Is.assert.is_not = Is.Assert.Not
 
 return Is

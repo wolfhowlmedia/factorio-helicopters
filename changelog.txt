@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 22.06.2025
+  Fixes:
+    - Krastorio2 2.0 support
+    - update stdlib to stdlib2 (with minor fixes)
+    - cleanup the log spam
+  Changes:
+    - roland77: added scripts/build_package.py for easy deployment
+    - roland77: added Krastorio2, SeaBlock as optional dependency as it was found in code
+    - roland77: removed self-advertisement in Korean locale file
+    - roland77: added some missing POSIX-compliant new-line character
+    - roland77: best is to test `script.active_mods["foo"]`` or `mods["foo"]` instead of `foo_something`
+---------------------------------------------------------------------------------------------------
 Version: 0.3.0
 Date: 27.10.2024
   Fixes:

@@ -1,6 +1,6 @@
 function getHeliControllerIndexByOwner(p)
-	if global.heliControllers then
-		for i, curController in ipairs(global.heliControllers) do
+	if storage.heliControllers then
+		for i, curController in ipairs(storage.heliControllers) do
 			if curController.owner == p then
 				return i
 			end
@@ -10,12 +10,12 @@ end
 
 function getHeliControllerByOwner(p)
 	local i = getHeliControllerIndexByowner(p)
-	if i then return global.heliControllers[i] end
+	if i then return storage.heliControllers[i] end
 end
 
 function getHeliControllerIndexByHeli(heli)
-	if global.heliControllers then
-		for i, curController in ipairs(global.heliControllers) do
+	if storage.heliControllers then
+		for i, curController in ipairs(storage.heliControllers) do
 			if curController.heli == heli then
 				return i
 			end
@@ -25,17 +25,16 @@ end
 
 function getHeliControllerByHeli(heli)
 	local i = getHeliControllerIndexByHeli(heli)
-	if i then return global.heliControllers[i] end
+	if i then return storage.heliControllers[i] end
 end
 
 function assignHeliController(owner, heli, target, targetIsPlayer)
-	local oldControllerIndex = searchIndexInTable(global.heliControllers, heli, "heli")
+	local oldControllerIndex = searchIndexInTable(storage.heliControllers, heli, "heli")
 	
 	if oldControllerIndex then
-		global.heliControllers[oldControllerIndex]:destroy()
-		table.remove(global.heliControllers, oldControllerIndex)
+		storage.heliControllers[oldControllerIndex]:destroy()
+		table.remove(storage.heliControllers, oldControllerIndex)
 	end
-
 	insertInGlobal("heliControllers", heliController.new(owner, heli, target, targetIsPlayer))
 end
 
@@ -83,6 +82,7 @@ heliController =
 		heli.remoteController = obj
 
 		setmetatable(obj, {__index = heliController})
+		insertInGlobal("heliControllers", obj)
 
 		OnHeliControllerCreated(obj)
 		return obj

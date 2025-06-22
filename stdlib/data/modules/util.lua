@@ -1,16 +1,18 @@
---- Utilities
--- @module Util
+--- Data Utilities
+-- @module Data.Util
 
 local Util = {
-    _module_name = 'Util'
+    __class = 'Util',
+    __index = require('stdlib/core')
 }
-setmetatable(Util, {__index = require('stdlib/core')})
+setmetatable(Util, Util)
 
 local Is = require('stdlib/utils/is')
+local table = require('stdlib/utils/table')
 
 function Util.extend(proto_array)
     Is.Assert.Table(proto_array, 'Missing table or array to extend')
-    data:extend(#proto_array > 0 and proto_array or {proto_array})
+    data:extend(#proto_array > 0 and proto_array or { proto_array })
 end
 
 function Util.disable_control(control)
@@ -23,6 +25,10 @@ function Util.extend_style(style)
     data.raw['gui-style'].default[style.name] = style
 end
 
+function Util.extend_style_by_name(name, style)
+    data.raw['gui-style'].default[name] = style
+end
+
 --- Quickly duplicate an existing prototype into a new one.
 -- @tparam string data_type The type of the object to duplicate
 -- @tparam string orig_name The name of the object to duplicate
@@ -31,7 +37,7 @@ end
 function Util.duplicate(data_type, orig_name, new_name, mining_result)
     mining_result = type(mining_result) == 'boolean' and new_name or mining_result
     if data.raw[data_type] and data.raw[data_type][orig_name] then
-        local proto = table.deepcopy(data.raw[data_type][orig_name])
+        local proto = table.deep_copy(data.raw[data_type][orig_name])
         proto.name = new_name
 
         if mining_result then
@@ -52,6 +58,16 @@ function Util.duplicate(data_type, orig_name, new_name, mining_result)
     else
         error('Unknown Prototype ' .. data_type .. '/' .. orig_name)
     end
+end
+
+-- load the data portion of stdlib into globals, by default it loads everything into an ALLCAPS name.
+-- Alternatively you can pass a dictionary of `[global names] -> [require path]`.
+-- @tparam[opt] table files
+-- @treturn Data
+-- @usage
+-- require('stdlib/data/data).util.create_data_globals()
+function Util.create_data_globals(files)
+    _ENV.STDLIB.create_stdlib_data_globals(files)
 end
 
 return Util

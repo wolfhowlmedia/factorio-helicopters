@@ -1,20 +1,43 @@
 --- Entity class
--- @classmod Entity
+-- @classmod Data.Entity
+
+local Data = require('stdlib/data/data')
 
 local Entity = {
-    _class = 'entity'
+    __class = 'Entity',
+    __index = Data,
+    __call = Data.__call
 }
-setmetatable(Entity, {__index = require('stdlib/data/data')})
+setmetatable(Entity, Entity)
 
-function Entity:_get(entity, type)
-    return self:get(entity, type)
+function Entity:get_minable_item()
+    local Item = require('stdlib/data/item')
+    if self:is_valid() then
+        local m = self.minable
+        return Item(m and (m.result or (m.results and (m.results[1] or m.results.name))), nil, self.options)
+    end
+    return Item()
 end
-Entity:set_caller(Entity._get)
 
-Entity._mt = {
-    __index = Entity,
-    __call = Entity._get,
-    __tostring = Entity.tostring
-}
+function Entity:is_player_placeable()
+    if self:is_valid() then
+        return self:Flags():any('player-creation', 'placeable-player')
+    end
+    return false
+end
+
+function Entity:change_lab_inputs(name, add)
+    if self:is_valid('lab') then
+        Entity.Unique_Array.set(self.inputs)
+        if add then
+            self.inputs:add(name)
+        else
+            self.inputs:remove(name)
+        end
+    else
+        log('Entity is not a lab.' .. _ENV.data_traceback())
+    end
+    return self
+end
 
 return Entity

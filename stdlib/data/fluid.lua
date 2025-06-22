@@ -1,20 +1,16 @@
 --- Fluid
--- @classmod Fluid
+-- @classmod Data.Fluid
+
+local Data = require('stdlib/data/data')
 
 local Fluid = {
-    _class = 'fluid'
+    __class = 'Fluid',
+    __index = Data,
 }
-setmetatable(Fluid, {__index = require('stdlib/data/data')})
 
-function Fluid:_get(fluid)
-    return self:get(fluid)
+function Fluid:__call(fluid)
+    return self:get(fluid, 'fluid')
 end
-Fluid:set_caller(Fluid._get)
-
-Fluid._mt = {
-    __index = Fluid,
-    __call = Fluid._get,
-    __tostring = Fluid.tostring
-}
+setmetatable(Fluid, Fluid)
 
 return Fluid

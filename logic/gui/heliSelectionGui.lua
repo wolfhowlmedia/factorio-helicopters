@@ -4,6 +4,8 @@ heliSelectionGui =
 {
 	prefix = "heli_heliSelectionGui_",
 
+	
+
 	new = function(mgr, p)
 		obj = 
 		{
@@ -314,105 +316,105 @@ heliSelectionGui =
 		els.root.style.maximal_width = 1000
 		els.root.style.maximal_height = 700
 
-			els.buttonFlow = els.root.add
-			{
-				type = "flow",
-				name = self.prefix .. "btnFlow",
-			}
-			els.buttonFlow.style.left_padding = 7
+		els.buttonFlow = els.root.add
+		{
+			type = "flow",
+			name = self.prefix .. "btnFlow",
+		}
+		els.buttonFlow.style.left_padding = 7
 
-				els.btnToPlayer = els.buttonFlow.add
-				{
-					type = "sprite-button",
-					name = self.prefix .. "btn_toPlayer",
-					sprite = "heli_to_player",
-					style = mod_gui.button_style,
-					tooltip = {"heli-gui-heliSelection-to-player-btn-tt"},
-				}
+		els.btnToPlayer = els.buttonFlow.add
+		{
+			type = "sprite-button",
+			name = self.prefix .. "btn_toPlayer",
+			sprite = "heli_to_player",
+			style = mod_gui.button_style,
+			tooltip = {"heli-gui-heliSelection-to-player-btn-tt"},
+		}
 
-				els.btnToMap = els.buttonFlow.add
-				{
-					type = "sprite-button",
-					name = self.prefix .. "btn_toMap",
-					sprite = "heli_to_map",
-					style = mod_gui.button_style,
-				}
+		els.btnToMap = els.buttonFlow.add
+		{
+			type = "sprite-button",
+			name = self.prefix .. "btn_toMap",
+			sprite = "heli_to_map",
+			style = mod_gui.button_style,
+		}
 
-				els.btnToPad = els.buttonFlow.add
-				{
-					type = "sprite-button",
-					name = self.prefix .. "btn_toPad",
-					sprite = "heli_to_pad",
-					style = mod_gui.button_style,
-				}
+		els.btnToPad = els.buttonFlow.add
+		{
+			type = "sprite-button",
+			name = self.prefix .. "btn_toPad",
+			sprite = "heli_to_pad",
+			style = mod_gui.button_style,
+		}
 
-				els.btnStop = els.buttonFlow.add
-				{
-					type = "sprite-button",
-					name = self.prefix .. "btn_stop",
-					sprite = "heli_stop",
-					style = mod_gui.button_style,
-				}
-				self:setControlBtnsStatus(false, false)
+		els.btnStop = els.buttonFlow.add
+		{
+			type = "sprite-button",
+			name = self.prefix .. "btn_stop",
+			sprite = "heli_stop",
+			style = mod_gui.button_style,
+		}
+		self:setControlBtnsStatus(false, false)
 
-			els.scrollPane = els.root.add
-			{
-				type = "scroll-pane",
-				name = self.prefix .. "scroller",
-			}
+		els.scrollPane = els.root.add
+		{
+			type = "scroll-pane",
+			name = self.prefix .. "scroller",
+		}
 
-			els.scrollPane.style.maximal_width = 1000
-			els.scrollPane.style.maximal_height = 600
+		els.scrollPane.style.maximal_width = 1000
+		els.scrollPane.style.maximal_height = 600
 
-				els.camTable = els.scrollPane.add
-				{
-					type = "table",
-					name = self.prefix .. "camTable",
-					column_count = 4,
-				}
-				els.camTable.style.horizontal_spacing = 10
-				els.camTable.style.vertical_spacing = 10
+		els.camTable = els.scrollPane.add
+		{
+			type = "table",
+			name = self.prefix .. "camTable",
+			column_count = 4,
+		}
+		els.camTable.style.horizontal_spacing = 10
+		els.camTable.style.vertical_spacing = 10
 
-					els.cams ={}
-					self.curCamID = 0
+		els.cams ={}
+		self.curCamID = 0
 
-					if global.helis then
-						local lastSelected = Entity.get_data(self.player, "heliSelectionGui_lastSelectedHeli")
-						local selectedSomething = false
+		if storage.helis then
+			local lastSelected = Entity.get_data(self.player, "heliSelectionGui_lastSelectedHeli")
+			local selectedSomething = false
 
-						for k, curHeli in pairs(global.helis) do
-							local curDriver = curHeli.baseEnt.get_driver()
-							
-							if curHeli.baseEnt.force == self.player.force and 
-								(curDriver == nil or curHeli.hasRemoteController or
-									(curDriver.player and curDriver.player.valid and curDriver.player.name == self.player.name)) then
+			for k, curHeli in pairs(storage.helis) do
+				local curDriver = curHeli.baseEnt.get_driver()
 
-								local controller = searchInTable(global.heliControllers, curHeli, "heli")
-								local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
+				if curHeli.baseEnt.force == self.player.force and 
+					(curDriver == nil or curHeli.hasRemoteController or
+						(curDriver.player and curDriver.player.valid and curDriver.player.name == self.player.name)) then
 
-								table.insert(els.cams,
-								{
-									flow = flow,
-									cam = cam,
-									heli = curHeli,
-									heliController = controller,
-									ID = self.curCamID,
-								})
+					local controller = searchInTable(storage.heliControllers, curHeli, "heli")
+					local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
 
-								self.curCamID = self.curCamID + 1
-								
-								if curHeli == lastSelected then
-									selectedSomething = true
-									self:setCamStatus(els.cams[self.curCamID], true, heliController)	
-								end						
-							end
-						end
+					table.insert(els.cams,
+					{
+						flow = flow,
+						cam = cam,
+						heli = curHeli,
+						heliController = controller,
+						ID = self.curCamID,
+					})
 
-						if not selectedSomething and #els.cams > 0 then
-							self:setCamStatus(els.cams[1], true, els.cams[1].heliController)
-						end
+					self.curCamID = self.curCamID + 1
+
+					if curHeli == lastSelected then
+						selectedSomething = true
+						self:setCamStatus(els.cams[self.curCamID], true, heliController)
 					end
+				end
+			end
 
-					self:setNothingAvailableIfNecessary()
+			if not selectedSomething and #els.cams > 0 then
+				self:setCamStatus(els.cams[1], true, els.cams[1].heliController)
+			end
+		end
+
+		self:setNothingAvailableIfNecessary()
 	end,
 }

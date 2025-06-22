@@ -1,16 +1,19 @@
 --- Tools for working with trains.
--- When this module is loaded into a mod, it automatically registers a number of new events in order to keep track of the trains as their locomotives and wagons are moved around.
+-- When this module is loaded into a mod, it automatically registers a number of new events in order to keep track of
+-- the trains as their locomotives and wagons are moved around.
 -- <p>To handle the events, you should use the @{Event} module.
--- @module Trains
+-- @module Event.Trains
 
 local Trains = {
-    _module_name = 'Trains'
+    __class = 'Trains',
+    __index = require('stdlib/core')
 }
-setmetatable(Trains, {__index = require('stdlib/core')})
+setmetatable(Trains, Trains)
 
 local Event = require('stdlib/event/event')
 local Surface = require('stdlib/area/surface')
 local Entity = require('stdlib/entity/entity')
+local table = require('stdlib/utils/table')
 
 --- This event fires when a train's ID changes.
 -- <p>The train ID is a property of the main locomotive,
@@ -22,12 +25,12 @@ local Entity = require('stdlib/entity/entity')
 -- @tparam uint new_id the ID of the train after the change
 -- @usage
 ---- Event.register(Trains.on_train_id_changed, my_handler)
-Trains.on_train_id_changed = script.generate_event_name()
+Trains.on_train_id_changed = Event.generate_event_name()
 
 --- Given a @{criteria|search criteria}, search for trains that match the criteria.
--- * If ***criteria.surface*** is not supplied, this function searches through all existing surfaces.
--- * If ***criteria.force*** is not supplied, this function searches through all existing forces.
--- * If ***criteria.state*** is not supplied, this function gets trains in any @{defines.train_state|state}.
+-- If ***criteria.surface*** is not supplied, this function searches through all existing surfaces.
+-- If ***criteria.force*** is not supplied, this function searches through all existing forces.
+-- If ***criteria.state*** is not supplied, this function gets trains in any @{defines.train_state|state}.
 -- @tparam criteria criteria a table used to search for trains
 -- @return (<span class="types">{@{train_details},...}</span>) an array of train IDs and LuaTrain instances
 -- @usage
@@ -52,7 +55,7 @@ function Trains.find_filtered(criteria)
     -- Apply state filters
     if criteria.state then
         results =
-            table.filter(
+        table.filter(
             results,
             function(train)
                 return train.state == criteria.state
@@ -62,10 +65,10 @@ function Trains.find_filtered(criteria)
 
     -- Lastly, look up the train ids
     results =
-        table.map(
+    table.map(
         results,
         function(train)
-            return {train = train, id = Trains.get_main_locomotive(train).unit_number}
+            return { train = train, id = Trains.get_main_locomotive(train).unit_number }
         end
     )
 
@@ -98,13 +101,13 @@ end
 function Trains._on_locomotive_changed()
     -- For all the known trains
     local renames = {}
-    for id, train in pairs(global._train_registry) do
+    for id, train in pairs(storage._train_registry) do
         -- Check if their known ID is the same as the LuaTrain's dervied id
         local derived_id = Trains.get_train_id(train)
         -- If it's not
         if (id ~= derived_id) then
             -- Capture the rename
-            table.insert(renames, {old_id = id, new_id = derived_id, train = train})
+            table.insert(renames, { old_id = id, new_id = derived_id, train = train })
         end
     end
 
@@ -112,8 +115,8 @@ function Trains._on_locomotive_changed()
     for _, renaming in pairs(renames) do
         -- Rename it in the registry
         -- and dispatch a renamed event
-        global._train_registry[renaming.new_id] = renaming.train
-        global._train_registry[renaming.old_id] = nil
+        storage._train_registry[renaming.new_id] = renaming.train
+        storage._train_registry[renaming.old_id] = nil
 
         local event_data = {
             old_id = renaming.old_id,
@@ -133,7 +136,7 @@ function Trains.get_main_locomotive(train)
     end
 end
 
---- Creates an entity from a train that is compatible with the @{Entity} module.
+--- Creates an entity from a train that is compatible with the @{Entity.Entity} module.
 -- @tparam LuaTrain train
 -- @return (<span class="types">@{train_entity}</span>)
 function Trains.to_entity(train)
@@ -155,7 +158,7 @@ end
 -- @table train_entity
 
 --- Associates the user data to a train.
--- This is a helper around @{Entity.set_data}.
+-- This is a helper around @{Entity.Entity.set_data}.
 -- <p>The user data will be stored in the global object and it will persist between loads.
 --> The user data will be removed from a train when the train becomes invalid.
 -- @tparam LuaTrain train the train to set the user data for
@@ -166,7 +169,7 @@ function Trains.set_data(train, data)
 end
 
 --- Gets the user data that is associated with a train.
--- This is a helper around @{Entity.get_data}.
+-- This is a helper around @{Entity.Entity.get_data}.
 -- <p>The user data is stored in the global object and it persists between loads.
 --> The user data will be removed from a train when the train becomes invalid.
 -- @tparam LuaTrain train the train to look up user data for
@@ -178,28 +181,27 @@ end
 -- Creates a registry of known trains.
 -- @return table a mapping of train id to LuaTrain object
 function Trains.create_train_registry()
-    global._train_registry = global._train_registry or {}
+    storage._train_registry = storage._train_registry or {}
 
     local all_trains = Trains.find_filtered()
     for _, trainInfo in pairs(all_trains) do
-        global._train_registry[tonumber(trainInfo.id)] = trainInfo.train
+        storage._train_registry[tonumber(trainInfo.id)] = trainInfo.train
     end
 
-    return global._train_registry
+    return storage._train_registry
 end
 
 function Trains.on_train_created(event)
     local train_id = Trains.get_train_id(event.train)
-    global._train_registry[train_id] = event.train
+    storage._train_registry[train_id] = event.train
 end
 
 --- This needs to be called to register events for this module
 -- @treturn Trains
 function Trains.register_events()
-    require('stdlib/event/event')
     -- When a locomotive is removed ...
-    local train_remove_events = {defines.events.on_entity_died, defines.events.on_pre_player_mined_item, defines.events.on_robot_pre_mined}
-    Event.register(train_remove_events, Event.filter_entity('entity', 'locomotive', Trains._on_locomotive_changed))
+    local train_remove_events = { defines.events.on_entity_died, defines.events.on_pre_player_mined_item, defines.events.on_robot_pre_mined }
+    Event.register(train_remove_events, Trains._on_locomotive_changed, Event.Filters.entity.type, 'locomotive')
 
     -- When a locomotive is added ...
     Event.register(defines.events.on_train_created, Trains.on_train_created)

@@ -19,22 +19,23 @@ function setRemoteBtn(p, show)
 	elseif (not show) and flow.heli_remote_btn and flow.heli_remote_btn.valid then
 		flow.heli_remote_btn.destroy()
 
-		local i = searchIndexInTable(global.remoteGuis, p, "player")
+		local i = searchIndexInTable(storage.remoteGuis, p, "player")
 		if i then
-			global.remoteGuis[i]:destroy()
-			table.remove(global.remoteGuis, i)
+			storage.remoteGuis[i]:destroy()
+			table.remove(storage.remoteGuis, i)
 		end
 	end
 end
 
 function toggleRemoteGui(player)
-	local i = searchIndexInTable(global.remoteGuis, player, "player")
+	local i = searchIndexInTable(storage.remoteGuis, player, "player")
+
 
 	if not i then
 		insertInGlobal("remoteGuis", remoteGui.new(player))
 	else
-		global.remoteGuis[i]:destroy()
-		table.remove(global.remoteGuis, i)
+		storage.remoteGuis[i]:destroy()
+		table.remove(storage.remoteGuis, i)
 	end
 end
 
@@ -59,7 +60,6 @@ remoteGui =
 		}
 
 		setmetatable(obj, {__index = remoteGui})
-	
 		obj.guis.heliSelection = heliSelectionGui.new(obj, p)
 		return obj
 	end,
@@ -84,7 +84,7 @@ remoteGui =
 		if not self.player.valid then
 			self:destroy()
 		else
-			for k, curGui in pairs(self.guis) do
+			for _, curGui in pairs(self.guis) do
 				if curGui.OnTick then
 					curGui:OnTick()
 				end
@@ -95,7 +95,7 @@ remoteGui =
 	OnGuiClick = function(self, e)
 		local name = e.element.name
 
-		for k, curGui in pairs(self.guis) do
+		for _, curGui in pairs(self.guis) do
 			if name:match("^" .. curGui.prefix .. ".+") and curGui.OnGuiClick then
 				curGui:OnGuiClick(e)
 			end
@@ -129,7 +129,7 @@ remoteGui =
 				self.guis.targetSelection = nil
 			end
 			self.guis.heliSelection:setVisible(true)
-		
+
 		elseif evtName == "selectedPlayer" then
 			local p = ...
 			local heli = self.guis.heliSelection.selectedCam.heli

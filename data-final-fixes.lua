@@ -1,4 +1,12 @@
 require("prototypes.tiles.heli-pad-concrete")
+if mods["Krastorio2"] then
+	for _, car in pairs(data.raw.car) do
+		if car.energy_source and car.energy_source.type == "burner" then
+			car.energy_source.fuel_categories = { "kr-vehicle-fuel" }
+		end
+	end
+end
+
 --[[
 if mods["Krastorio2"] then
 	-- copy K2 eqipment categories into heli-equipment-grid

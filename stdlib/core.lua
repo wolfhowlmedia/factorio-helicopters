@@ -1,19 +1,10 @@
---- The Core module loads some helper functions useful in all stages
+--- The Core module loads some helper functions and globals useful in all stages
 -- of a mods life cycle. All modules have an __index method into core.
 -- @module Core
 -- @usage local Core = require('stdlib/core')
 
---Global mutates
+-- require global helper functions.
 require('stdlib/utils/globals')
-require('stdlib/utils/table')
-require('stdlib/utils/string')
-require('stdlib/utils/math')
-
---Defines Mutates
-require('stdlib/defines/color')
-require('stdlib/defines/time')
-
-local Is = require('stdlib/utils/is')
 
 local Core = {
     _VERSION = '1.0.0',
@@ -36,75 +27,97 @@ local Core = {
         ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
         OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     ]],
-    _module_name = 'Core',
-    _concat = function(lhs, rhs)
-        --Sanitize to remove address
-        return tostring(lhs):gsub('(%w+)%: %x+', '%1: (ADDR)') .. tostring(rhs):gsub('(%w+)%: %x+', '%1: (ADDR)')
+    __class = 'Core',
+    __call = function(t, ...)
+        return t:__call(...)
     end,
-    _classes = {
-        string_array_mt = require('stdlib/utils/classes/string_array')
-    }
+    __config = require('stdlib/config')
 }
 
+Core.Unique_Array = require('stdlib/utils/classes/unique_array')
+Core.String_Array = Core.Unique_Array
+
+--- Prints and logs the msg
+-- @tparam string msg
+-- @treturn boolean true if the message was printed to someone
 function Core.log_and_print(msg)
     if game and #game.connected_players > 0 then
-        log(msg)
+        log(script.mod_name .. ':' .. msg)
         game.print(msg)
         return true
-    end
-end
-
-function Core.VALID_FILTER(v)
-    return v and v.valid
-end
-
---- Sets the __call metamethod on the metatable.
--- @tparam table this The object to get the metatable for
--- @tparam function caller The function to set to __call
--- @treturn table with metatable attached
-function Core.set_caller(this, caller)
-    if getmetatable(this) then
-        getmetatable(this).__call = caller
-        return this
     else
-        error('Metatable not found', 2)
+        log(msg)
     end
 end
 
---- load the stdlib into globals, by default it loads everything into an ALLCAPS name.
--- Alternatively you can pass a dictionary of `[global names] -> [require path]`.
--- @tparam[opt] table files
--- @treturn Core
--- @usage
--- require('stdlib/core).create_stdlib_globals()
-function Core.create_stdlib_globals(files)
-    files =
-        files or
-        {
-            GAME = 'stdlib/game',
-            AREA = 'stdlib/area/area',
-            POSITION = 'stdlib/area/position',
-            TILE = 'stdlib/area/tile',
-            SURFACE = 'stdlib/area/surface',
-            CHUNK = 'stdlib/area/chunk',
-            COLOR = 'stdlib/color/color',
-            ENTITY = 'stdlib/entity/entity',
-            INVENTORY = 'stdlib/entity/inventory',
-            RESOURCE = 'stdlib/entity/resource',
-            CONFIG = 'stdlib/config/config',
-            LOGGER = 'stdlib/log/logger',
-            QUEUE = 'stdlib/queue/queue',
-            EVENT = 'stdlib/event/event',
-            GUI = 'stdlib/event/gui',
-            PLAYER = 'stdlib/event/player',
-            FORCE = 'stdlib/event/force'
-        }
-    Is.Assert.Table(files, 'files must be a dictionary of global names -> file paths')
-
-    for glob, path in pairs(files) do
-        _G[glob] = prequire((path:gsub('%.', '/'))) -- extra () required to emulate select(1)
+if script then
+    ---Simple valid check, only available in control stage.
+    ---@deprecated
+    function Core.VALID_FILTER(v)
+        return v and v.valid
     end
-    return Core
+
+    function Core.get_file_path(append)
+        return script.mod_name .. '/' .. append
+    end
+end
+
+local function no_meta(item, path)
+    if path[#path] == _ENV.inspect.METATABLE then
+        return { item.__class }
+    end
+    return item
+end
+
+--- Inspect the class
+function Core.inspect(self)
+    return _ENV.inspect(self, { process = no_meta })
+end
+
+--- Help function available on everything.
+function Core.help(self)
+    local help_string = ''
+    local tab = self
+    local pat = '^%_%_%_'
+    local function sort(a, b)
+        if b:find(pat) then
+            return false
+        end
+        return a:find(pat) or a < b
+    end
+    local function build_string()
+        local keys = {}
+        for key in pairs(tab) do
+            if type(key) ~= 'number' and not key:find('^%_%w') then
+                if key == '__class' then
+                    key = '___' .. tab.__class
+                end
+                keys[#keys + 1] = key
+            end
+        end
+        table.sort(keys, sort)
+        help_string = help_string .. table.concat(keys, ', ') .. '\n\n'
+    end
+
+    while (type(tab) == 'table') do
+        build_string()
+
+        local old_meta = tab
+        tab = getmetatable(tab)
+
+        if tab then
+            if tab ~= old_meta then
+                build_string()
+            end
+            if type(tab.__index) == 'function' then
+                tab = tab.__parent
+            elseif type(tab.__index == 'table') then
+                tab = tab.__index
+            end
+        end
+    end
+
+    return help_string
 end
 
 return Core

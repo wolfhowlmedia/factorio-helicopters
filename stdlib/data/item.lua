@@ -1,62 +1,44 @@
 --- Item
--- @classmod Item
+-- @classmod Data.Item
+
+local Data = require('stdlib/data/data')
+local Table = require('stdlib/utils/table')
 
 local Item = {
-    _class = 'item'
+    __class = 'Item',
+    __index = Data,
+    __call = Data.__call
 }
-setmetatable(Item, {__index = require('stdlib/data/data')})
+setmetatable(Item, Item)
 
-Item.item_types = {
-    'item',
-    'ammo',
-    'armor',
-    'gun',
-    'capsule',
-    'repair-tool',
-    'mining-tool',
-    'item-with-entity-data',
-    'rail-planner',
-    'tool',
-    'blueprint',
-    'deconstruction-item',
-    'blueprint-book',
-    'selection-tool',
-    'item-with-tags',
-    'item-with-label',
-    'item-with-inventory',
-    'module'
-}
-
-function Item:_get(item, item_type)
-    return self:get(item, item_type)
+local function make_table(params)
+    if not params then
+        return Table.keys(data.raw.lab)
+    else
+        return type(params) == 'table' and params or { params }
+    end
 end
-Item:set_caller(Item._get)
 
-Item.item_types = {
-    'item',
-    'ammo',
-    'armor',
-    'gun',
-    'capsule',
-    'repair-tool',
-    'mining-tool',
-    'item-with-entity-data',
-    'rail-planner',
-    'tool',
-    'blueprint',
-    'deconstruction-item',
-    'blueprint-book',
-    'selection-tool',
-    'item-with-tags',
-    'item-with-label',
-    'item-with-inventory',
-    'module'
-}
+local function change_inputs(name, lab_names, add)
+    lab_names = make_table(lab_names)
+    local Entity = require('stdlib/data/entity')
+    for _, lab_name in pairs(lab_names) do
+        Entity(lab_name, 'lab'):change_lab_inputs(name, add)
+    end
+end
 
-Item._mt = {
-    __index = Item,
-    __call = Item._get,
-    __tostring = Item.tostring
-}
+function Item:add_to_labs(lab_names)
+    if self:is_valid() then
+        change_inputs(self.name, lab_names, true)
+    end
+    return self
+end
+
+function Item:remove_from_labs(lab_names)
+    if self:is_valid() then
+        change_inputs(self.name, lab_names, false)
+    end
+    return self
+end
 
 return Item

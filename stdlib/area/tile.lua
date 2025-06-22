@@ -1,37 +1,30 @@
 --- Tools for working with tiles.
 -- A tile represents a 1 unit<sup>2</sup> on a surface in Factorio.
--- @module Tile
+-- @module Area.Tile
 -- @usage local Tile = require('stdlib/area/tile')
 -- @see LuaTile
 
-local Tile = {_module_name = 'Tile'}
-setmetatable(Tile, {__index = require('stdlib/core')})
+local Tile = {
+    __class = 'Tile',
+    __index = require('stdlib/core')
+}
+setmetatable(Tile, Tile)
 
 local Is = require('stdlib/utils/is')
-local Area = require('stdlib/area/area')
+local Game = require('stdlib/game')
 local Position = require('stdlib/area/position')
-local Chunk = require('stdlib/area/chunk')
 
---local MAX_UINT = 4294967296
+Tile.__call = Position.__call
 
 --- Get the @{LuaTile.position|tile position} of a tile where the given position resides.
--- @tparam Concepts.Position position the position that resides somewhere in a tile
--- @treturn LuaTile.position the tile position
-function Tile.from_position(position)
-    position = Position.new(position)
-    return Position.new({x = math.floor(position.x), y = math.floor(position.y)}) --Is this correct? Tile position should be the center?
-end
+-- @function Tile.from_position
+-- @see Area.Position.floor
+Tile.from_position = Position.floor
 
 --- Converts a tile position to the @{Concepts.BoundingBox|area} of the tile it is in.
--- @tparam LuaTile.position tile_pos the tile position
--- @treturn Concepts.BoundingBox the area of the tile
-function Tile.to_area(tile_pos)
-    Is.Assert(tile_pos, 'missing tile_pos argument')
-    local left_top = Tile.from_position(tile_pos)
-    local right_bottom = Position.offset(Position.copy(tile_pos), 1, 1)
-
-    return Area.new({left_top = left_top, right_bottom = right_bottom})
-end
+-- @function Tile.to_area
+-- @see Area.Position.to_tile_area
+Tile.to_area = Position.to_tile_area
 
 --- Creates an array of tile positions for all adjacent tiles (N, E, S, W) **OR** (N, NE, E, SE, S, SW, W, NW) if diagonal is set to true.
 -- @tparam LuaSurface surface the surface to examine for adjacent tiles
@@ -43,9 +36,9 @@ function Tile.adjacent(surface, position, diagonal, tile_name)
     Is.Assert(surface, 'missing surface argument')
     Is.Assert(position, 'missing position argument')
 
-    local offsets = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}
+    local offsets = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } }
     if diagonal then
-        offsets = {{0, 1}, {1, 1}, {1, 0}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}}
+        offsets = { { 0, 1 }, { 1, 1 }, { 1, 0 }, { -1, 1 }, { -1, 0 }, { -1, -1 }, { 0, -1 }, { 1, -1 } }
     end
     local adjacent_tiles = {}
     for _, offset in pairs(offsets) do
@@ -69,70 +62,29 @@ end
 -- @tparam[opt] Mixed default_value the user data to set for the tile and returned if it did not have user data
 -- @treturn ?|nil|Mixed the user data **OR** *nil* if it does not exist for the tile and no default_value was set
 function Tile.get_data(surface, tile_pos, default_value)
-    Is.Assert(surface, 'missing surface argument')
-    Is.Assert(tile_pos, 'missing tile_pos argument')
-    if not global._tile_data then
-        if not default_value then
-            return nil
-        end
-        global._tile_data = {}
-    end
-    local chunk_idx = Chunk.get_index(surface, Chunk.from_position(tile_pos))
-    if not global._tile_data[chunk_idx] then
-        if not default_value then
-            return nil
-        end
-        global._tile_data[chunk_idx] = {}
-    end
+    surface = Game.get_surface(surface)
+    assert(surface, 'invalid surface')
 
-    local chunk_tiles = global._tile_data[chunk_idx]
-    if not chunk_tiles then
-        return nil
-    end
+    local key = Position.to_key(Position.floor(tile_pos))
 
-    local idx = Tile.get_index(tile_pos)
-    local val = chunk_tiles[idx]
-    if not val then
-        chunk_tiles[idx] = default_value
-        val = default_value
-    end
-
-    return val
+    return Game.get_or_set_data('_tile_data', surface.index, key, false, default_value)
 end
+Tile.get = Tile.get_data
 
 --- Associates the user data to a tile.
 -- The user data will be stored in the global object and it will persist between loads.
 -- @tparam LuaSurface surface the surface on which the user data will reside
 -- @tparam LuaTile.position tile_pos the tile position of a tile that will be associated with the user data
--- @tparam ?|nil|Mixed data the user data to set **OR** *nil* to erase the existing user data for the tile
+-- @tparam ?|nil|Mixed value the user data to set **OR** *nil* to erase the existing user data for the tile
 -- @treturn ?|nil|Mixed the previous user data associated with the tile **OR** *nil* if the tile had no previous user data
-function Tile.set_data(surface, tile_pos, data)
-    Is.Assert(surface, 'missing surface argument')
-    Is.Assert(tile_pos, 'missing tile_pos argument')
-    if not global._tile_data then
-        global._tile_data = {}
-    end
+function Tile.set_data(surface, tile_pos, value)
+    surface = Game.get_surface(surface)
+    assert(surface, 'invalid surface')
 
-    local chunk_idx = Chunk.get_index(surface, Chunk.from_position(tile_pos))
-    if not global._tile_data[chunk_idx] then
-        global._tile_data[chunk_idx] = {}
-    end
+    local key = Position.to_key(Position.floor(tile_pos))
 
-    local chunk_tiles = global._tile_data[chunk_idx]
-    local idx = Tile.get_index(tile_pos)
-    local prev = chunk_tiles[idx]
-    chunk_tiles[idx] = data
-
-    return prev
+    return Game.get_or_set_data('_tile_data', surface.index, key, true, value)
 end
-
---- Calculates and returns a stable and deterministic integer ID of a tile from a given tile position.
--- The tile ID will not change once it is calculated, and every tile ID is unique to the chunk they are in and they may repeat across a surface.
--- @tparam LuaTile.position tile_pos
--- @treturn int the tile ID
-function Tile.get_index(tile_pos)
-    Is.Assert(tile_pos, 'missing tile_pos argument')
-    return bit32.band(bit32.bor(bit32.lshift(bit32.band(tile_pos.x, 0x1F), 5), bit32.band(tile_pos.y, 0x1F)), 0x3FF)
-end
+Tile.set = Tile.set_data
 
 return Tile

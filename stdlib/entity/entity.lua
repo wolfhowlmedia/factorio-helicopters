@@ -1,22 +1,23 @@
 --- Tools for working with entities.
--- @module Entity
+-- @module Entity.Entity
 -- @usage local Entity = require('stdlib/entity/entity')
 
-local Entity = {_module_name = 'Entity'}
-setmetatable(Entity, {__index = require('stdlib/core')})
-
-local Is = require('stdlib/utils/is')
+local Entity = {
+    __class = 'Entity',
+    __index = require('stdlib/core')
+}
+setmetatable(Entity, Entity)
 
 --- Tests whether an entity has access to a given field.
 -- @tparam LuaEntity entity the entity to test the access to a field
 -- @tparam string field_name the field name
 -- @treturn boolean true if the entity has access to the field, false if the entity threw an exception when trying to access the field
 function Entity.has(entity, field_name)
-    Is.Assert(entity, 'missing entity argument')
-    Is.Assert(field_name, 'missing field name argument')
+    assert(entity, 'missing entity argument')
+    assert(field_name, 'missing field name argument')
 
     local status =
-        pcall(
+    pcall(
         function()
             return entity[field_name]
         end
@@ -25,124 +26,81 @@ function Entity.has(entity, field_name)
 end
 
 --- Gets the user data that is associated with an entity.
--- The user data is stored in the global object and it persists between loads.
+-- The user data is stored in the storage object and it persists between loads.
 --> The user data will be removed from an entity when the entity becomes invalid.
 -- @tparam LuaEntity entity the entity to look up
--- @param Optional field to access data like a table
 -- @treturn ?|nil|Mixed the user data, or nil if no data exists for the entity
-function Entity.get_data(entity, field)
-    Is.Assert(entity, 'missing entity argument')
-
+function Entity.get_data(entity)
+    assert(entity, 'missing entity argument')
     if not storage._entity_data then
         return nil
     end
 
-    local dest
-
+    -- local unit_number = entity.unit_number
     local code, unit_number = pcall(function() return entity.unit_number end)
-    if code then
-        dest = storage._entity_data[unit_number]
+    if unit_number then
+        return storage._entity_data[unit_number]
     else
-        local prototype_name = entity.name
-        if not storage._entity_data[prototype_name] then
+        local entity_name = entity.name
+        if not storage._entity_data[entity_name] then
             return nil
         end
 
-        local prototype_category = storage._entity_data[prototype_name]
-
-        for i = #prototype_category, 1, -1 do
-            local cur_entity_data = prototype_category[i]
-
-            if not cur_entity_data.entity.valid then
-                table.remove(prototype_category, i)
-            
-            elseif Entity._are_equal(cur_entity_data.entity, entity) then
-                dest = cur_entity_data.data
-                break
+        local entity_category = storage._entity_data[entity_name]
+        for _, entity_data in pairs(entity_category) do
+            if Entity._are_equal(entity_data.entity, entity) then
+                return entity_data.data
             end
         end
+        return nil
     end
-
-    if dest and field then
-        if type(dest) == "table" then
-            return dest[field]
-        else
-            return nil
-        end
-    end
-
-    return dest
 end
 
 --- Associates the user data to an entity.
--- The user data will be stored in the global object and it will persist between loads.
+-- The user data will be stored in the storage object and it will persist between loads.
 --> The user data will be removed from an entity when the entity becomes invalid.
 -- @tparam LuaEntity entity the entity with which to associate the user data
 -- @tparam ?|nil|Mixed data the data to set, or nil to delete the data associated with the entity
--- @param Optional field to set data to, treats the entity data like a table
 -- @treturn ?|nil|Mixed the previous data associated with the entity, or nil if the entity had no previous data
-function Entity.set_data(entity, data, field)
-    Is.Assert(entity, 'missing entity argument')
+function Entity.set_data(entity, data)
+    assert(entity, 'missing entity argument')
 
     if not storage._entity_data then
         storage._entity_data = {}
     end
 
-    local dest_table, dest_key
-
+    -- local unit_number = entity.unit_number
     local code, unit_number = pcall(function() return entity.unit_number end)
-    if code then
-        dest_table = storage._entity_data
-        dest_key = unit_number
+    if unit_number then
+        local prev = storage._entity_data[unit_number]
+        storage._entity_data[unit_number] = data
+        return prev
     else
-        local prototype_name = entity.name
-        dest_key = "data"
-
-        if not storage._entity_data[prototype_name] then
-            storage._entity_data[prototype_name] = {}
+        local entity_name = entity.name
+        if not storage._entity_data[entity_name] then
+            storage._entity_data[entity_name] = {}
         end
 
-        local prototype_category = storage._entity_data[prototype_name]
+        local entity_category = storage._entity_data[entity_name]
 
-        for i = #prototype_category, 1, -1 do
-            local cur_entity_data = prototype_category[i]
-
-            if not cur_entity_data.entity.valid then
-                table.remove(prototype_category, i)
-
-            elseif Entity._are_equal(cur_entity_data.entity, entity) then
-                if not field and data == nil then
-                    local prev = cur_entity_data.data
-                    table.remove(prototype_category, i)
-                    return prev
+        for i = #entity_category, 1, -1 do
+            local entity_data = entity_category[i]
+            if not entity_data.entity.valid then
+                table.remove(entity_category, i)
+            end
+            if Entity._are_equal(entity_data.entity, entity) then
+                local prev = entity_data.data
+                if data then
+                    entity_data.data = data
+                else
+                    table.remove(entity_category, i)
                 end
-
-                dest_table = cur_entity_data
-                break
+                return prev
             end
         end
-
-        if not dest_table then
-            table.insert(prototype_category, {entity = entity})
-            dest_table = prototype_category[#prototype_category]
-        end
+        table.insert(entity_category, { entity = entity, data = data })
     end
-
-    local prev
-
-    if field then
-        if type(dest_table[dest_key]) ~= "table" then
-            dest_table[dest_key] = {}
-        end
-
-        prev = dest_table[dest_key][field]
-        dest_table[dest_key][field] = data
-    else
-        prev = dest_table[dest_key]
-        dest_table[dest_key] = data
-    end
-
-    return prev
+    return nil
 end
 
 --- Freezes an entity, by making it inactive, inoperable, and non-rotatable, or unfreezes by doing the reverse.
@@ -150,7 +108,7 @@ end
 -- @tparam[opt=true] boolean mode if true, freezes the entity, if false, unfreezes the entity. If not specified, it is set to true
 -- @treturn LuaEntity the entity that has been frozen or unfrozen
 function Entity.set_frozen(entity, mode)
-    Is.Assert(entity, 'missing entity argument')
+    assert(entity, 'missing entity argument')
     mode = mode == false and true or false
     entity.active = mode
     entity.operable = mode
@@ -163,7 +121,7 @@ end
 -- @tparam[opt=true] boolean mode if true, makes the entity indestructible, if false, makes the entity destructable
 -- @treturn LuaEntity the entity that has been made indestructable or destructable
 function Entity.set_indestructible(entity, mode)
-    Is.Assert(entity, 'missing entity argument')
+    assert(entity, 'missing entity argument')
     mode = mode == false and true or false
     entity.minable = mode
     entity.destructible = mode
@@ -187,100 +145,42 @@ function Entity._are_equal(entity_a, entity_b)
     end
 end
 
---- Functions that raise events
--- @section Raise-Events
--- from @{https://github.com/aubergine10/lifecycle-events lifecycle-events}
--- <br>Used for raising `on_built and on_died` events for other mods
-
---- Destroy an entity by first raising the event.
---> Some entities can't be destroyed, such as the rails with trains on them.
--- @tparam LuaEntity entity the entity to be destroyed
--- @tparam[opt=false] boolean died raise on_entity_died event
--- @tparam[opt] LuaEntity cause the entity if available that did the killing for on_entity_died
--- @tparam[opt] LuaForce force the force if any that did the killing
--- @treturn boolean was the entity destroyed?
-function Entity.destroy_entity(entity, died, cause, force)
-    if entity and entity.valid and entity.can_be_destroyed then
-        local event = {
-            name = died and defines.events.on_entity_died or defines.events.script_raised_destroy,
-            entity = entity,
-            cause = cause,
-            force = force,
-            script = true
+function Entity.find_resources(entity, all)
+    if entity.type == 'mining-drill' then
+        local radius = entity.prototype.mining_drill_radius
+        local name = (not all and (entity.mining_target and entity.mining_target.name)) or nil
+        return entity.surface.count_entities_filtered {
+            type = 'resource',
+            name = name,
+            position = entity.position,
+            radius = radius,
         }
-        -- If no event name is passed, assume script_raised_destroy, otherwise raise the event
-        -- with the passed event name. ie. defines.events.on_preplayer_mined_item
-        event.script = true
-        event.mod_name = 'stdlib'
-        script.raise_event(event.name, event)
-        return entity.destroy()
     end
+    return 0
 end
 
---- Create an entity and raise a build event.
--- @tparam LuaSurface surface the surface to create the entity on
--- @tparam table settings settings to pass to create_entity see @{LuaSurface.create_entity}
--- @tparam[opt] uint player_index the index of the player, when not present and not raise_script_event pass a fake robot
--- @tparam[opt] boolean raise_script_event raise script_raised_built
--- @treturn LuaEntity the created entity
-function Entity.create_entity(surface, settings, player_index, raise_script_event)
-    surface = game.surfaces[surface]
-    local entity = surface.create_entity(settings)
-    if entity then
-        local event = {
-            created_entity = entity,
-            script = true
-        }
+function Entity.is_damaged(entity)
+    return entity.get_health_ratio() < 1
+end
+Entity.damaged = Entity.is_damaged
 
-        if raise_script_event then
-            event.name = defines.events.script_raised_built
-            event.player_index = player_index
-        elseif player_index then
-            event.name = defines.events.on_built_entity
-            event.player_index = player_index
-        else
-            event.name = defines.events.on_robot_built_entity
-            event.robot = {}
-        end
-
-        script.raise_event(event.name, event)
-        return entity
-    end
+function Entity.is_circuit_connected(entity)
+    local list = entity.circuit_connected_entities
+    return list and (next(list.red) or next(list.green))
 end
 
---- Revivie an entity ghost and raise the `on_built` or `on_robot_built` event.
--- @tparam LuaEntity ghost the ghost entity to revivie
--- @tparam[opt] uint player_index if present, raise `on_built_entity` with player_index, if not present raise `on_robot_built_entity`
--- @tparam[opt] boolean raise_script_event, if true raise script_raised_built as the event
--- @treturn table the item stacks this entity collided with
--- @treturn LuaEntity the new revived entity
--- @treturn LuaEntity the item request proxy if present
-function Entity.revive(ghost, player_index, raise_script_event)
-    if ghost and ghost.valid then
-        local collided, revived, proxy = ghost.revive(true)
-        if revived then
-            local event = {
-                created_entity = revived,
-                revived = true,
-                script = true,
-                modname = 'stdlib'
-            }
+function Entity.count_circuit_connections(entity)
+    local list = entity.circuit_connected_entities
+    return list and #list.red + #list.green
+end
 
-            if raise_script_event then
-                event.name = defines.events.script_raised_built
-                event.player_index = player_index
-            elseif player_index then
-                event.name = defines.events.on_built_entity
-                event.player_index = player_index
-            else
-                event.name = defines.events.on_robot_built_entity
-                event.robot = {}
-            end
+function Entity.has_fluidbox(entity)
+    local box = entity.fluidbox
+    return box and #box > 0
+end
 
-            script.raise_event(event.name, event)
-            return collided, revived, proxy
-        end
-    end
+function Entity.can_deconstruct(entity)
+    return entity.minable and entity.prototype.selectable_in_game and not entity.has_flag('not-deconstructable')
 end
 
 return Entity

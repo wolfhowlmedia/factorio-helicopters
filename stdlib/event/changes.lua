@@ -1,14 +1,37 @@
 --- Configuration changed event handling.
 -- This module registers events
--- @module Changes
--- @usage require('stdlib/event/changes')
+-- @module Event.Changes
+-- @usage
+-- local Changes = require('stdlib/event/changes')
+-- Changes.register('mod_versions', 'path_to_version_file')
+-- @usage
+-- -- version files should return a dictionary of functions indexed by version number.
+-- return {['1.0.0'] = function() end}
+-- @usage
+-- -- Other change files should return a single function and will run in the order they are added.
+-- -- Multiple files can be registered to a change type.
+-- Changes.register('any-first', 'path_to_file_1')
+-- Changes.register('any-first', 'path_to_file_2')
 
 local Event = require('stdlib/event/event')
 
+---@class Changes
+---@field map_first table
+---@field any_first table
+---@field mod_first table
+---@field mod_versions table
+---@field mod_last table
+---@field any_last table
+---@field map_last table
+---@field get_file_path function
 local Changes = {
-    _module_name = 'Changes'
+    __class = 'Changes',
+    __index = require('stdlib/core'),
+    registered_for_events = false
 }
-setmetatable(Changes, {__index = require('stdlib/core')})
+setmetatable(Changes, Changes)
+
+local inspect = _ENV.inspect
 
 --[[
     ConfigurationChangedData
@@ -21,76 +44,110 @@ setmetatable(Changes, {__index = require('stdlib/core')})
     old_version :: string: Old version of the mod. May be nil if the mod wasn't previously present (i.e. it was just added).
     new_version :: string: New version of the mod. May be nil if the mod is no longer present (i.e. it was just removed).
 --]]
-Changes.versions = prequire('changes/versions') or {}
-Changes['map-change-always-first'] = prequire('changes/map-change-always-first')
-Changes['any-change-always-first'] = prequire('changes/any-change-always-first')
-Changes['mod-change-always-first'] = prequire('changes/mod-change-always-first')
-Changes['mod-change-always-last'] = prequire('changes/mod-change-always-last')
-Changes['any-change-always-last'] = prequire('changes/any-change-always-last')
-Changes['map-change-always-last'] = prequire('changes/map-change-always-last')
+local table = require('stdlib/utils/table')
 
-local function run_if_exists(func)
-    return func and type(func) == 'function' and func()
+local map_changes = {
+    ['map_first'] = true,
+    ['any_first'] = true,
+    ['mod_first'] = true,
+    ['mod_versions'] = true,
+    ['mod_last'] = true,
+    ['any_last'] = true,
+    ['map_last'] = true
+}
+for change_type in pairs(map_changes) do
+    Changes[change_type] = {}
 end
 
---[Mark all migrations as complete during Init]--
-function Changes.on_init()
-    local list = {}
-    local cur_version = script.active_mods[script.mod_name]
-    for ver in pairs(Changes.versions) do
-        list[ver] = cur_version
+local function run_if_exists(path)
+    for _, fun in pairs(path) do
+        if type(fun) == 'function' then
+            fun()
+        end
     end
-    global._changes = list
+end
+
+function Changes.register_events(change_type, path)
+    if map_changes[change_type] then
+        if not Changes.registered_for_events then
+            Event.register(Event.core_events.configuration_changed, Changes.on_configuration_changed)
+            if change_type == 'mod_versions' then
+                -- Register on_init only for mod_versions changes
+                Event.register(Event.core_events.init, Changes.on_init)
+            end
+        end
+        Changes[change_type][path] = require(path)
+    else
+        error('Incorrect change type ' .. (change_type or 'nil') .. ' expected: ' .. table.concat(table.keys(map_changes), ', ') .. '.')
+    end
+    return Changes
+end
+Changes.register = Changes.register_events
+
+function Changes.register_versions(path)
+    return Changes.register_events('mod_versions', path)
+end
+
+-- Mark all version changes as complete during Init
+function Changes.on_init()
+    for _, versions in pairs(Changes.mod_versions) do
+        local list = {}
+        local cur_version = script.active_mods[script.mod_name]
+        for ver in pairs(versions) do
+            list[ver] = cur_version
+        end
+        storage._changes = list
+    end
 end
 
 function Changes.on_configuration_changed(event)
-    run_if_exists(Changes['map-change-always-first'])
+    run_if_exists(Changes.map_first)
     if event.mod_changes then
-        run_if_exists(Changes['any-change-always-first'])
+        run_if_exists(Changes.any_first)
         if event.mod_changes[script.mod_name] then
-            run_if_exists(Changes['mod-change-always-first'])
+            run_if_exists(Changes.mod_first)
             local this_mod_changes = event.mod_changes[script.mod_name]
             Changes.on_mod_changed(this_mod_changes)
-            log('Version changed from ' .. tostring(this_mod_changes.old_version) .. ' to ' .. tostring(this_mod_changes.new_version))
-            run_if_exists(Changes['mod-change-always-last'])
+            log(script.mod_name .. ': version changed from ' .. tostring(this_mod_changes.old_version) .. ' to ' .. tostring(this_mod_changes.new_version))
+            run_if_exists(Changes.mod_last)
         end
-        run_if_exists(Changes['any-change-always-last'])
+        run_if_exists(Changes.any_last)
     end
-    run_if_exists(Changes['map-change-always-last'])
+    run_if_exists(Changes.map_last)
 end
 
 function Changes.on_mod_changed(this_mod_changes)
-    global._changes = global._changes or {}
+    storage._changes = storage._changes or {}
 
     local old = this_mod_changes.old_version
     if old then -- Find the last installed version
-        for ver, func in pairs(Changes.versions) do
-            if not global._changes[ver] then
-                run_if_exists(func)
-                global._changes[ver] = old
-                log('Migration completed for version ' .. ver)
+        local versions = {}
+        for _, path in pairs(Changes.mod_versions) do
+            for ver, fun in pairs(path) do
+                if not storage._changes[ver] then
+                    versions[ver] = this_mod_changes.new_version
+                    fun()
+                    log('Migration completed for version ' .. ver)
+                end
             end
         end
+        table.each(
+            versions,
+            function(v, k)
+                storage._changes[k] = v
+            end
+        )
     end
 end
 
-function Changes.register_events()
-    Event.register(Event.core_events.configuration_changed, Changes.on_configuration_changed)
-    Event.register(Event.core_events.init, Changes.on_init)
-    return Changes
+function Changes.dump_data()
+    for change_type in pairs(map_changes) do
+        if table.size(Changes[change_type]) > 0 then
+            game.write_file(Changes.get_file_path('Changes/' .. change_type .. '.lua'),
+                'return ' .. inspect(Changes[change_type], { longkeys = true, arraykeys = true }))
+        end
+    end
+    game.write_file(Changes.get_file_path('Changes/global.lua'), 'return ' .. inspect(storage._changes or nil, { longkeys = true, arraykeys = true }))
 end
-
---[Always run these before any migrations]--
---Changes["map-change-always-first"] = function() end
---Changes["any-change-always-first"] = function() end
---Changes["mod-change-always-first"] = function() end
-
---Mod version changes made
---Changes.version["0.0.1"] = function() end
-
---[Always run these at the end]--
---Changes["mod-change-always-last"] = function() end
---Changes["any-change-always-last"] = function() end
---Changes["map-change-always-last"] = function() end
 
 return Changes
