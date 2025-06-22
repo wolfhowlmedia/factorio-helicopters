@@ -177,46 +177,46 @@ heliPadSelectionGui =
 		els.root.style.maximal_height = 700
 
 
-			els.scrollPane = els.root.add
-			{
-				type = "scroll-pane",
-				name = self.prefix .. "scroller",
-			}
+		els.scrollPane = els.root.add
+		{
+			type = "scroll-pane",
+			name = self.prefix .. "scroller",
+		}
 
-			els.scrollPane.style.maximal_width = 1000
-			els.scrollPane.style.maximal_height = 600
+		els.scrollPane.style.maximal_width = 1000
+		els.scrollPane.style.maximal_height = 600
 
-				els.camTable = els.scrollPane.add
-				{
-					type = "table",
-					name = self.prefix .. "camTable",
-					column_count = 4,
-				}
-				els.camTable.style.horizontal_spacing = 10
-				els.camTable.style.vertical_spacing = 10
+		els.camTable = els.scrollPane.add
+		{
+			type = "table",
+			name = self.prefix .. "camTable",
+			column_count = 4,
+		}
+		els.camTable.style.horizontal_spacing = 10
+		els.camTable.style.vertical_spacing = 10
 
-					self.curCamID = 0
-					els.cams = {}
+		self.curCamID = 0
+		els.cams = {}
 
-					local hasCams = false
-					if storage.heliPads then
-						for k, curPad in pairs(storage.heliPads) do
-							if curPad.baseEnt.force == self.player.force then
-								hasCams = true
-								table.insert(els.cams, 
-								{
-									cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, self:getDefaultZoom()),
-									ID = self.curCamID,
-									heliPad = curPad,
-								})
+		local hasCams = false
+		if storage.heliPads then
+			for k, curPad in pairs(storage.heliPads) do
+				if curPad.baseEnt.force == self.player.force then
+					hasCams = true
+					table.insert(els.cams, 
+					{
+						cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, self:getDefaultZoom()),
+						ID = self.curCamID,
+						heliPad = curPad,
+					})
 
-								self.curCamID = self.curCamID + 1
-							end
-						end
-					end
+					self.curCamID = self.curCamID + 1
+				end
+			end
+		end
 
-					if not hasCams then
-						self:setNothingAvailable(true)
-					end
+		if not hasCams then
+			self:setNothingAvailable(true)
+		end
 	end,
 }

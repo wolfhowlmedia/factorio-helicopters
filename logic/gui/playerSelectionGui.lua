@@ -126,11 +126,11 @@ playerSelectionGui =
 		}
 
 		els.btns = {}
-		for i, curPlayer in pairs(game.connected_players) do
+		for _, curPlayer in pairs(game.connected_players) do
 			if curPlayer.controller_type == defines.controllers.character and curPlayer.character then
 				table.insert(els.btns, self:buildBtnFromPlayer(els.flow, curPlayer))
 			end
 		end
-		
+
 	end,
 }

@@ -384,7 +384,7 @@ heliSelectionGui =
 
 			for k, curHeli in pairs(storage.helis) do
 				local curDriver = curHeli.baseEnt.get_driver()
-				
+
 				if curHeli.baseEnt.force == self.player.force and 
 					(curDriver == nil or curHeli.hasRemoteController or
 						(curDriver.player and curDriver.player.valid and curDriver.player.name == self.player.name)) then
@@ -402,11 +402,11 @@ heliSelectionGui =
 					})
 
 					self.curCamID = self.curCamID + 1
-						
+
 					if curHeli == lastSelected then
 						selectedSomething = true
 						self:setCamStatus(els.cams[self.curCamID], true, heliController)
-					end						
+					end
 				end
 			end
 

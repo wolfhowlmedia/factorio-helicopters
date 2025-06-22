@@ -84,7 +84,7 @@ remoteGui =
 		if not self.player.valid then
 			self:destroy()
 		else
-			for k, curGui in pairs(self.guis) do
+			for _, curGui in pairs(self.guis) do
 				if curGui.OnTick then
 					curGui:OnTick()
 				end
@@ -95,7 +95,7 @@ remoteGui =
 	OnGuiClick = function(self, e)
 		local name = e.element.name
 
-		for k, curGui in pairs(self.guis) do
+		for _, curGui in pairs(self.guis) do
 			if name:match("^" .. curGui.prefix .. ".+") and curGui.OnGuiClick then
 				curGui:OnGuiClick(e)
 			end
@@ -129,7 +129,7 @@ remoteGui =
 				self.guis.targetSelection = nil
 			end
 			self.guis.heliSelection:setVisible(true)
-		
+
 		elseif evtName == "selectedPlayer" then
 			local p = ...
 			local heli = self.guis.heliSelection.selectedCam.heli
