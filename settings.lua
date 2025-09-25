@@ -1,5 +1,7 @@
 data:extend({
-    --------- Armory settings ---------
+    ----------------------------------------------
+    -- Armory settings
+    ----------------------------------------------
     {
         type = "double-setting",
         name = "heli-gun-damage-modifier",
@@ -56,14 +58,26 @@ data:extend({
         default_value = 70,
         minimum_value = 0,
     },
-    ------------------------------
-    -- Take damage settings
-    ------------------------------
+    ----------------------------------------------
+    -- Damage settings
+    ----------------------------------------------
     {
         type = "bool-setting",
-        name = "heli-disable-biters-damage",
+        name = "heli-disable-any-damage",
+        setting_type = "runtime-global",
+        default_value = false,
+    },
+    {
+        type = "bool-setting",
+        name = "heli-disable-biter-damage",
         setting_type = "runtime-global",
         default_value = true,
+    },
+    {
+        type = "bool-setting",
+        name = "heli-disable-acid-projectile-damage",
+        setting_type = "runtime-global",
+        default_value = false,
     },
     {
         type = "bool-setting",
@@ -73,11 +87,11 @@ data:extend({
     },
     {
         type = "bool-setting",
-        name = "heli-disable-direct-spitter-damage",
+        name = "heli-disable-fire-damage",
         setting_type = "runtime-global",
-        default_value = false,
+        default_value = true,
     },
-    ------------------------------
+    ----------------------------------------------
     {
         type = "string-setting",
         name = "heli-consumption",
@@ -97,8 +111,9 @@ data:extend({
         default_value = 2800,
         minimum_value = 0,
     },
-    
-    ------------- Misc -------------------
+    ----------------------------------------------
+    -- Misc
+    ----------------------------------------------
     {
         type = "bool-setting",
         name = "heli-deactivate-inserters",
