@@ -152,7 +152,7 @@ heliController =
 				self.driverIsBot = false
 			end
 			self.heli.baseEnt.set_driver(curPassenger)
-			
+
 			if self.targetIsPlayer and curPassenger == self.targetPlayer.character then
 				self:destroy()
 				return
@@ -342,7 +342,7 @@ heliController =
 		local dist = getDistance(self.heli.childs.bodyEntShadow.position, self.targetPos)
 		if dist < 0.2 or dist > self.oldDist then
             -- If targeting the player and we shouldn't land when we catch up, then just stop, otherwise land
-            if( self.targetIsPlayer and self.targetPlayer.mod_settings["heli-remote-dont-land-following-player"].value )then
+            if (self.targetIsPlayer and self.targetPlayer.mod_settings["heli-remote-dont-land-following-player"].value) then
                 self:changeState(heliControllerState.stop)
             else
                 self:changeState(heliControllerState.land)

@@ -166,7 +166,7 @@ data:extend({
         type = "bool-setting",
         name = "heli-remote-dont-auto-land-player",
         setting_type = "runtime-per-user",
-        default_value = true,
+        default_value = false,
     },
 
     {

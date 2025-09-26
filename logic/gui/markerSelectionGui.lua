@@ -25,7 +25,7 @@ markerSelectionGui =
 
 		obj:buildGui()
 
-		if p.mod_settings["heli-auto-focus-searchfields"].value then 
+		if p.mod_settings["heli-auto-focus-searchfields"].value then
 			obj.guiElems.searchField.focus()
 		end
 
@@ -313,7 +313,7 @@ markerSelectionGui =
 		{
 			type = "textfield",
 			name = self.prefix .. "searchField",
-			style = "search_popup_textfield",
+			style = "stretchable_textfield",
 		}
 		self.guiElems.searchField.style.left_padding = 22
 		self.guiElems.searchField.style.minimal_height = 26
