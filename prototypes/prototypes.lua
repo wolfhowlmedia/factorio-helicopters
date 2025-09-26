@@ -132,10 +132,6 @@ data:extend({
                 type = "unlock-recipe",
                 recipe = "heli-remote-recipe"
             },
-            {
-                type = "unlock-recipe",
-                recipe = "heli-pad-recipe"
-            },
         },
         prerequisites = {"heli-technology", "concrete", "processing-unit", "battery", "modular-armor"},
         unit =
@@ -163,6 +159,10 @@ data:extend({
             {
                 type = "unlock-recipe",
                 recipe = "heli-recipe"
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "heli-pad-recipe"
             },
         },
         prerequisites = {"automobilism", "processing-unit", "gun-turret", "rocketry"},

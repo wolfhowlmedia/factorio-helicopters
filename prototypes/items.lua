@@ -8,7 +8,8 @@ data:extend({
 		subgroup = "transport",
 		order = "b[personal-transport]-c[heli]",
 		place_result = "heli-placement-entity-_-",
-		stack_size = 1
+		stack_size = 1,
+        weight = 1000000,
 	},
     {
         type = "gun",

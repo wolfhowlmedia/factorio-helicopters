@@ -20,6 +20,7 @@ data:extend({
     has_belt_immunity = true,
     minable = {mining_time = 1, result = "heli-item"},
     max_health = 2500,
+    hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     dying_explosion = "medium-explosion",
     selection_box = {{-1.5, -1.8}, {0.9, 3}},
@@ -49,13 +50,14 @@ data:extend({
       layers = {
         {
           priority = "high",
-          width = 360,
-          height = 300,
+          width = 720,
+          height = 600,
           frame_count = 1,
           direction_count = 1,
           shift = {0, 0},
           animation_speed = 8,
           max_advance = 0.2,
+          scale = 0.5,
           stripes =
           {
             {
@@ -68,13 +70,14 @@ data:extend({
 
         {
           priority = "high",
-          width = 360,
-          height = 300,
+          width = 720,
+          height = 600,
           frame_count = 1,
           direction_count = 1,
           shift = {0, 0},
           animation_speed = 8,
           max_advance = 0.2,
+          scale = 0.5,
           stripes =
           {
             {
@@ -169,6 +172,8 @@ data:extend({
       size = {40, 40},
       scale = 0.5
     },
+		subgroup = "transport",
+		order = "b[personal-transport]-c[heli]",
   },
 ----------------------flying collision--------------------
   {
@@ -182,6 +187,7 @@ data:extend({
     minable = {mining_time = 1, result = "heli-item"},
     has_belt_immunity = true,
     max_health = 999999,
+    hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{-1.8, -0.2}, {1.2, 0.2}},
@@ -249,6 +255,7 @@ data:extend({
     minable = {mining_time = 1, result = "heli-item"},
     has_belt_immunity = true,
     max_health = 999999,
+    hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{-0.1, -2.4}, {0.1, 2.4}}, --{{-0.1, -1.8}, {0.1, 3}},
@@ -316,6 +323,7 @@ data:extend({
     has_belt_immunity = true,
     minable = {mining_time = 1, result = "heli-item"},
     max_health = 999999,
+    hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{-1.5, -0.1}, {1.5, 0.1}}, --{{-1.8, -0.1}, {1.2, 0.1}} --{{-1.8, -1.8}, {1.2, 3}}
@@ -383,6 +391,7 @@ data:extend({
     minable = {mining_time = 1, result = "heli-item"},
     has_belt_immunity = true,
     max_health = 1500,
+    hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
@@ -453,6 +462,7 @@ data:extend({
     minable = {mining_time = 1, result = "heli-item"},
     has_belt_immunity = true,
     max_health = 1500,
+    hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
@@ -524,6 +534,7 @@ data:extend({
     minable = {mining_time = 1, result = "heli-item"},
     has_belt_immunity = true,
     max_health = 999999,
+    hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
@@ -613,6 +624,7 @@ data:extend({
     minable = {mining_time = 1, result = "heli-item"},
     has_belt_immunity = true,
     max_health = 999999,
+    hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
