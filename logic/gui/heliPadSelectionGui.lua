@@ -1,6 +1,6 @@
 mod_gui = require("mod-gui")
 
-heliPadSelectionGui = 
+heliPadSelectionGui =
 {
 	prefix = "heli_heliPadSelectionGui_",
 
@@ -11,7 +11,7 @@ heliPadSelectionGui =
 			manager = mgr,
 			player = p,
 
-			guiElems = 
+			guiElems =
 			{
 				parent = mod_gui.get_frame_flow(p),
 			},

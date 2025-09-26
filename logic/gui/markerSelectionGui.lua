@@ -34,7 +34,7 @@ markerSelectionGui =
 
 	destroy = function(self)
 		self.valid = false
-	
+
 		if self.guiElems.root and self.guiElems.root.valid then
 			self.guiElems.root.destroy()
 		end
@@ -125,7 +125,7 @@ markerSelectionGui =
 
 			if not curBtn.tag.valid then
 				self:removeBtnIndex(i)
-			
+
 			else
 				if newTags[curBtn.tag.tag_number] then
 					newTags[curBtn.tag.tag_number] = nil
@@ -139,7 +139,7 @@ markerSelectionGui =
 
 				if not curBtn.icon and curBtn.tag.icon then
 					curBtn.icon, curBtn.iconType, curBtn.iconName = self:buildIconFromTag(curBtn.btn, curBtn.tag)
-				
+
 				elseif curBtn.icon and not curBtn.tag.icon then
 					curBtn.icon.destroy()
 					curBtn.icon, curBtn.iconType, curBtn.iconName = nil, nil, nil
@@ -236,7 +236,7 @@ markerSelectionGui =
 			icon = icon,
 
 			tag = tag,
-			
+
 			text = tag.text,		
 			iconType = iconType,
 			iconName = iconName,
@@ -253,7 +253,7 @@ markerSelectionGui =
 		for k, curTag in pairs(tagList) do
 			table.insert(self.guiElems.btns, self:buildBtnFromTag(self.guiElems.table, curTag))
 		end
-		
+
 		self:setNothingAvailableIfNecessary()
 	end,
 
@@ -318,7 +318,7 @@ markerSelectionGui =
 			self.guiElems.searchField.style.maximal_height = 32
 
 			self.lastSearchFieldText = ""
-			
+
 				self.guiElems.searchField.add{
 					type = "sprite",
 					name = self.prefix .. "searchIcon",
@@ -333,7 +333,7 @@ markerSelectionGui =
 				name = self.prefix .. "searchFieldClearBtn",
 				style = "heli-clear_text_button",
 			}
-		
+
 
 		self.guiElems.scroller = self.guiElems.root.add
 		{

@@ -4,8 +4,6 @@ heliSelectionGui =
 {
 	prefix = "heli_heliSelectionGui_",
 
-
-
 	new = function(mgr, p)
 		obj =
 		{
@@ -23,7 +21,6 @@ heliSelectionGui =
 		}
 
 		setmetatable(obj, {__index = heliSelectionGui})
-
 		obj:buildGui()
 
 		return obj
