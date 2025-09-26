@@ -102,7 +102,7 @@ function Entity.set_data(entity, data)
     end
     return nil
 end
-
+--[[
 --- Freezes an entity, by making it inactive, inoperable, and non-rotatable, or unfreezes by doing the reverse.
 -- @tparam LuaEntity entity the entity to freeze or unfreeze
 -- @tparam[opt=true] boolean mode if true, freezes the entity, if false, unfreezes the entity. If not specified, it is set to true
@@ -127,7 +127,7 @@ function Entity.set_indestructible(entity, mode)
     entity.destructible = mode
     return entity
 end
-
+]]
 --- Tests if two entities are equal.
 -- If they don't have a reference equality and ***entity\_a*** has ***equals*** function, it will be called with ***entity\_b*** as its first argument.
 -- @tparam LuaEntity entity_a
@@ -144,7 +144,7 @@ function Entity._are_equal(entity_a, entity_b)
         return false
     end
 end
-
+--[[
 function Entity.find_resources(entity, all)
     if entity.type == 'mining-drill' then
         local radius = entity.prototype.mining_drill_radius
@@ -182,5 +182,5 @@ end
 function Entity.can_deconstruct(entity)
     return entity.minable and entity.prototype.selectable_in_game and not entity.has_flag('not-deconstructable')
 end
-
+]]
 return Entity
