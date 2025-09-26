@@ -339,6 +339,7 @@ heliSelectionGui =
 			name = self.prefix .. "btn_toMap",
 			sprite = "heli_to_map",
 			style = mod_gui.button_style,
+			tooltip = {"heli-gui-heliSelection-to-map-btn-tt"},
 		}
 
 		els.btnToPad = els.buttonFlow.add
@@ -347,6 +348,7 @@ heliSelectionGui =
 			name = self.prefix .. "btn_toPad",
 			sprite = "heli_to_pad",
 			style = mod_gui.button_style,
+			tooltip = {"heli-gui-heliSelection-to-pad-btn-tt"},
 		}
 
 		els.btnStop = els.buttonFlow.add
@@ -355,6 +357,7 @@ heliSelectionGui =
 			name = self.prefix .. "btn_stop",
 			sprite = "heli_stop",
 			style = mod_gui.button_style,
+			tooltip = {"heli-gui-heliSelection-stop-btn-tt"},
 		}
 		self:setControlBtnsStatus(false, false)
 
