@@ -4,7 +4,7 @@
 
 local Entity = {
     __class = 'Entity',
-    __index = require('stdlib/core')
+    --__index = require('stdlib/core')
 }
 setmetatable(Entity, Entity)
 
@@ -36,7 +36,6 @@ function Entity.get_data(entity)
         return nil
     end
 
-    -- local unit_number = entity.unit_number
     local code, unit_number = pcall(function() return entity.unit_number end)
     if unit_number then
         return storage._entity_data[unit_number]
@@ -102,32 +101,7 @@ function Entity.set_data(entity, data)
     end
     return nil
 end
---[[
---- Freezes an entity, by making it inactive, inoperable, and non-rotatable, or unfreezes by doing the reverse.
--- @tparam LuaEntity entity the entity to freeze or unfreeze
--- @tparam[opt=true] boolean mode if true, freezes the entity, if false, unfreezes the entity. If not specified, it is set to true
--- @treturn LuaEntity the entity that has been frozen or unfrozen
-function Entity.set_frozen(entity, mode)
-    assert(entity, 'missing entity argument')
-    mode = mode == false and true or false
-    entity.active = mode
-    entity.operable = mode
-    entity.rotatable = mode
-    return entity
-end
 
---- Makes an entity indestructible so that it cannot be damaged or mined neither by the player nor by their enemy factions.
--- @tparam LuaEntity entity the entity to make indestructable
--- @tparam[opt=true] boolean mode if true, makes the entity indestructible, if false, makes the entity destructable
--- @treturn LuaEntity the entity that has been made indestructable or destructable
-function Entity.set_indestructible(entity, mode)
-    assert(entity, 'missing entity argument')
-    mode = mode == false and true or false
-    entity.minable = mode
-    entity.destructible = mode
-    return entity
-end
-]]
 --- Tests if two entities are equal.
 -- If they don't have a reference equality and ***entity\_a*** has ***equals*** function, it will be called with ***entity\_b*** as its first argument.
 -- @tparam LuaEntity entity_a
@@ -144,43 +118,5 @@ function Entity._are_equal(entity_a, entity_b)
         return false
     end
 end
---[[
-function Entity.find_resources(entity, all)
-    if entity.type == 'mining-drill' then
-        local radius = entity.prototype.mining_drill_radius
-        local name = (not all and (entity.mining_target and entity.mining_target.name)) or nil
-        return entity.surface.count_entities_filtered {
-            type = 'resource',
-            name = name,
-            position = entity.position,
-            radius = radius,
-        }
-    end
-    return 0
-end
 
-function Entity.is_damaged(entity)
-    return entity.get_health_ratio() < 1
-end
-Entity.damaged = Entity.is_damaged
-
-function Entity.is_circuit_connected(entity)
-    local list = entity.circuit_connected_entities
-    return list and (next(list.red) or next(list.green))
-end
-
-function Entity.count_circuit_connections(entity)
-    local list = entity.circuit_connected_entities
-    return list and #list.red + #list.green
-end
-
-function Entity.has_fluidbox(entity)
-    local box = entity.fluidbox
-    return box and #box > 0
-end
-
-function Entity.can_deconstruct(entity)
-    return entity.minable and entity.prototype.selectable_in_game and not entity.has_flag('not-deconstructable')
-end
-]]
 return Entity
