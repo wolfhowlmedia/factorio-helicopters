@@ -185,7 +185,6 @@ heliSelectionGui =
 	end,
 
 	setCamStatus = function(self, cam, isSelected, hasController)
-		hasController = hasController or false
 		local flow = cam.flow
 
 		local pos = cam.cam.position
@@ -212,7 +211,7 @@ heliSelectionGui =
 		self.guiElems.btnToPlayer.enabled = heliSelected
 		self.guiElems.btnToMap.enabled = heliSelected
 		self.guiElems.btnToPad.enabled = heliSelected
-		self.guiElems.btnStop.enabled = heliSelected and hasController
+		self.guiElems.btnStop.enabled = heliSelected and not isNil(hasController)
 	end,
 
 	setNothingAvailableIfNecessary = function(self)

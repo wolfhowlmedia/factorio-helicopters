@@ -1,3 +1,7 @@
+function isNil(value)
+    return value == nil
+end
+
 function tableToString(table)
 	local s = ""
 	for k,v in pairs(table) do

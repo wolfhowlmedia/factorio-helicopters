@@ -121,7 +121,7 @@ playerSelectionGui =
 		{
 			type = "flow",
 			name = self.prefix .. "flow",
-			style = "achievements_vertical_flow",
+			style = "vertical_flow",
 			direction = "vertical",
 		}
 

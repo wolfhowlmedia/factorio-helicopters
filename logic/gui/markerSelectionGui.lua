@@ -86,7 +86,7 @@ markerSelectionGui =
 		local newText = e.element.text
 
 		if name == self.prefix .. "searchField" then
-			if newText:contains(self.lastSearchFieldText) then
+			if string.find(newText, self.lastSearchFieldText) then
 				self:filterBtnList(newText)
 			else
 				self:buildBtnList()
@@ -104,7 +104,7 @@ markerSelectionGui =
 	filterBtnList = function(self, filterStr)
 		for i = #self.guiElems.btns, 1, -1 do --iterate backwards so table.remove doesnt mess up the indices
 			local curBtn = self.guiElems.btns[i]
-			if not curBtn.text:contains(filterStr) then
+			if not string.find(curBtn.text, filterStr) then
 				self:removeBtnIndex(i)
 			end
 		end
@@ -189,7 +189,7 @@ markerSelectionGui =
 		local tagList = self.player.force.find_chart_tags(self.player.surface)
 
 		for i = #tagList, 1, -1 do
-			if not tagList[i].text:contains(self.guiElems.searchField.text) then
+			if not string.find(tagList[i].text, self.guiElems.searchField.text) then
 				table.remove(tagList, i)
 			end
 		end
@@ -201,6 +201,8 @@ markerSelectionGui =
 		local sprite
 		if tag.icon.type == "virtual" then
 			sprite = "virtual-signal" .. "/" .. tag.icon.name
+		elseif tag.icon.type == nil then
+			sprite = "item/" .. tag.icon.name
 		else
 			sprite = tag.icon.type .. "/" .. tag.icon.name
 		end
@@ -311,7 +313,7 @@ markerSelectionGui =
 			{
 				type = "textfield",
 				name = self.prefix .. "searchField",
-				style = "search_textfield_with_fixed_width",
+				style = "search_popup_textfield",
 			}
 			self.guiElems.searchField.style.left_padding = 22
 			self.guiElems.searchField.style.minimal_height = 26
@@ -348,7 +350,7 @@ markerSelectionGui =
 		{
 			type = "flow",
 			name = self.prefix .. "flow",
-			style = "achievements_vertical_flow",
+			style = "vertical_flow",
 			direction = "vertical",
 		}
 
