@@ -59,7 +59,13 @@ end
 
 function equipmentGridHasItem(grid, itemName)
 	local contents = grid.get_contents()
-	return contents[itemName] and contents[itemName] > 0
+
+	for _, item in pairs(contents) do
+		if item.name == itemName and item.count > 0 then
+			return true
+		end
+	end
+	return false
 end
 
 function searchIndexInTable(table, obj, field)

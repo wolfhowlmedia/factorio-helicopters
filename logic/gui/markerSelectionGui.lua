@@ -309,32 +309,30 @@ markerSelectionGui =
 
 		}
 
-			self.guiElems.searchField = self.guiElems.searchFieldFlow.add
-			{
-				type = "textfield",
-				name = self.prefix .. "searchField",
-				style = "search_popup_textfield",
-			}
-			self.guiElems.searchField.style.left_padding = 22
-			self.guiElems.searchField.style.minimal_height = 26
-			self.guiElems.searchField.style.maximal_height = 32
+		self.guiElems.searchField = self.guiElems.searchFieldFlow.add
+		{
+			type = "textfield",
+			name = self.prefix .. "searchField",
+			style = "search_popup_textfield",
+		}
+		self.guiElems.searchField.style.left_padding = 22
+		self.guiElems.searchField.style.minimal_height = 26
+		self.guiElems.searchField.style.maximal_height = 32
 
-			self.lastSearchFieldText = ""
+		self.lastSearchFieldText = ""
 
-				self.guiElems.searchField.add{
-					type = "sprite",
-					name = self.prefix .. "searchIcon",
-					sprite = "heli_search_icon",
-					--style = "heli_search_icon_style",
-				}
+		self.guiElems.searchField.add{
+			type = "sprite",
+			name = self.prefix .. "searchIcon",
+			sprite = "heli_search_icon",
+		}
 
-
-			self.guiElems.searchFieldClearBtn = self.guiElems.searchFieldFlow.add
-			{
-				type = "button",
-				name = self.prefix .. "searchFieldClearBtn",
-				style = "heli-clear_text_button",
-			}
+		self.guiElems.searchFieldClearBtn = self.guiElems.searchFieldFlow.add
+		{
+			type = "button",
+			name = self.prefix .. "searchFieldClearBtn",
+			style = "heli-clear_text_button",
+		}
 
 
 		self.guiElems.scroller = self.guiElems.root.add
