@@ -22,7 +22,7 @@ gaugeGui =
 
 	pointerData =
 	{
-		fuel = 
+		fuel =
 		{
 			min = 0,
 			max = 1,
@@ -31,7 +31,7 @@ gaugeGui =
 			clockwise = true,
 		},
 
-		speed = 
+		speed =
 		{
 			min = 0,
 			max = 400,
@@ -40,7 +40,7 @@ gaugeGui =
 			clockwise = true,
 		},
 
-		height = 
+		height =
 		{
 			min = 0,
 			max = 25,
@@ -49,7 +49,7 @@ gaugeGui =
 			clockwise = true,
 		},
 
-		rpm = 
+		rpm =
 		{
 			min = 0,
 			max = 3000,
@@ -60,13 +60,13 @@ gaugeGui =
 	},
 
 	new = function(player, heli)
-		obj = 
+		obj =
 		{
 			valid = true,
 			player = player,
 			heli = heli,
 
-			guiElems = 
+			guiElems =
 			{
 				parent = mod_gui.get_frame_flow(player),
 			},
@@ -82,7 +82,7 @@ gaugeGui =
 
 	destroy = function(self)
 		self.valid = false
-	
+
 		if self.guiElems.root and self.guiElems.root.valid then
 			self.guiElems.root.destroy()
 		end
@@ -103,7 +103,7 @@ gaugeGui =
 
 		if name == self.prefix .. "speaker_on_button" then
 			self:setMuted(true)
-		
+
 		elseif name == self.prefix .. "speaker_off_button" then
 			self:setMuted(false)
 		end
@@ -194,7 +194,7 @@ gaugeGui =
 
 	setLedBlinking = function(self, gaugeName, ledName, on, interval, sound)
 		local led = self.guiElems[gaugeName].leds[ledName]
-		
+
 		if not on then
 			led.sound = nil
 
