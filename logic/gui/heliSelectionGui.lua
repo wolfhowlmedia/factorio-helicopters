@@ -188,6 +188,7 @@ heliSelectionGui =
 	end,
 
 	setCamStatus = function(self, cam, isSelected, hasController)
+		hasController = hasController or false
 		local flow = cam.flow
 
 		local pos = cam.cam.position
@@ -405,7 +406,7 @@ heliSelectionGui =
 
 					if curHeli == lastSelected then
 						selectedSomething = true
-						self:setCamStatus(els.cams[self.curCamID], true, heliController)
+						self:setCamStatus(els.cams[self.curCamID], true, els.cams[self.curCamID].heliController)
 					end
 				end
 			end
