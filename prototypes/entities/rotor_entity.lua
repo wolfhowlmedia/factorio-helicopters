@@ -30,11 +30,12 @@ data:extend({
       layers = {
         {
           priority = "high",
-          width = 360,
-          height = 300,
+          width = 720,
+          height = 600,
           frame_count = 1,
           direction_count = 64,
           shift = {0, -5.1},
+          scale = 0.5,
           animation_speed = 8,
           max_advance = 0.2,
           stripes =
@@ -60,40 +61,6 @@ data:extend({
               height_in_frames = 4,
             },
           },
-          hr_version = {
-            priority = "high",
-            width = 720,
-            height = 600,
-            frame_count = 1,
-            direction_count = 64,
-            shift = {0, -5.1},
-            scale = 0.5,
-            animation_speed = 8,
-            max_advance = 0.2,
-            stripes =
-            {
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/hr-rotor-0.png",
-                width_in_frames = 4,
-                height_in_frames = 4,
-              },
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/hr-rotor-1.png",
-                width_in_frames = 4,
-                height_in_frames = 4,
-              },
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/hr-rotor-2.png",
-                width_in_frames = 4,
-                height_in_frames = 4,
-              },
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/hr-rotor-3.png",
-                width_in_frames = 4,
-                height_in_frames = 4,
-              },
-            },
-          }
         },
       }
     },
@@ -133,12 +100,13 @@ data:extend({
       layers = {
         {
           priority = "very-low",
-          width = 360,
-          height = 300,
+          width = 720,
+          height = 600,
           frame_count = 1,
           draw_as_shadow = true,
           direction_count = 64,
           shift = {0.4, -0.5},
+          scale = 0.5,
           animation_speed = 8,
           max_advance = 0.2,
           stripes =
@@ -164,41 +132,6 @@ data:extend({
               height_in_frames = 4,
             },
           },
-          hr_version = {
-            priority = "very-low",
-            width = 720,
-            height = 600,
-            frame_count = 1,
-            draw_as_shadow = true,
-            direction_count = 64,
-            shift = {0.4, -0.5},
-            scale = 0.5,
-            animation_speed = 8,
-            max_advance = 0.2,
-            stripes =
-            {
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/hr-rotor_shadow-0.png",
-                width_in_frames = 4,
-                height_in_frames = 4,
-              },
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/hr-rotor_shadow-1.png",
-                width_in_frames = 4,
-                height_in_frames = 4,
-              },
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/hr-rotor_shadow-2.png",
-                width_in_frames = 4,
-                height_in_frames = 4,
-              },
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/hr-rotor_shadow-3.png",
-                width_in_frames = 4,
-                height_in_frames = 4,
-              },
-            },
-          }
         },
       }
     },
