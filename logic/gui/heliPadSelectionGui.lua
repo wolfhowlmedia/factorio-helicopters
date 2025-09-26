@@ -26,7 +26,7 @@ heliPadSelectionGui =
 
 	destroy = function(self)
 		self.valid = false
-	
+
 		if self.guiElems.root and self.guiElems.root.valid then
 			self.guiElems.root.destroy()
 		end
@@ -203,7 +203,7 @@ heliPadSelectionGui =
 			for k, curPad in pairs(storage.heliPads) do
 				if curPad.baseEnt.force == self.player.force then
 					hasCams = true
-					table.insert(els.cams, 
+					table.insert(els.cams,
 					{
 						cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, self:getDefaultZoom()),
 						ID = self.curCamID,

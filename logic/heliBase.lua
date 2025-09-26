@@ -8,7 +8,7 @@ function getHeliFromBaseEntity(ent)
 			return v
 		end
 	end
-	
+
 	return nil
 end
 

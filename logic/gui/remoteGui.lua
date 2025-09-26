@@ -30,7 +30,6 @@ end
 function toggleRemoteGui(player)
 	local i = searchIndexInTable(storage.remoteGuis, player, "player")
 
-
 	if not i then
 		insertInGlobal("remoteGuis", remoteGui.new(player))
 	else
@@ -48,7 +47,7 @@ function OnHeliControllerDestroyed(controller)
 end
 
 
-remoteGui = 
+remoteGui =
 {
 	new = function(p)
 		local obj = {

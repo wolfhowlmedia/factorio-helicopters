@@ -4,16 +4,16 @@ heliSelectionGui =
 {
 	prefix = "heli_heliSelectionGui_",
 
-	
+
 
 	new = function(mgr, p)
-		obj = 
+		obj =
 		{
 			valid = true,
 			manager = mgr,
 			player = p,
 
-			guiElems = 
+			guiElems =
 			{
 				parent = mod_gui.get_frame_flow(p),
 			},
@@ -31,7 +31,7 @@ heliSelectionGui =
 
 	destroy = function(self)
 		self.valid = false
-	
+
 		if self.guiElems.root and self.guiElems.root.valid then
 			self.guiElems.root.destroy()
 		end
@@ -375,7 +375,7 @@ heliSelectionGui =
 		els.camTable.style.horizontal_spacing = 10
 		els.camTable.style.vertical_spacing = 10
 
-		els.cams ={}
+		els.cams = {}
 		self.curCamID = 0
 
 		if storage.helis then
@@ -385,7 +385,7 @@ heliSelectionGui =
 			for k, curHeli in pairs(storage.helis) do
 				local curDriver = curHeli.baseEnt.get_driver()
 
-				if curHeli.baseEnt.force == self.player.force and 
+				if curHeli.baseEnt.force == self.player.force and
 					(curDriver == nil or curHeli.hasRemoteController or
 						(curDriver.player and curDriver.player.valid and curDriver.player.name == self.player.name)) then
 
