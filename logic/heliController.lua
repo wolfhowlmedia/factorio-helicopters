@@ -35,7 +35,8 @@ function assignHeliController(owner, heli, target, targetIsPlayer)
 		storage.heliControllers[oldControllerIndex]:destroy()
 		table.remove(storage.heliControllers, oldControllerIndex)
 	end
-	insertInGlobal("heliControllers", heliController.new(owner, heli, target, targetIsPlayer))
+	--insertInGlobal("heliControllers", heliController.new(owner, heli, target, targetIsPlayer))
+	heliController.new(owner, heli, target, targetIsPlayer)
 end
 
 heliControllerState = {
