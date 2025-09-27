@@ -512,51 +512,55 @@ heliBase = {
 
   -- Cancelling damage when airborne
   -- evt - https://lua-api.factorio.com/latest/events.html#on_entity_damaged
+  -- Cancelling damage when airborne
+  -- evt - https://lua-api.factorio.com/latest/events.html#on_entity_damaged
   OnDamaged = function(self, evt)
 
-	local damage_amount = evt.final_damage_amount
 	local cancelDamage = settings.global["heli-disable-any-damage"].value
-
-    if self.height <= maxCollisionHeight and not ( cancelDamagethen and 0 < self.height ) then
+	
+    if self.height <= maxCollisionHeight and not ( cancelDamage and 0 < self.height ) then
 		-- too low, allow damage (also triggers when hitting things)
 		return
     end
+	
+	
+	local damage_amount = evt.final_damage_amount
+	local cause = evt.cause
+	local source = evt.source
+	
+	if not cancelDamage and cause and settings.global["heli-disable-biter-damage"].value and string.find(cause.name, "biter") then
+		cancelDamage = true
+		--game.print("Try canceling biter")
 
-	if evt.cause and not cancelDamage then
-		
-		local cause = evt.cause
-		local source = evt.source
-
-		if settings.global["heli-disable-biter-damage"].value and string.find(cause.name, "biter") then
+	elseif not cancelDamage and source then
+		if settings.global["heli-disable-acid-projectile-damage"].value and string.find(source.name, "stream") and string.find(source.name, "acid") then
 			cancelDamage = true
-
-		elseif settings.global["heli-disable-acid-projectile-damage"].value and string.find(source.name, "stream") and string.find(source.name, "acid") then
-			cancelDamage = true
+			--game.print("Try canceling acid stream")
 
 		elseif settings.global["heli-disable-acid-splash-damage"].value and string.find(source.name, "splash") and string.find(source.name, "acid") then
 			cancelDamage = true
-
-		elseif settings.global["heli-disable-fire-damage"].value and  string.find(source.name, "fire-flame") then
+			--game.print("Try canceling acid splash")
+		
+		elseif settings.global["heli-disable-fire-damage"].value and string.find(source.name, "flame") and string.find(source.name, "fire") then
 			cancelDamage = true
-
+			--game.print("Try canceling fire")
 		--else
-			-- uncought damage type
-			--game.print("Heli damaged by unhandled cause: " .. evt.damage_type.name .. " damage: " .. damage_amount .. " health: " .. self.baseEnt.health)
+			--game.print("Heli damaged by unhandled source: src=\"" .. source.name .. "\" type=\"" .. evt.damage_type.name .. "\" damage=" .. damage_amount)
 		end
+	--elseif not cancelDamage then
+		-- uncought damage type
+		--game.print("Heli damaged by unhandled reason:type=\"" .. evt.damage_type.name .. "\" damage=" .. damage_amount)
 	end
 
 
-    if cancelDamage then
-		if self.baseEnt and self.baseEnt.valid then
-			self.baseEnt.health = self.baseEnt.health + damage_amount
-			--game.print("Damage successfully canceled: " .. evt.damage_type.name .. " " .. damage_amount)
-		end
-	else
+    if cancelDamage and self.baseEnt and self.baseEnt.valid then
+		self.baseEnt.health = self.baseEnt.health + damage_amount
+		--game.print("Damage successfully canceled: " .. evt.damage_type.name .. " " .. damage_amount)
+	--else
 		--game.print("Damage not canceled: " .. evt.damage_type.name .. " " .. damage_amount)
-		return
+		--return
 	end
   end,
-
 
 	---------------- states ----------------
 
