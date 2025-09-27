@@ -159,6 +159,7 @@ data:extend({
     },
     open_sound = { filename = "__base__/sound/car-door-open.ogg", volume = 0.7 },
     close_sound = { filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },
+    mined_sound = data.raw["car"]["tank"].mined_sound,
     guns = gun_slots,
     turret_rotation_speed = 1 / 60,
     minimap_representation = {
