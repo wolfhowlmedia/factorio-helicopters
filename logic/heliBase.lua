@@ -545,7 +545,7 @@ heliBase = {
 						-- game.print("[".. attack_ammo_type .."] ("..damage_type..") Heli damaged by: " .. cause.name .. " (type: " .. cause.type .. ")" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
 					end
 					else
-						-- unit doesn't have attack_parameters, that is strange          
+						-- unit doesn't have attack_parameters, that is strange         
 					end
 			else
 				-- not a unit, could be an acid puddle

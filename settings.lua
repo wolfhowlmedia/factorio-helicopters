@@ -97,7 +97,7 @@ data:extend({
         default_value = 2800,
         minimum_value = 0,
     },
-    
+   
     ------------- Misc -------------------
     {
         type = "bool-setting",

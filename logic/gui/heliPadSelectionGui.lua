@@ -5,7 +5,7 @@ heliPadSelectionGui =
 	prefix = "heli_heliPadSelectionGui_",
 
 	new = function(mgr, p)
-		obj = 
+		obj =
 		{
 			valid = true,
 			manager = mgr,
@@ -71,7 +71,7 @@ heliPadSelectionGui =
 
 	OnHeliPadBuilt = function(self, heliPad)
 		if heliPad.baseEnt.force == self.player.force then
-			table.insert(self.guiElems.cams, 
+			table.insert(self.guiElems.cams,
 			{
 				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad.baseEnt.position, self:getDefaultZoom()),
 				ID = self.curCamID,

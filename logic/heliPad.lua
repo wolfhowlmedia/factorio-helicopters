@@ -8,10 +8,10 @@ function getHeliPadIndexFromBaseEntity(ent)
 	return nil
 end
 
-heliPad = 
+heliPad =
 {
 	new = function(placementEnt)
-		local obj = 
+		local obj =
 		{
 			valid = true,
 
@@ -29,7 +29,7 @@ heliPad =
 		--game.players[1].print("calc: ".. tostring(placementEnt.position.y - heli_pad_sprite_y_shift).. " real pos: "..tostring(obj.baseEnt.position.y))
 		--game.players[1].print(tostring(placementEnt.position.x) .. "|" .. tostring(placementEnt.position.y))
 
-		local boundingBox = 
+		local boundingBox =
 		{
 			left_top = {placementEnt.position.x - 3.5, placementEnt.position.y - 3.5},
 			right_bottom = {placementEnt.position.x + 3.5, placementEnt.position.y + 3.5}
@@ -51,10 +51,10 @@ heliPad =
 			obj.replacedTiles[i] = {}
 
 			for j = -3, 3 do
-				table.insert(tiles, 
+				table.insert(tiles,
 				{
-					name = "heli-pad-concrete", 
-					position = {x = placementEnt.position.x + i, y = placementEnt.position.y + j} 
+					name = "heli-pad-concrete",
+					position = {x = placementEnt.position.x + i, y = placementEnt.position.y + j}
 				})
 
 				local oldTile = obj.surface.get_tile(placementEnt.position.x + i, placementEnt.position.y + j)

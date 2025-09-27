@@ -1,7 +1,7 @@
-basicAnimator = 
+basicAnimator =
 {
 	new = function(startValue, maxValue, durationInFrames, easingName)
-		local obj = 
+		local obj =
 		{
 			curFrame = 0,
 			endFrame = durationInFrames - 1,
@@ -91,7 +91,7 @@ basicAnimator =
 		end
 	end,
 
-	easingFuncs = 
+	easingFuncs =
 	{
 		--source: https://gist.github.com/gre/1650294
 
@@ -106,19 +106,19 @@ basicAnimator =
 		-- acceleration until halfway, then deceleration
 		easeInOutQuad = function(x) if x < 0.5 then return 2*x^2 else return -1+(4-2*x)*x end end,
 
-		-- accelerating from zero velocity 
+		-- accelerating from zero velocity
 		easeInCubic = function(x) return x^3 end,
 
-		-- decelerating to zero velocity 
+		-- decelerating to zero velocity
 		easeOutCubic = function(x) return (x-1)^3+1 end,
 
-		-- acceleration until halfway, then deceleration 
+		-- acceleration until halfway, then deceleration
 		easeInOutCubic = function(x) if x < 0.5 then return 4*x^3 else return (x-1)*(2*x-2)*(2*x-2)+1 end end,
 
-		-- accelerating from zero velocity 
+		-- accelerating from zero velocity
 		easeInQuart = function(x) return x^4 end,
 
-		-- decelerating to zero velocity 
+		-- decelerating to zero velocity
 		easeOutQuart = function(x) return 1-(x-1)^4 end,
 
 		-- acceleration until halfway, then deceleration
@@ -130,10 +130,10 @@ basicAnimator =
 		-- decelerating to zero velocity
 		easeOutQuint = function(x) return 1+(x-1)^5 end,
 			
-		-- acceleration until halfway, then deceleration 
+		-- acceleration until halfway, then deceleration
 		easeInOutQuint = function(x) if x < 0.5 then return 16*x^5 else return 1+16*(1-x)^5 end end,
 
-		-- acceleration until halfway, then deceleration 
+		-- acceleration until halfway, then deceleration
 		easeInOutSine = function(x) return (math.cos(x * math.pi) - 1) * -0.5 end,
 
 		cyclicSine = function(x) return math.sin(2 * math.pi * x) end,
