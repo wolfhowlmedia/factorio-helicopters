@@ -529,21 +529,21 @@ heliBase = {
 			if evt.cause.type == "unit" then
 				-- damage caused by a unit (e.g. biters, spitters)
 				if evt.cause.prototype.attack_parameters and evt.cause.prototype.attack_parameters.ammo_type then
-					local attack_ammo_type = evt.cause.prototype.attack_parameters.ammo_type.category
+					local attack_ammo_type = evt.cause.prototype.attack_parameters.ammo_categories[1]
 					if attack_ammo_type == "melee" then
 						-- attacked by a biter
 						if settings.global["heli-disable-biters-damage"].value then
 							cancelDamage = true
 						end
-						elseif attack_ammo_type == "biological" and damage_type == "acid" then
-							-- attacked by a spitter direct projectile
-							if settings.global["heli-disable-direct-spitter-damage"].value then
-								cancelDamage = true
-							end            
-						else
-							-- unknown attack ammo type
-							-- game.print("[".. attack_ammo_type .."] ("..damage_type..") Heli damaged by: " .. cause.name .. " (type: " .. cause.type .. ")" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
-						end          
+					elseif attack_ammo_type == "biological" and damage_type == "acid" then
+						-- attacked by a spitter direct projectile
+						if settings.global["heli-disable-direct-spitter-damage"].value then
+							cancelDamage = true
+						end
+					else
+						-- unknown attack ammo type
+						-- game.print("[".. attack_ammo_type .."] ("..damage_type..") Heli damaged by: " .. cause.name .. " (type: " .. cause.type .. ")" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
+					end
 					else
 						-- unit doesn't have attack_parameters, that is strange          
 					end
@@ -561,9 +561,16 @@ heliBase = {
 			end
 		else
 			if damage_type == "acid" then
-				-- attacked by a spitter direct projectile (the spitter is already destroyed)
-				if settings.global["heli-disable-direct-spitter-damage"].value then
-					cancelDamage = true
+				if evt.source and string.find(evt.source.name, "acid-splash-fire", 1, true) then
+					-- attacked by an acid puddle
+					if settings.global["heli-disable-acid-splash-damage"].value then
+						cancelDamage = true
+					end
+				else
+					-- attacked by a spitter direct projectile (the spitter is already destroyed)
+					if settings.global["heli-disable-direct-spitter-damage"].value then
+						cancelDamage = true
+					end
 				end
 			else
 				-- unknown cause
