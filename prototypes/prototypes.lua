@@ -249,25 +249,28 @@ data:extend({
     {
         type = "sprite",
         name = "heli_gauge_fs",
-        filename = "__HelicopterRevival__/graphics/gui/gauges/gauge_fs.png",
-        width = 128,
-        height = 128,
+        filename = "__HelicopterRevival__/graphics/gui/gauges/gauge_fs_hr.png",
+        width = 256,
+        height = 256,
+        scale = 0.5,
         priority = "extra-high-no-scale",
     },
     {
         type = "sprite",
         name = "heli_gauge_fs_led_fuel",
-        filename = "__HelicopterRevival__/graphics/gui/gauges/gauge_fs_led_fuel.png",
-        width = 128,
-        height = 128,
+        filename = "__HelicopterRevival__/graphics/gui/gauges/gauge_fs_led_fuel_hr.png",
+        width = 256,
+        height = 256,
+        scale = 0.5,
         priority = "extra-high-no-scale",
     },
     {
         type = "sprite",
         name = "heli_gauge_hr",
         filename = "__HelicopterRevival__/graphics/gui/gauges/gauge_hr.png",
-        width = 128,
-        height = 128,
+        width = 256,
+        height = 256,
+        scale = 0.5,
         priority = "extra-high-no-scale",
     },
 })
@@ -277,10 +280,11 @@ for i = 0, 127 do
 	table.insert(gauge_pointers, {
 		type = "sprite",
 		name = "heli_gauge_pointer_" .. tostring(i),
-		filename = "__HelicopterRevival__/graphics/gui/gauges/pointers/pointer-" .. tostring(i) .. ".png",
+		filename = "__HelicopterRevival__/graphics/gui/gauges/pointers/hr/pointer-" .. tostring(i) .. "-hr.png",
 		priority = "medium",
-		width = 128,
-		height = 128,
+        scale = 0.5,
+		width = 256,
+		height = 256,
 	})
 end
 data:extend(gauge_pointers)
