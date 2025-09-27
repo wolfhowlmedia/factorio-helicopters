@@ -44,7 +44,7 @@ data:extend({
 
     rotation_speed = 0.005,
     inventory_size = 0,
-    equipment_grid = nil,
+    equipment_grid = "heli-equipment-grid",
 
     animation = {
       layers = {
@@ -121,11 +121,12 @@ data:extend({
     friction = 0.002,
     terrain_friction_modifier = 0,
     weight = settings.startup["heli-weight"].value,
+    is_military_target = true,
 
     rotation_speed = 0.005,
     tank_driving = true,
     inventory_size = inventory_slots,
-    -- equipment_grid = "heli-equipment-grid",
+    equipment_grid = "heli-equipment-grid",
 
     animation = {
       layers = {
