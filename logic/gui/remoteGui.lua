@@ -73,8 +73,8 @@ remoteGui =
 	end,
 
 	hasMyPrefix = function(str)
-		return string.startswith(str, heliSelectionGui.prefix) or 
-			string.startswith(str, playerSelectionGui.prefix) or 
+		return string.startswith(str, heliSelectionGui.prefix) or
+			string.startswith(str, playerSelectionGui.prefix) or
 			string.startswith(str, markerSelectionGui.prefix) or
 			string.startswith(str, heliPadSelectionGui.prefix)
 	end,

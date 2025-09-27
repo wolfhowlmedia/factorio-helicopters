@@ -35,7 +35,7 @@ function printA(...)
 	local n = select("#", ...)
 	for i = 1, n do
 		s = s .. tostring(select(i, ...))
-		if i < n then 
+		if i < n then
 			s = s .. ", "
 		end
 	end
@@ -177,7 +177,7 @@ string.startswith = function(str, strSub)
   if str:len() < strSub:len() then
     return false
   end
-  
+ 
   return str:sub(1, strSub:len()) == strSub
 end
 

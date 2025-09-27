@@ -157,7 +157,7 @@ gaugeGui =
 				pointer.lastFrame = frame
 
 				if pointer.elem then
-					pointer.elem.destroy() 
+					pointer.elem.destroy()
 				end
 
 				pointer.elem = pointer.root.add
@@ -241,7 +241,7 @@ gaugeGui =
 	end,
 
 	buildGauge = function(self, parent, name, pointerNames, ledNames)
-		local gauge = 
+		local gauge =
 		{
 			elem = parent.add
 			{
@@ -264,7 +264,7 @@ gaugeGui =
 		}
 
 		for k,v in pairs(pointerNames or {}) do
-			gauge.pointers[v] = 
+			gauge.pointers[v] =
 			{
 				root = gauge.elem.add
 				{

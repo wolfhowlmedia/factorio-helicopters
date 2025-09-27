@@ -1,4 +1,4 @@
-basicState = 
+basicState =
 {
 	new = function(obj)
 		return setmetatable(obj, basicState.mt)

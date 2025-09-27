@@ -1,7 +1,7 @@
 timer =
 {
 	new = function(func, frames, isInterval, timerData)
-		local timer = 
+		local timer =
 		{
 			valid = true,
 			callback = func,
@@ -71,7 +71,7 @@ function OnTimerTick()
 					end
 				end
 			end
-		end 
+		end
 	end
 end
 
