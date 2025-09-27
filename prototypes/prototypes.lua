@@ -1,4 +1,5 @@
 require("util")
+local scale = settings.startup["heli-gauge-scale"].value
 
 --Equipment
 data:extend({
@@ -252,7 +253,7 @@ data:extend({
         filename = "__HelicopterRevival__/graphics/gui/gauges/gauge_fs_hr.png",
         width = 256,
         height = 256,
-        scale = 0.5,
+        scale = 0.5 * scale,
         priority = "extra-high-no-scale",
     },
     {
@@ -261,7 +262,7 @@ data:extend({
         filename = "__HelicopterRevival__/graphics/gui/gauges/gauge_fs_led_fuel_hr.png",
         width = 256,
         height = 256,
-        scale = 0.5,
+        scale = 0.5 * scale,
         priority = "extra-high-no-scale",
     },
     {
@@ -270,7 +271,7 @@ data:extend({
         filename = "__HelicopterRevival__/graphics/gui/gauges/gauge_hr.png",
         width = 256,
         height = 256,
-        scale = 0.5,
+        scale = 0.5 * scale,
         priority = "extra-high-no-scale",
     },
 })
@@ -282,7 +283,7 @@ for i = 0, 127 do
 		name = "heli_gauge_pointer_" .. tostring(i),
 		filename = "__HelicopterRevival__/graphics/gui/gauges/pointers/hr/pointer-" .. tostring(i) .. "-hr.png",
 		priority = "medium",
-        scale = 0.5,
+        scale = 0.5 * scale,
 		width = 256,
 		height = 256,
 	})

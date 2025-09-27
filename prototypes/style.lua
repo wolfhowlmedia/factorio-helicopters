@@ -121,5 +121,5 @@ function makeButtonStyle(width, height, image, padding)
 end
 
 data.raw["gui-style"].default["heli-clear_text_button"] = makeButtonStyle(15, 15, "__HelicopterRevival__/graphics/gui/clear-text.png", {top = 4})
-data.raw["gui-style"].default["heli-speaker_on_button"] = makeButtonStyle(15, 15, "__HelicopterRevival__/graphics/gui/speaker_on.png")
-data.raw["gui-style"].default["heli-speaker_off_button"] = makeButtonStyle(15, 15, "__HelicopterRevival__/graphics/gui/speaker_off.png")
+data.raw["gui-style"].default["heli-speaker_on_button"] = makeButtonStyle(24, 24, "__HelicopterRevival__/graphics/gui/speaker_on_hr.png")
+data.raw["gui-style"].default["heli-speaker_off_button"] = makeButtonStyle(24, 24, "__HelicopterRevival__/graphics/gui/speaker_off_hr.png")

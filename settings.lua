@@ -56,6 +56,14 @@ data:extend({
         default_value = 70,
         minimum_value = 0,
     },
+    {
+        type = "double-setting",
+        name = "heli-gauge-scale",
+        setting_type = "startup",
+        maximum_value = 2,
+        default_value = 1.25,
+        minimum_value = 0.5,
+    },
     ------------------------------
     -- Take damage settings
     ------------------------------
