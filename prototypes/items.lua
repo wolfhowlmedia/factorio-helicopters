@@ -160,7 +160,7 @@ data:extend({
         stack_size = 10
     },
 })
-if mods["Krastorio2"] or data.raw["ammo-category"]["kr-anti-materiel-rifle-ammo"] then
+if mods["Krastorio2"] and data.raw["ammo-category"]["kr-anti-materiel-rifle-ammo"] then
     local anti_material_rifle_shot_sound = {
         variations = {
             {
