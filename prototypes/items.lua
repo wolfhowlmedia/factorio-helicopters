@@ -160,8 +160,7 @@ data:extend({
         stack_size = 10
     },
 })
-
-if mods["Krastorio2"] or data.raw["ammo-category"]["anti-material-rifle-ammo"] then
+if mods["Krastorio2"] or data.raw["ammo-category"]["kr-anti-materiel-rifle-ammo"] then
     local anti_material_rifle_shot_sound = {
         variations = {
             {
@@ -192,7 +191,7 @@ if mods["Krastorio2"] or data.raw["ammo-category"]["anti-material-rifle-ammo"] t
             attack_parameters =
             {
                 type = "projectile",
-                ammo_category = "anti-material-rifle-ammo",
+                ammo_category = "kr-anti-materiel-rifle-ammo",
                 movement_slow_down_factor = 1.2,
                 cooldown = 20,
                 damage_modifier = settings.startup["heli-k2-anti-material-gun-damage-modifier"].value,

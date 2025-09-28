@@ -3,7 +3,7 @@ local inventory_slots = 80
 
 gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower"}
 
-if mods["Krastorio2"] and data.raw["ammo-category"]["anti-material-rifle-ammo"] then
+if mods["Krastorio2"] and data.raw["ammo-category"]["kr-anti-materiel-rifle-ammo"] then
   -- Override  gun slots for K2
   gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower", "heli-k2-anti-material-gun"}
 end
