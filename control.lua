@@ -1,3 +1,4 @@
+if script.active_mods["gvv"] then require("__gvv__.gvv")() end
 math3d = require("math3d")
 require("logic.mtMgr")
 

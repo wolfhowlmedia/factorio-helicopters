@@ -6,13 +6,13 @@ markerSelectionGui =
 	refreshCooldown = 20,
 
 	new = function(mgr, p)
-		obj = 
+		obj =
 		{
 			valid = true,
 			manager = mgr,
 			player = p,
 
-			guiElems = 
+			guiElems =
 			{
 				parent = mod_gui.get_frame_flow(p),
 			},
@@ -25,7 +25,7 @@ markerSelectionGui =
 
 		obj:buildGui()
 
-		if p.mod_settings["heli-auto-focus-searchfields"].value then 
+		if p.mod_settings["heli-auto-focus-searchfields"].value then
 			obj.guiElems.searchField.focus()
 		end
 
@@ -34,7 +34,7 @@ markerSelectionGui =
 
 	destroy = function(self)
 		self.valid = false
-	
+
 		if self.guiElems.root and self.guiElems.root.valid then
 			self.guiElems.root.destroy()
 		end
@@ -86,7 +86,7 @@ markerSelectionGui =
 		local newText = e.element.text
 
 		if name == self.prefix .. "searchField" then
-			if newText:contains(self.lastSearchFieldText) then
+			if string.find(newText, self.lastSearchFieldText) then
 				self:filterBtnList(newText)
 			else
 				self:buildBtnList()
@@ -104,7 +104,7 @@ markerSelectionGui =
 	filterBtnList = function(self, filterStr)
 		for i = #self.guiElems.btns, 1, -1 do --iterate backwards so table.remove doesnt mess up the indices
 			local curBtn = self.guiElems.btns[i]
-			if not curBtn.text:contains(filterStr) then
+			if not string.find(curBtn.text, filterStr) then
 				self:removeBtnIndex(i)
 			end
 		end
@@ -125,7 +125,7 @@ markerSelectionGui =
 
 			if not curBtn.tag.valid then
 				self:removeBtnIndex(i)
-			
+
 			else
 				if newTags[curBtn.tag.tag_number] then
 					newTags[curBtn.tag.tag_number] = nil
@@ -139,7 +139,7 @@ markerSelectionGui =
 
 				if not curBtn.icon and curBtn.tag.icon then
 					curBtn.icon, curBtn.iconType, curBtn.iconName = self:buildIconFromTag(curBtn.btn, curBtn.tag)
-				
+
 				elseif curBtn.icon and not curBtn.tag.icon then
 					curBtn.icon.destroy()
 					curBtn.icon, curBtn.iconType, curBtn.iconName = nil, nil, nil
@@ -189,7 +189,7 @@ markerSelectionGui =
 		local tagList = self.player.force.find_chart_tags(self.player.surface)
 
 		for i = #tagList, 1, -1 do
-			if not tagList[i].text:contains(self.guiElems.searchField.text) then
+			if not string.find(tagList[i].text, self.guiElems.searchField.text) then
 				table.remove(tagList, i)
 			end
 		end
@@ -201,6 +201,8 @@ markerSelectionGui =
 		local sprite
 		if tag.icon.type == "virtual" then
 			sprite = "virtual-signal" .. "/" .. tag.icon.name
+		elseif tag.icon.type == nil then
+			sprite = "item/" .. tag.icon.name
 		else
 			sprite = tag.icon.type .. "/" .. tag.icon.name
 		end
@@ -236,7 +238,7 @@ markerSelectionGui =
 			icon = icon,
 
 			tag = tag,
-			
+
 			text = tag.text,		
 			iconType = iconType,
 			iconName = iconName,
@@ -253,7 +255,7 @@ markerSelectionGui =
 		for k, curTag in pairs(tagList) do
 			table.insert(self.guiElems.btns, self:buildBtnFromTag(self.guiElems.table, curTag))
 		end
-		
+
 		self:setNothingAvailableIfNecessary()
 	end,
 
@@ -307,33 +309,31 @@ markerSelectionGui =
 
 		}
 
-			self.guiElems.searchField = self.guiElems.searchFieldFlow.add
-			{
-				type = "textfield",
-				name = self.prefix .. "searchField",
-				style = "search_textfield_with_fixed_width",
-			}
-			self.guiElems.searchField.style.left_padding = 22
-			self.guiElems.searchField.style.minimal_height = 26
-			self.guiElems.searchField.style.maximal_height = 32
+		self.guiElems.searchField = self.guiElems.searchFieldFlow.add
+		{
+			type = "textfield",
+			name = self.prefix .. "searchField",
+			style = "stretchable_textfield",
+		}
+		self.guiElems.searchField.style.left_padding = 22
+		self.guiElems.searchField.style.minimal_height = 26
+		self.guiElems.searchField.style.maximal_height = 32
 
-			self.lastSearchFieldText = ""
-			
-				self.guiElems.searchField.add{
-					type = "sprite",
-					name = self.prefix .. "searchIcon",
-					sprite = "heli_search_icon",
-					--style = "heli_search_icon_style",
-				}
+		self.lastSearchFieldText = ""
 
+		self.guiElems.searchField.add{
+			type = "sprite",
+			name = self.prefix .. "searchIcon",
+			sprite = "heli_search_icon",
+		}
 
-			self.guiElems.searchFieldClearBtn = self.guiElems.searchFieldFlow.add
-			{
-				type = "button",
-				name = self.prefix .. "searchFieldClearBtn",
-				style = "heli-clear_text_button",
-			}
-		
+		self.guiElems.searchFieldClearBtn = self.guiElems.searchFieldFlow.add
+		{
+			type = "button",
+			name = self.prefix .. "searchFieldClearBtn",
+			style = "heli-clear_text_button",
+		}
+
 
 		self.guiElems.scroller = self.guiElems.root.add
 		{
@@ -348,7 +348,7 @@ markerSelectionGui =
 		{
 			type = "flow",
 			name = self.prefix .. "flow",
-			style = "achievements_vertical_flow",
+			style = "vertical_flow",
 			direction = "vertical",
 		}
 

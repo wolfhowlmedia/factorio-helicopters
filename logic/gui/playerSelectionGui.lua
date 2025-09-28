@@ -5,13 +5,13 @@ playerSelectionGui =
 	prefix = "heli_playerSelectionGui_",
 
 	new = function(mgr, p)
-		obj = 
+		obj =
 		{
 			valid = true,
 			manager = mgr,
 			player = p,
 
-			guiElems = 
+			guiElems =
 			{
 				parent = mod_gui.get_frame_flow(p),
 			},
@@ -26,7 +26,7 @@ playerSelectionGui =
 
 	destroy = function(self)
 		self.valid = false
-	
+
 		if self.guiElems.root and self.guiElems.root.valid then
 			self.guiElems.root.destroy()
 		end
@@ -41,7 +41,7 @@ playerSelectionGui =
 			else
 				self.manager:OnChildEvent(self, "selectedPlayer", searchInTable(self.guiElems.btns, e.element, "btn").player)
 			end
-			
+
 		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
 			self.manager:OnChildEvent(self, "cancel")
 		end
@@ -121,7 +121,7 @@ playerSelectionGui =
 		{
 			type = "flow",
 			name = self.prefix .. "flow",
-			style = "achievements_vertical_flow",
+			style = "vertical_flow",
 			direction = "vertical",
 		}
 

@@ -19,7 +19,7 @@ data:extend({
     },
 
     count_as_rock_for_filtered_deconstruction = false,
-    mined_sound = { filename = "__base__/sound/deconstruct-bricks.ogg" },
+    mined_sound = {filename = "__base__/sound/deconstruct-bricks.ogg"},
     render_layer = "object",
     max_health = 200,
     resistances =
@@ -34,15 +34,9 @@ data:extend({
     {
       {
         filename = "__HelicopterRevival__/graphics/entities/heli_pad.png",
-        width = 260,
-        height = 260,
-
-        hr_version = {
-          filename = "__HelicopterRevival__/graphics/entities/heli_pad_hr.png",
-          width = 520,
-          height = 520,
-          scale = 0.5,
-        },
+        width = 520,
+        height = 520,
+        scale = 0.5,
       },
     }
   },
@@ -58,7 +52,7 @@ data:extend({
     collision_box = {{-3.5, -3.5}, {3.5, 3.5}},
     collision_mask = {layers = {}},--{"object-layer"},
     selection_box = {{-2, -2}, {2, 2}},
-
+    is_military_target = false,
     minable =
     {
       mining_time = 2,
@@ -67,7 +61,7 @@ data:extend({
     },
 
     count_as_rock_for_filtered_deconstruction = false,
-    mined_sound = { filename = "__base__/sound/deconstruct-bricks.ogg" },
+    mined_sound = {filename = "__base__/sound/deconstruct-bricks.ogg"},
     render_layer = "decorative",
     max_health = 200,
     resistances =

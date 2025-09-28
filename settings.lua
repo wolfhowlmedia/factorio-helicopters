@@ -56,6 +56,14 @@ data:extend({
         default_value = 70,
         minimum_value = 0,
     },
+    {
+        type = "double-setting",
+        name = "heli-gauge-scale",
+        setting_type = "startup",
+        maximum_value = 2,
+        default_value = 1.25,
+        minimum_value = 0.5,
+    },
     ------------------------------
     -- Take damage settings
     ------------------------------
@@ -97,7 +105,7 @@ data:extend({
         default_value = 2800,
         minimum_value = 0,
     },
-    
+   
     ------------- Misc -------------------
     {
         type = "bool-setting",
@@ -166,13 +174,13 @@ data:extend({
         type = "bool-setting",
         name = "heli-remote-dont-auto-land-player",
         setting_type = "runtime-per-user",
-        default_value = true,
+        default_value = false,
     },
 
     {
         type = "bool-setting",
         name = "heli-remote-dont-land-following-player",
         setting_type = "runtime-per-user",
-        default_value = false,
+        default_value = true,
     },
 })

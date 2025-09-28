@@ -1,3 +1,7 @@
+function isNil(value)
+    return value == nil
+end
+
 function tableToString(table)
 	local s = ""
 	for k,v in pairs(table) do
@@ -31,7 +35,7 @@ function printA(...)
 	local n = select("#", ...)
 	for i = 1, n do
 		s = s .. tostring(select(i, ...))
-		if i < n then 
+		if i < n then
 			s = s .. ", "
 		end
 	end
@@ -55,7 +59,13 @@ end
 
 function equipmentGridHasItem(grid, itemName)
 	local contents = grid.get_contents()
-	return contents[itemName] and contents[itemName] > 0
+
+	for _, item in pairs(contents) do
+		if item.name == itemName and item.count > 0 then
+			return true
+		end
+	end
+	return false
 end
 
 function searchIndexInTable(table, obj, field)
@@ -167,7 +177,7 @@ string.startswith = function(str, strSub)
   if str:len() < strSub:len() then
     return false
   end
-  
+ 
   return str:sub(1, strSub:len()) == strSub
 end
 

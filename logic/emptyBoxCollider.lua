@@ -8,7 +8,7 @@ emptyBoxCollider =
 			position = getIndexedPos(options.position),
 			force = options.force,
 
-			boxHalfs = 
+			boxHalfs =
 			{
 				ends = options.boxLengths.ends / 2,
 				sides = options.boxLengths.sides / 2
@@ -275,7 +275,7 @@ emptyBoxCollider.mt =
 		elseif k == "get_inventory" then
 			return function(...)
 				local params = {...}
-				return setmetatable({}, 
+				return setmetatable({},
 					{__index = function(_t, _k)
 						return function(...)
 							for key, curCol in pairs(t.childColliders) do

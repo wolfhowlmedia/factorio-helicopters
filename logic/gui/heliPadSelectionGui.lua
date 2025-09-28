@@ -1,17 +1,17 @@
 mod_gui = require("mod-gui")
 
-heliPadSelectionGui = 
+heliPadSelectionGui =
 {
 	prefix = "heli_heliPadSelectionGui_",
 
 	new = function(mgr, p)
-		obj = 
+		obj =
 		{
 			valid = true,
 			manager = mgr,
 			player = p,
 
-			guiElems = 
+			guiElems =
 			{
 				parent = mod_gui.get_frame_flow(p),
 			},
@@ -26,7 +26,7 @@ heliPadSelectionGui =
 
 	destroy = function(self)
 		self.valid = false
-	
+
 		if self.guiElems.root and self.guiElems.root.valid then
 			self.guiElems.root.destroy()
 		end
@@ -71,7 +71,7 @@ heliPadSelectionGui =
 
 	OnHeliPadBuilt = function(self, heliPad)
 		if heliPad.baseEnt.force == self.player.force then
-			table.insert(self.guiElems.cams, 
+			table.insert(self.guiElems.cams,
 			{
 				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad.baseEnt.position, self:getDefaultZoom()),
 				ID = self.curCamID,
@@ -203,7 +203,7 @@ heliPadSelectionGui =
 			for k, curPad in pairs(storage.heliPads) do
 				if curPad.baseEnt.force == self.player.force then
 					hasCams = true
-					table.insert(els.cams, 
+					table.insert(els.cams,
 					{
 						cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, self:getDefaultZoom()),
 						ID = self.curCamID,

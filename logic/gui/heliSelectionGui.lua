@@ -4,16 +4,14 @@ heliSelectionGui =
 {
 	prefix = "heli_heliSelectionGui_",
 
-	
-
 	new = function(mgr, p)
-		obj = 
+		obj =
 		{
 			valid = true,
 			manager = mgr,
 			player = p,
 
-			guiElems = 
+			guiElems =
 			{
 				parent = mod_gui.get_frame_flow(p),
 			},
@@ -23,7 +21,6 @@ heliSelectionGui =
 		}
 
 		setmetatable(obj, {__index = heliSelectionGui})
-
 		obj:buildGui()
 
 		return obj
@@ -31,7 +28,7 @@ heliSelectionGui =
 
 	destroy = function(self)
 		self.valid = false
-	
+
 		if self.guiElems.root and self.guiElems.root.valid then
 			self.guiElems.root.destroy()
 		end
@@ -214,7 +211,7 @@ heliSelectionGui =
 		self.guiElems.btnToPlayer.enabled = heliSelected
 		self.guiElems.btnToMap.enabled = heliSelected
 		self.guiElems.btnToPad.enabled = heliSelected
-		self.guiElems.btnStop.enabled = heliSelected and hasController
+		self.guiElems.btnStop.enabled = heliSelected and not isNil(hasController)
 	end,
 
 	setNothingAvailableIfNecessary = function(self)
@@ -338,6 +335,7 @@ heliSelectionGui =
 			name = self.prefix .. "btn_toMap",
 			sprite = "heli_to_map",
 			style = mod_gui.button_style,
+			tooltip = {"heli-gui-heliSelection-to-map-btn-tt"},
 		}
 
 		els.btnToPad = els.buttonFlow.add
@@ -346,6 +344,7 @@ heliSelectionGui =
 			name = self.prefix .. "btn_toPad",
 			sprite = "heli_to_pad",
 			style = mod_gui.button_style,
+			tooltip = {"heli-gui-heliSelection-to-pad-btn-tt"},
 		}
 
 		els.btnStop = els.buttonFlow.add
@@ -354,6 +353,7 @@ heliSelectionGui =
 			name = self.prefix .. "btn_stop",
 			sprite = "heli_stop",
 			style = mod_gui.button_style,
+			tooltip = {"heli-gui-heliSelection-stop-btn-tt"},
 		}
 		self:setControlBtnsStatus(false, false)
 
@@ -375,7 +375,7 @@ heliSelectionGui =
 		els.camTable.style.horizontal_spacing = 10
 		els.camTable.style.vertical_spacing = 10
 
-		els.cams ={}
+		els.cams = {}
 		self.curCamID = 0
 
 		if storage.helis then
@@ -385,7 +385,7 @@ heliSelectionGui =
 			for k, curHeli in pairs(storage.helis) do
 				local curDriver = curHeli.baseEnt.get_driver()
 
-				if curHeli.baseEnt.force == self.player.force and 
+				if curHeli.baseEnt.force == self.player.force and
 					(curDriver == nil or curHeli.hasRemoteController or
 						(curDriver.player and curDriver.player.valid and curDriver.player.name == self.player.name)) then
 
@@ -405,7 +405,7 @@ heliSelectionGui =
 
 					if curHeli == lastSelected then
 						selectedSomething = true
-						self:setCamStatus(els.cams[self.curCamID], true, heliController)
+						self:setCamStatus(els.cams[self.curCamID], true, els.cams[self.curCamID].heliController)
 					end
 				end
 			end

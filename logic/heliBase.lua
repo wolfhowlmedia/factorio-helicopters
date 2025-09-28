@@ -8,7 +8,7 @@ function getHeliFromBaseEntity(ent)
 			return v
 		end
 	end
-	
+
 	return nil
 end
 
@@ -511,76 +511,82 @@ heliBase = {
 
   -- called when the helicopter entity is damaged
   -- evt - https://lua-api.factorio.com/latest/events.html#on_entity_damaged
-  OnDamaged = function(self, evt)
+	OnDamaged = function(self, evt)
+		-- check if the helicopter is above the biters reach
+		if self.height <= maxCollisionHeight then
+			-- too low, within biters reach, allow damage
+			return
+		end
 
-    -- check if the helicopter is above the biters reach
-    if self.height <= maxCollisionHeight then
-		-- too low, within biters reach, allow damage
-		return
-    end
+		local damage_amount = evt.final_damage_amount
+		local damage_type = evt.damage_type.name
+		local cancelDamage = false
 
-	local damage_amount = evt.final_damage_amount
-	local damage_type = evt.damage_type.name
-	local cancelDamage = false
-
-	-- if evt.cause and evt.cause.valid then
-	-- don't check for validity, because the enemy that caused the damage might have been destroyed already
-	if evt.cause then
-		local cause = evt.cause
-		if evt.cause.type == "unit" then
-			-- damage caused by a unit (e.g. biters, spitters)
-			if evt.cause.prototype.attack_parameters and evt.cause.prototype.attack_parameters.ammo_type then
-				local attack_ammo_type = evt.cause.prototype.attack_parameters.ammo_type.category
-        		if attack_ammo_type == "melee" then
-					-- attacked by a biter
-					if settings.global["heli-disable-biters-damage"].value then
-						cancelDamage = true
-					end
+		-- if evt.cause and evt.cause.valid then
+		-- don't check for validity, because the enemy that caused the damage might have been destroyed already
+		if evt.cause then
+			local cause = evt.cause
+			if evt.cause.type == "unit" then
+				-- damage caused by a unit (e.g. biters, spitters)
+				if evt.cause.prototype.attack_parameters and evt.cause.prototype.attack_parameters.ammo_type then
+					local attack_ammo_type = evt.cause.prototype.attack_parameters.ammo_categories[1]
+					if attack_ammo_type == "melee" then
+						-- attacked by a biter
+						if settings.global["heli-disable-biters-damage"].value then
+							cancelDamage = true
+						end
 					elseif attack_ammo_type == "biological" and damage_type == "acid" then
 						-- attacked by a spitter direct projectile
 						if settings.global["heli-disable-direct-spitter-damage"].value then
 							cancelDamage = true
-						end            
+						end
 					else
 						-- unknown attack ammo type
 						-- game.print("[".. attack_ammo_type .."] ("..damage_type..") Heli damaged by: " .. cause.name .. " (type: " .. cause.type .. ")" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
-					end          
+					end
+					else
+						-- unit doesn't have attack_parameters, that is strange         
+					end
+			else
+				-- not a unit, could be an acid puddle
+				if string.find(cause.name, "acid-splash-fire", 1, true) then
+					-- stepped on an acid puddle
+					if settings.global["heli-disable-acid-splash-damage"].value then
+						cancelDamage = true
+					end
 				else
-					-- unit doesn't have attack_parameters, that is strange          
+					-- unknown entity, which is not a unit
+					-- game.print("NOT UNIT ("..damage_type..") - Heli damaged by: " .. cause.name .. " (type: " .. cause.type .. ")" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
 				end
-		else
-			-- not a unit, could be an acid puddle
-			if string.find(cause.name, "acid-splash-fire", 1, true) then
-				-- stepped on an acid puddle
-				if settings.global["heli-disable-acid-splash-damage"].value then
-					cancelDamage = true
-				end
-	        else
-				-- unknown entity, which is not a unit
-				-- game.print("NOT UNIT ("..damage_type..") - Heli damaged by: " .. cause.name .. " (type: " .. cause.type .. ")" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
-			end
-		end
-    else
-		if damage_type == "acid" then
-			-- attacked by a spitter direct projectile (the spitter is already destroyed)
-			if settings.global["heli-disable-direct-spitter-damage"].value then
-				cancelDamage = true
 			end
 		else
-			-- unknown cause
-			-- game.print("("..damage_type..") Heli damaged by: unknown cause" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
+			if damage_type == "acid" then
+				if evt.source and string.find(evt.source.name, "acid-splash-fire", 1, true) then
+					-- attacked by an acid puddle
+					if settings.global["heli-disable-acid-splash-damage"].value then
+						cancelDamage = true
+					end
+				else
+					-- attacked by a spitter direct projectile (the spitter is already destroyed)
+					if settings.global["heli-disable-direct-spitter-damage"].value then
+						cancelDamage = true
+					end
+				end
+			else
+				-- unknown cause
+				-- game.print("("..damage_type..") Heli damaged by: unknown cause" .. " damage: " .. damage_amount .. " health: " .. finalHealth)
+			end
 		end
-    end
 
-    if cancelDamage then
-		-- restore health
-		if self.baseEnt and self.baseEnt.valid then
-			self.baseEnt.health = self.baseEnt.health + damage_amount
+		if cancelDamage then
+			-- restore health
+			if self.baseEnt and self.baseEnt.valid then
+				self.baseEnt.health = self.baseEnt.health + damage_amount
+			end
+		else
+			-- game.print("WARNING: damage not cancelled: " .. damage_type .. " " .. damage_amount)
 		end
-	else
-		-- game.print("WARNING: damage not cancelled: " .. damage_type .. " " .. damage_amount)
-	end
-  end,
+  	end,
 
 
 	---------------- states ----------------
