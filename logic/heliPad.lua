@@ -23,6 +23,7 @@ heliPad =
 				name = "heli-pad-entity",
 				force = placementEnt.force,
 				position = placementEnt.position,
+				quality = placementEnt.quality,
 			}
 		}
 

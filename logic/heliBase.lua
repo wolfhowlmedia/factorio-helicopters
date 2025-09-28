@@ -120,7 +120,7 @@ end
 local transferGridEquipment = function(srcEnt, destEnt)
 	if srcEnt.grid and destEnt.grid then --assume they have the same size and destEnt.grid is empty.
 		for i, equip in ipairs(srcEnt.grid.equipment) do
-			local newEquip = destEnt.grid.put{name = equip.name, position = equip.position}
+			local newEquip = destEnt.grid.put{name = equip.name, position = equip.position, quality = equip.qualit}
 
 			if equip.type == "energy-shield-equipment" then newEquip.shield = equip.shield end
 			newEquip.energy = equip.energy
