@@ -1,10 +1,21 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.0
-Date: ??.??.2025
+Date: 01.10.2025
   Fixes:
     - K2 support: Weapon not loading correctly
   Changes:
-    - TheKingJo: Massive refactor of entire mod
+    - TheKingJo: heli got mined sound
+    - TheKingJo: made heli a military target because it is
+    - TheKingJo: one heli fits in a rocket now (just as car and tank)
+    - TheKingJo: flipped one setting default cause it makes more sense this way
+    - TheKingJo: made the search field for map marker bigger
+    - TheKingJo: added tooltips for all the other GUI buttons
+    - TheKingJo: added english and german locale where missing
+    - TheKingJo: heliControllers don't get stored twice anymore (heliController l.38)
+    - TheKingJo: streamlined the prototype initiation files (noone needs a whole file in an extra folder for a single prototype definition)
+    - TheKingJo: removed unused stdlib files cause the were annoying 
+    - TheKingJo: some formatting cleanup (removed spaces at ends of lines, corrected some indentations, removed empty lines where it didn't look right)
+    - TheKingJo: massive refactor of entire mod
     - 1000101: introduce quality
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.1
