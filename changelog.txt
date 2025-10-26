@@ -4,17 +4,17 @@ Date: 26.10.2025
   Changes:
     - TheKingJo: added remote driving
     - TheKingJo: added vehicle logistics
-  Fixes:
+  Bugfixes:
     - TheKingJo: on_save error when trying to save while heli doesn't have enough fuel should be fixed now
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.1
 Date: 12.10.2025
-  Fixes:
+  Bugfixes:
     - Typo in quality implementation that broke equipment grid (and the mod)
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.0
 Date: 01.10.2025
-  Fixes:
+  Bugfixes:
     - K2 support: Weapon not loading correctly
   Changes:
     - TheKingJo: heli got mined sound
@@ -33,9 +33,9 @@ Date: 01.10.2025
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.1
 Date: 22.06.2025
-  Fixes:
+  Bugfixes:
     - Krastorio2 2.0 support
-    - update stdlib to stdlib2 (with minor fixes)
+    - update stdlib to stdlib2 (with minor Bugfixes)
     - cleanup the log spam
   Changes:
     - roland77: added scripts/build_package.py for easy deployment
@@ -46,7 +46,7 @@ Date: 22.06.2025
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.0
 Date: 27.10.2024
-  Fixes:
+  Bugfixes:
     - Rendering below the power wires
   Changes:
     - Factorio 2.0
@@ -56,8 +56,8 @@ Date: 27.10.2024
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.4
 Date: 12.08.2024
-  Fixes:
-    - Fixes crash when not in IR3
+  Bugfixes:
+    - Bugfixes crash when not in IR3
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.3
 Date: 12.08.2024
@@ -68,8 +68,8 @@ Date: 12.08.2024
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.2
 Date: 25.12.2022
-  Fixes:
-    - Changelog date / credit fixes
+  Bugfixes:
+    - Changelog date / credit Bugfixes
     - Don't enable anti-material-gun if the ammo for it is missing or disabled in config (K2)
     - Don't crash if the tile under the helicopter was removed
     - LEFD: Lower Volume of heli gun (K2)
@@ -80,13 +80,13 @@ Date: 25.12.2022
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.1
 Date: 21.04.2022
-  Fixes:
+  Bugfixes:
     - Fixed a potential crash when unloading GaugeGUI
     - Restore shadow positioning when auto-landing
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 13.04.2022
-  Fixes:
+  Bugfixes:
     - Fixed default up / down keys (thanks to Keysivi / Pi-C from Discussion thread)
     - Updated K2 anti-material sounds thanks to RafaelFuchs
     - Fixed crash when attempting to load with newer version of Krastorio
@@ -108,7 +108,7 @@ Date: 27.10.2021
     - More startup configuration options for flamethrower, gun, and rocket launcher
     - More Japanese translations thanks to Shelaf
     - Add an optional K2 anti-material gun
-  Fixes:
+  Bugfixes:
     - Fixed potential crash when using Alien Biomes in conjunction of Asphalt Roads
     - Fixed future date in the changelog
     - Uniformed date format in changelog
@@ -156,12 +156,12 @@ Date: 07.04.2020
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 07.04.2020
-  Fixes:
+  Bugfixes:
     - Compatibility with Krastorio 2
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.2
 Date: 12.03.2020
-  Fixes:
+  Bugfixes:
     - Fix some icons
   Changes:
     - Added flamethrower to the helicopter
@@ -169,4 +169,4 @@ Date: 12.03.2020
 Version: 0.0.1
 Date: 14.02.2020
   Changes:
-    - Fork from Kumpu's Helicopters with fixes for Factorio 0.18.2+
+    - Fork from Kumpu's Helicopters with Bugfixes for Factorio 0.18.2+
