@@ -41,6 +41,7 @@ data:extend({
     friction = 0.002,
     terrain_friction_modifier = 0,
     weight = 3000,
+    deliver_category = "vehicle",
 
     rotation_speed = 0.005,
     inventory_size = 0,
@@ -116,12 +117,15 @@ data:extend({
       emissions = 0.005,
       fuel_inventory_size = fuel_slots,
     },
+    allow_remote_driving = true,
+    trash_inventory_size = 10,
     consumption = settings.startup["heli-consumption"].value,
     braking_power = settings.startup["heli-braking-power"].value,
     friction = 0.002,
     terrain_friction_modifier = 0,
     weight = settings.startup["heli-weight"].value,
     is_military_target = true,
+    deliver_category = "vehicle",
 
     rotation_speed = 0.005,
     tank_driving = true,
@@ -206,6 +210,7 @@ data:extend({
     friction = 0.002,
     terrain_friction_modifier = 0,
     weight = 3000,
+    deliver_category = "vehicle",
 
     rotation_speed = 0.005,
     inventory_size = 0,
@@ -274,6 +279,7 @@ data:extend({
     friction = 0.002,
     terrain_friction_modifier = 0,
     weight = 3000,
+    deliver_category = "vehicle",
 
     rotation_speed = 0.005,
     inventory_size = 0,
@@ -342,6 +348,7 @@ data:extend({
     friction = 0.002,
     terrain_friction_modifier = 0,
     weight = 3000,
+    deliver_category = "vehicle",
 
     rotation_speed = 0.005,
     inventory_size = 0,
@@ -409,6 +416,7 @@ data:extend({
     },
     consumption = "100kW",
     friction = 0.01,
+    deliver_category = "vehicle",
 
     animation = {
       layers = {

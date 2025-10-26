@@ -208,21 +208,10 @@ gaugeGui =
 			led.sound = sound
 
 			if not led.blinkInterval then
-				led.blinkInterval = setInterval(function(timer)
-				    local gg = timer.data.gg
-				    local _led = timer.data.led
-
-					if not gg.valid then
-						timer:cancel()
-
-					else
-						gg:setLed("gauge_fs", "fuel", not _led.on)
-
-						if _led.sound and (not gg.muted) and gg.player.mod_settings["heli-gaugeGui-play-fuel-warning-sound"].value then
-							gg.player.play_sound{path = _led.sound}
-						end
-					end
-				end, interval, {gg = self, led = led})
+				led.blinkInterval = setInterval(
+					interval,
+					{gg = self, led = led}
+				)
 			else
 				led.blinkInterval.interval = interval
 			end

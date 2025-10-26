@@ -1,10 +1,9 @@
 timer =
 {
-	new = function(func, frames, isInterval, timerData)
+	new = function(frames, isInterval, timerData)
 		local timer =
 		{
 			valid = true,
-			callback = func,
 			runTick = game.tick + frames,
 			interval = isInterval and frames,
 			paused = false,
@@ -35,8 +34,23 @@ function setTimeout(func, frames, timerData)
 	return timer.new(func, frames, false, timerData)
 end
 
-function setInterval(func, frames, timerData)
-	return timer.new(func, frames, true, timerData)
+function setInterval(frames, timerData)
+	return timer.new(frames, true, timerData)
+end
+
+function playTimerSound(timer)
+	local gg = timer.data.gg
+	local _led = timer.data.led
+
+	if not gg.valid then
+		timer:cancel()
+	else
+		gg:setLed("gauge_fs", "fuel", not _led.on)
+
+		if _led.sound and (not gg.muted) and gg.player.mod_settings["heli-gaugeGui-play-fuel-warning-sound"].value then
+			gg.player.play_sound{path = _led.sound}
+		end
+	end
 end
 
 function OnTimerTick()
@@ -48,26 +62,18 @@ function OnTimerTick()
 
 			if not curTimer.valid then
 				table.remove(timers, i)
-			
+
 			else
 				if (not curTimer.paused) and curTimer.runTick <= game.tick then
-					-- i don't know if this check is the correct way to catch it
-					-- but sometimes after game load, the callback slot will be
-					-- empty and cause a crash. this appears to fix that.
-					-- seems this is only used by the fuel gauge as well
-					if not curTimer.callback then
+					--curTimer:callback()
+					playTimerSound(curTimer)
+
+					if curTimer.interval then
+						curTimer.runTick = game.tick + curTimer.interval
+
+					else
 						curTimer.valid = false
 						table.remove(timers, i)
-					else
-						curTimer:callback()
-
-						if curTimer.interval then
-							curTimer.runTick = game.tick + curTimer.interval
-
-						else
-							curTimer.valid = false
-							table.remove(timers, i)
-						end
 					end
 				end
 			end
