@@ -1,7 +1,3 @@
-tmrMgr = 
-{
-}
-
 timer =
 {
 	new = function(func, frames, isInterval, timerData)
@@ -15,10 +11,9 @@ timer =
 			data = timerData,
 		}
 
-		-- mtMgr.set(timer, "timer")
+		mtMgr.set(timer, "timer")
 
-		-- return insertInGlobal("timers", timer)
-		return insertIntoTimeManager(timer)
+		return insertInGlobal("timers", timer)
 	end,
 
 	cancel = function(self)
@@ -44,18 +39,8 @@ function setInterval(func, frames, timerData)
 	return timer.new(func, frames, true, timerData)
 end
 
-function insertIntoTimeManager(data)
-	if not tmrMgr["timers"] then
-		tmrMgr["timers"] = {}
-	end
-	table.insert(tmrMgr["timers"], data)
-
-	return data
-end
-
 function OnTimerTick()
-	-- local timers = storage.timers
-	local timers = tmrMgr.timers
+	local timers = storage.timers
 
 	if timers then
 		for i = #timers, 1, -1 do
@@ -90,4 +75,4 @@ function OnTimerTick()
 	end
 end
 
--- mtMgr.assign("timer", {__index = timer})
+mtMgr.assign("timer", {__index = timer})
