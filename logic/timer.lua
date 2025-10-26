@@ -30,10 +30,6 @@ timer =
 	end,
 }
 
-function setTimeout(func, frames, timerData)
-	return timer.new(func, frames, false, timerData)
-end
-
 function setInterval(frames, timerData)
 	return timer.new(frames, true, timerData)
 end
