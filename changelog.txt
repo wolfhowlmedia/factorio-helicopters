@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 26.10.2025
+  Changes:
+    - TheKingJo: added remote driving
+    - TheKingJo: added vehicle logistics
+  Fixes:
+    - TheKingJo: on_save error when trying to save while heli doesn't have enough fuel should be fixed now
+---------------------------------------------------------------------------------------------------
 Version: 0.4.1
 Date: 12.10.2025
   Fixes:
