@@ -231,7 +231,7 @@ function OnHeliFollow(e)
 
 		if heli then
 			assignHeliController(p, heli, p, true)
-			p.add_custom_alert(heli.baseEnt, {type = "item", name = "heli-item"}, {"heli-alert-follow", chopDecimal(dist)}, true)
+			p.add_custom_alert(heli.baseEnt, {type = "item", name = "heli-placement-entity-_-"}, {"heli-alert-follow", chopDecimal(dist)}, true)
 		end
 	end
 end

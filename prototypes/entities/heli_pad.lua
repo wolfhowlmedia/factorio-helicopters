@@ -10,11 +10,10 @@ data:extend({
     collision_box = {{-3.5, -3.5}, {3.5, 3.5}},
     collision_mask = {layers = {object=true, water_tile=true}},
     selection_box = {{-3.5, -3.5}, {3.5, 3.5}},
-
     minable =
     {
       mining_time = 2,
-      result = "heli-pad-item",
+      result = "heli-pad-placement-entity",
       count = 1
     },
 
@@ -26,6 +25,22 @@ data:extend({
     {
       {
         type = "fire",
+        percent = 100
+      },
+      {
+        type = "physical",
+        percent = 100
+      },
+      {
+        type = "impact",
+        percent = 100
+      },
+      {
+        type = "explosion",
+        percent = 90
+      },
+      {
+        type = "acid",
         percent = 100
       }
     },
@@ -53,10 +68,11 @@ data:extend({
     collision_mask = {layers = {}},--{"object-layer"},
     selection_box = {{-2, -2}, {2, 2}},
     is_military_target = false,
+    hidden_in_factoriopedia = true,
     minable =
     {
       mining_time = 2,
-      result = "heli-pad-item",
+      result = "heli-pad-placement-entity",
       count = 1
     },
 

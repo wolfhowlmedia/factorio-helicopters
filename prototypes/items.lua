@@ -1,7 +1,7 @@
 data:extend({
 	{
 		type = "item-with-entity-data",
-		name = "heli-item",
+		name = "heli-placement-entity-_-",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 64,
 		flags = {},
@@ -147,7 +147,7 @@ data:extend({
     },
     {
         type = "item",
-        name = "heli-pad-item",
+        name = "heli-pad-placement-entity",
         icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
         icon_size = 64,
         flags = {},

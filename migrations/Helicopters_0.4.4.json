@@ -1,0 +1,13 @@
+{
+	"item":
+	[
+		["heli-pad-item", "heli-pad-placement-entity"],
+		["heli-item", "heli-placement-entity-_-"]
+	],
+	"recipe":
+	[
+		["heli-pad-recipe", "heli-pad-placement-entity"],
+		["heli-recipe", "heli-placement-entity-_-"],
+		["heli-remote-recipe", "heli-remote-equipment"]
+	]
+}
