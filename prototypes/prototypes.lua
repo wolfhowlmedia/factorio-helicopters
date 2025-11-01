@@ -54,7 +54,7 @@ data:extend({
 data:extend({
 	{
 		type = "recipe",
-		name = "heli-recipe",
+        name = "heli-item",
 		enabled = false,
 		ingredients = {
 			{type = "item", name = "engine-unit", amount = 150},
@@ -68,7 +68,7 @@ data:extend({
 	},
 	{
 		type = "recipe",
-		name = "heli-remote-recipe",
+        name = "heli-remote-equipment",
 		enabled = false,
 		energy_required = 15,
 		ingredients = {
@@ -81,7 +81,7 @@ data:extend({
 	},
 	{
 		type = "recipe",
-		name = "heli-pad-recipe",
+        name = "heli-pad-item",
 		enabled = false,
 		energy_required = 5,
 		ingredients = {
@@ -131,7 +131,7 @@ data:extend({
         {
             {
                 type = "unlock-recipe",
-                recipe = "heli-remote-recipe"
+                recipe = "heli-remote-equipment"
             },
         },
         prerequisites = {"heli-technology", "concrete", "processing-unit", "battery", "modular-armor"},
@@ -159,11 +159,11 @@ data:extend({
         {
             {
                 type = "unlock-recipe",
-                recipe = "heli-recipe"
+                recipe = "heli-item"
             },
             {
                 type = "unlock-recipe",
-                recipe = "heli-pad-recipe"
+                recipe = "heli-pad-item"
             },
         },
         prerequisites = {"automobilism", "processing-unit", "gun-turret", "rocketry"},
