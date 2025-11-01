@@ -396,7 +396,7 @@ heliBase = {
 		obj.baseEnt.effectivity_modifier = 0
 
 		for k,v in pairs(obj.childs) do
-			if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
+			if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 200})
 			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 				v.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
@@ -845,7 +845,7 @@ heliBase = {
 		end
 
 		if self.childs.collisionEnt then
-			if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
+			if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({ name = "kr-fuel", count = 200 })
 			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
@@ -860,7 +860,7 @@ heliBase = {
 		if enabled then
 			if not (self.childs.floodlightEnt and self.childs.floodlightEnt.valid) then
 				self.childs.floodlightEnt = self.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = self.baseEnt.position}
-				if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
+				if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
 					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({ name = "kr-fuel", count = 200 })
 				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 					self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
@@ -930,7 +930,7 @@ heliBase = {
 			end
 		end
 
-		if script.active_mods["Krastorio2"] then
+		if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"]  then
 			remainingFuel = remainingFuel * 16
 		elseif script.active_mods["SeaBlock"] then
 			remainingFuel = remainingFuel * 9
@@ -997,7 +997,7 @@ heliBase = {
 		if self.burnerDriver and self.burnerDriver.valid then
 			self.burnerDriver.riding_state = {acceleration = defines.riding.acceleration.accelerating, direction = defines.riding.direction.straight}
 			if self.childs.burnerEnt.burner.remaining_burning_fuel < 1000 then
-				if script.active_mods["Krastorio2"] then --Krastorio 2 workaround
+				if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({ name = "kr-fuel", count = 1 })
 				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
 					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 1})

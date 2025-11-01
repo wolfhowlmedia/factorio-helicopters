@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: ??.??.????
+  Changes:
+    - Krastorio2 Spaced Out support
+  Bugfixes:
+    - Some changelog find / replace texts
+---------------------------------------------------------------------------------------------------
 Version: 0.4.2
 Date: 26.10.2025
   Changes:
@@ -35,7 +42,7 @@ Version: 0.3.1
 Date: 22.06.2025
   Bugfixes:
     - Krastorio2 2.0 support
-    - update stdlib to stdlib2 (with minor Bugfixes)
+    - update stdlib to stdlib2 (with minor fixes)
     - cleanup the log spam
   Changes:
     - roland77: added scripts/build_package.py for easy deployment
@@ -69,7 +76,7 @@ Date: 12.08.2024
 Version: 0.2.2
 Date: 25.12.2022
   Bugfixes:
-    - Changelog date / credit Bugfixes
+    - Changelog date / credit fixes
     - Don't enable anti-material-gun if the ammo for it is missing or disabled in config (K2)
     - Don't crash if the tile under the helicopter was removed
     - LEFD: Lower Volume of heli gun (K2)
@@ -169,4 +176,4 @@ Date: 12.03.2020
 Version: 0.0.1
 Date: 14.02.2020
   Changes:
-    - Fork from Kumpu's Helicopters with Bugfixes for Factorio 0.18.2+
+    - Fork from Kumpu's Helicopters with fixes for Factorio 0.18.2+

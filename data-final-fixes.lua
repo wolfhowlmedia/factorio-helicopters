@@ -6,7 +6,7 @@ heliConcrete.decorative_removal_probability = 1
 
 data:extend({heliConcrete})
 
-if mods["Krastorio2"] then
+if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] then
 	for _, car in pairs(data.raw.car) do
 		if car.energy_source and car.energy_source.type == "burner" then
 			car.energy_source.fuel_categories = { "kr-vehicle-fuel" }
