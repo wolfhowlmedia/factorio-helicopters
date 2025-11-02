@@ -152,7 +152,7 @@ data:extend({
         icon_size = 64,
         flags = {},
         subgroup = "transport",
-        order = "b[personal-transport]-d[heli-pad-item]",
+        order = "b[personal-transport]-d[helicopter-pad]",
         inventory_move_sound = data.raw["item"]["stone-wall"].inventory_move_sound,
         pick_sound = data.raw["item"]["stone-wall"].pick_sound,
         drop_sound = data.raw["item"]["stone-wall"].drop_sound,
