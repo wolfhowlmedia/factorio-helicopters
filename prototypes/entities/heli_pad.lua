@@ -1,7 +1,7 @@
 data:extend({
   {
     type = "simple-entity-with-force",
-    name = "heli-pad-placement-entity",
+    name = "helicopter-pad",
     flags = {"placeable-neutral", "player-creation"},
     icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
     icon_size = 64,
@@ -13,7 +13,7 @@ data:extend({
     minable =
     {
       mining_time = 2,
-      result = "heli-pad-placement-entity",
+      result = "helicopter-pad",
       count = 1
     },
 
@@ -72,7 +72,7 @@ data:extend({
     minable =
     {
       mining_time = 2,
-      result = "heli-pad-placement-entity",
+      result = "helicopter-pad",
       count = 1
     },
 

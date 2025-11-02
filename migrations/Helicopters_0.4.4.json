@@ -1,13 +1,13 @@
 {
 	"item":
 	[
-		["heli-pad-item", "heli-pad-placement-entity"],
-		["heli-item", "heli-placement-entity-_-"]
+		["heli-pad-item", "helicopter-pad"],
+		["heli-item", "helicopter"]
 	],
 	"recipe":
 	[
-		["heli-pad-recipe", "heli-pad-placement-entity"],
-		["heli-recipe", "heli-placement-entity-_-"],
+		["heli-pad-recipe", "helicopter-pad"],
+		["heli-recipe", "helicopter"],
 		["heli-remote-recipe", "heli-remote-equipment"]
 	]
 }

@@ -1,13 +1,13 @@
 data:extend({
 	{
 		type = "item-with-entity-data",
-		name = "heli-placement-entity-_-",
+		name = "helicopter",
 		icon = "__HelicopterRevival__/graphics/icons/heli.png",
 		icon_size = 64,
 		flags = {},
 		subgroup = "transport",
 		order = "b[personal-transport]-c[heli]",
-		place_result = "heli-placement-entity-_-",
+		place_result = "helicopter",
         inventory_move_sound = data.raw["item-with-entity-data"]["car"].inventory_move_sound,
         pick_sound = data.raw["item-with-entity-data"]["car"].pick_sound,
         drop_sound = data.raw["item-with-entity-data"]["car"].drop_sound,
@@ -147,7 +147,7 @@ data:extend({
     },
     {
         type = "item",
-        name = "heli-pad-placement-entity",
+        name = "helicopter-pad",
         icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
         icon_size = 64,
         flags = {},
@@ -156,7 +156,7 @@ data:extend({
         inventory_move_sound = data.raw["item"]["stone-wall"].inventory_move_sound,
         pick_sound = data.raw["item"]["stone-wall"].pick_sound,
         drop_sound = data.raw["item"]["stone-wall"].drop_sound,
-        place_result = "heli-pad-placement-entity",
+        place_result = "helicopter-pad",
         stack_size = 10
     },
 })

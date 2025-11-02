@@ -137,7 +137,7 @@ end
 function OnBuilt(e)
 	local ent = e.entity
 
-	if ent.name == "heli-placement-entity-_-" then
+	if ent.name == "helicopter" then
 		local newHeli = insertInGlobal("helis", heliAttack.new(ent))
 
 		if storage.remoteGuis then
@@ -146,7 +146,7 @@ function OnBuilt(e)
 			end
 		end
 
-	elseif ent.name == "heli-pad-placement-entity" then
+	elseif ent.name == "helicopter-pad" then
 		local newPad = insertInGlobal("heliPads", heliPad.new(ent))
 		callInGlobal("remoteGuis", "OnHeliPadBuilt", newPad)
 
@@ -231,7 +231,7 @@ function OnHeliFollow(e)
 
 		if heli then
 			assignHeliController(p, heli, p, true)
-			p.add_custom_alert(heli.baseEnt, {type = "item", name = "heli-placement-entity-_-"}, {"heli-alert-follow", chopDecimal(dist)}, true)
+			p.add_custom_alert(heli.baseEnt, {type = "item", name = "helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
 		end
 	end
 end
