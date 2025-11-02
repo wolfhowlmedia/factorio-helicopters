@@ -103,6 +103,7 @@ data:extend({
     minable = {mining_time = 1, result = "helicopter"},
     max_health = 2500,
     hidden_in_factoriopedia = true,
+    factoriopedia_alternative  = "helicopter",
     corpse = "medium-remnants",
     dying_explosion = "medium-explosion",
     selection_box = {{-1.8, -1.8}, {1.2, 3}},
