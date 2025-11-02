@@ -1,8 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.3
-Date: ??.??.????
+Date: 2025-11-02
   Changes:
     - Krastorio2 Spaced Out support
+    - Factoriopedia unification: renaming and migrating recipe and items of heli, -pad and -remote so it shows up as only one entry
+    - crafting of heli now takes 60 seconds
   Bugfixes:
     - Some changelog find / replace texts
 ---------------------------------------------------------------------------------------------------

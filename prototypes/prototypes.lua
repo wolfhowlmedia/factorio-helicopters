@@ -54,8 +54,9 @@ data:extend({
 data:extend({
 	{
 		type = "recipe",
-        name = "heli-item",
+        name = "helicopter",
 		enabled = false,
+		energy_required = 60,
 		ingredients = {
 			{type = "item", name = "engine-unit", amount = 150},
 			{type = "item", name = "steel-plate", amount = 150},
@@ -64,7 +65,7 @@ data:extend({
 			{type = "item", name = "gun-turret", amount = 10},
 			{type = "item", name = "rocket-launcher", amount = 10},
 		},
-		results = {{type = "item", name = "heli-item", amount = 1},},
+		results = {{type = "item", name = "helicopter", amount = 1},},
 	},
 	{
 		type = "recipe",
@@ -81,13 +82,13 @@ data:extend({
 	},
 	{
 		type = "recipe",
-        name = "heli-pad-item",
+        name = "helicopter-pad",
 		enabled = false,
 		energy_required = 5,
 		ingredients = {
 			{type = "item", name = "refined-concrete", amount = 50},
 		},
-		results = {{type = "item", name = "heli-pad-item", amount = 1}},
+		results = {{type = "item", name = "helicopter-pad", amount = 1}},
 	},
 })
 
@@ -159,11 +160,11 @@ data:extend({
         {
             {
                 type = "unlock-recipe",
-                recipe = "heli-item"
+                recipe = "helicopter"
             },
             {
                 type = "unlock-recipe",
-                recipe = "heli-pad-item"
+                recipe = "helicopter-pad"
             },
         },
         prerequisites = {"automobilism", "processing-unit", "gun-turret", "rocketry"},
