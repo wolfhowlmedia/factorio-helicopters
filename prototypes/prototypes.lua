@@ -5,7 +5,7 @@ local scale = settings.startup["heli-gauge-scale"].value
 data:extend({
 	{
 		type = "battery-equipment",
-		name = "heli-remote-equipment",
+		name = "helicopter-remote-equipment",
 		sprite =
 		{
 			filename = "__HelicopterRevival__/graphics/equipment/heli-remote-equipment.png",
@@ -69,7 +69,7 @@ data:extend({
 	},
 	{
 		type = "recipe",
-        name = "heli-remote-equipment",
+        name = "helicopter-remote-equipment",
 		enabled = false,
 		energy_required = 15,
 		ingredients = {
@@ -78,7 +78,7 @@ data:extend({
 			{type = "item", name = "plastic-bar", amount = 40},
 			{type = "item", name = "iron-stick", amount = 20},
 		},
-		results = {{type = "item", name = "heli-remote-equipment", amount = 1},}
+		results = {{type = "item", name = "helicopter-remote-equipment", amount = 1},}
 	},
 	{
 		type = "recipe",
@@ -132,7 +132,7 @@ data:extend({
         {
             {
                 type = "unlock-recipe",
-                recipe = "heli-remote-equipment"
+                recipe = "helicopter-remote-equipment"
             },
         },
         prerequisites = {"heli-technology", "concrete", "processing-unit", "battery", "modular-armor"},

@@ -11,7 +11,7 @@ function setRemoteBtn(p, show)
 		{
 			type = "sprite-button",
 			name = "heli_remote_btn",
-			sprite = "item/heli-remote-equipment",
+			sprite = "item/helicopter-remote-equipment",
 			style = mod_gui.button_style,
 			tooltip = {"heli-gui-remote-btn-tt"},
 		}
