@@ -69,6 +69,7 @@ data:extend({
     selection_box = {{-2, -2}, {2, 2}},
     is_military_target = false,
     hidden_in_factoriopedia = true,
+    factoriopedia_alternative = "helicopter-pad",
     minable =
     {
       mining_time = 2,
