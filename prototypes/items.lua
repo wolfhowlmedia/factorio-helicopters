@@ -132,10 +132,10 @@ data:extend({
 
     {
         type = "item",
-        name = "heli-remote-equipment",
+        name = "helicopter-remote-equipment",
         icon = "__HelicopterRevival__/graphics/icons/heli-remote-icon.png",
         icon_size = 64,
-        place_as_equipment_result = "heli-remote-equipment",
+        place_as_equipment_result = "helicopter-remote-equipment",
         flags = {},
         subgroup = "equipment",
         order = "g[heli-remote]-a[heli-remote-item]",

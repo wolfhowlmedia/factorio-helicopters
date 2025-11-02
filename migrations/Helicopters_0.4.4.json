@@ -2,12 +2,13 @@
 	"item":
 	[
 		["heli-pad-item", "helicopter-pad"],
-		["heli-item", "helicopter"]
+		["heli-item", "helicopter"],
+		["heli-remote-equipment", "helicopter-remote-equipment"]
 	],
 	"recipe":
 	[
 		["heli-pad-recipe", "helicopter-pad"],
 		["heli-recipe", "helicopter"],
-		["heli-remote-recipe", "heli-remote-equipment"]
+		["heli-remote-recipe", "helicopter-remote-equipment"]
 	]
 }
