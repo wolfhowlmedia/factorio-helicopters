@@ -226,7 +226,7 @@ end
 function OnHeliFollow(e)
 	local p = game.players[e.player_index]
 
-	if playerHasEquipment(p, "heli-remote-equipment") then
+	if playerHasEquipment(p, "helicopter-remote-equipment") then
 		local heli, dist = findNearestAvailableHeli(p.position, p.force, p)
 
 		if heli then
@@ -239,13 +239,13 @@ end
 function OnRemoteOpen(e)
 	local p = game.players[e.player_index]
 
-	if playerHasEquipment(p, "heli-remote-equipment") then
+	if playerHasEquipment(p, "helicopter-remote-equipment") then
 		toggleRemoteGui(p)
 	end
 end
 
 function OnPlacedEquipment(e)
-	if e.equipment.name == "heli-remote-equipment" then
+	if e.equipment.name == "helicopter-remote-equipment" then
 		local p = game.players[e.player_index]
 
 		setRemoteBtn(p, true)
@@ -253,10 +253,10 @@ function OnPlacedEquipment(e)
 end
 
 function OnRemovedEquipment(e)
-	if e.equipment == "heli-remote-equipment" then
+	if e.equipment == "helicopter-remote-equipment" then
 		local p = game.players[e.player_index]
 
-		if not equipmentGridHasItem(e.grid, "heli-remote-equipment") then
+		if not equipmentGridHasItem(e.grid, "helicopter-remote-equipment") then
 			setRemoteBtn(p, false)
 		end
 	end
@@ -265,7 +265,7 @@ end
 function OnArmorInventoryChanged(e)
 	local p = game.players[e.player_index]
 
-	if playerHasEquipment(p, "heli-remote-equipment") then
+	if playerHasEquipment(p, "helicopter-remote-equipment") then
 		setRemoteBtn(p, true)
 	else
 		setRemoteBtn(p, false)
