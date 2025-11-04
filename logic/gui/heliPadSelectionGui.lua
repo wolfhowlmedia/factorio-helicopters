@@ -73,7 +73,7 @@ heliPadSelectionGui =
 		if heliPad.baseEnt.force == self.player.force then
 			table.insert(self.guiElems.cams,
 			{
-				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad.baseEnt.position, self:getDefaultZoom()),
+				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad.baseEnt.position, heliPad.baseEnt.surface_index, self:getDefaultZoom()),
 				ID = self.curCamID,
 				heliPad = heliPad,
 			})
@@ -106,7 +106,7 @@ heliPadSelectionGui =
 		return self.player.mod_settings["heli-gui-heliPadSelection-defaultZoom"].value
 	end,
 
-	buildCam = function(self, parent, ID, position, zoom)
+	buildCam = function(self, parent, ID, position, surfaceIndex, zoom)
 		local padding = 8
 		local size = 210
 		local camSize = size - padding
@@ -116,6 +116,7 @@ heliPadSelectionGui =
 			type = "camera",
 			name = self.prefix .. "cam_" .. tostring(ID),
 			position = position,
+			surface_index = surfaceIndex,
 			zoom = zoom,
 			tooltip = {"heli-gui-cam-tt"},
 		}
@@ -205,7 +206,7 @@ heliPadSelectionGui =
 					hasCams = true
 					table.insert(els.cams,
 					{
-						cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, self:getDefaultZoom()),
+						cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, curPad.baseEnt.surface_index, self:getDefaultZoom()),
 						ID = self.curCamID,
 						heliPad = curPad,
 					})
