@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+Date: 2025-11-04
+  Bugfixes:
+    - fixed some oudated code that caused an error when toggling the remote while remote driving
+---------------------------------------------------------------------------------------------------
 Version: 0.4.4
 Date: 2025-11-04
   Bugfixes:
