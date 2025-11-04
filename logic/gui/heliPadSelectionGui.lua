@@ -48,8 +48,13 @@ heliPadSelectionGui =
 		if e.button == defines.mouse_button_type.left then
 			local camID = tonumber(e.element.name:match("%d+"))
 			local cam = searchInTable(self.guiElems.cams, camID, "ID")
-			self.manager:OnChildEvent(self, "selectedPosition", cam.heliPad.baseEnt.position)
-
+			local heliSurface = self.manager.guis.heliSelection.selectedCam.heli.surface.index --heli
+			local padSurface = cam.heliPad.surface.index --pad
+			if heliSurface == padSurface then
+				self.manager:OnChildEvent(self, "selectedPosition", cam.heliPad.baseEnt.position)
+			else
+				game.print("Can't do that, surfaces missmatch!")
+			end
 		elseif e.button == defines.mouse_button_type.right then
 			local zoomMax = 1.0125
 			local zoomMin = 0.025
