@@ -57,7 +57,7 @@ heliSelectionGui =
 		local name = e.element.name
 
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
-			self:OnCamClicked(e)
+			self:OnCamClicked(e) --Heli Selected Clicked
 
 		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
 			self.manager:OnChildEvent(self, "cancel")
@@ -74,13 +74,13 @@ heliSelectionGui =
 					self.manager:OnChildEvent(self, "showTargetSelectionGui", playerSelectionGui)
 				end
 
-			elseif name == self.prefix .. "btn_toMap" then
+			elseif name == self.prefix .. "btn_toMap" then --To Map Marker Button Pressed
 				self.manager:OnChildEvent(self, "showTargetSelectionGui", markerSelectionGui)
 
-			elseif name == self.prefix .. "btn_toPad" then
+			elseif name == self.prefix .. "btn_toPad" then --To Pad Button Pressed
 				self.manager:OnChildEvent(self, "showTargetSelectionGui", heliPadSelectionGui)
 
-			elseif name == self.prefix .. "btn_stop" then
+			elseif name == self.prefix .. "btn_stop" then --Stop Button Pressed
 				if self.selectedCam.heliController then
 					self.selectedCam.heliController:stopAndDestroy()
 				end
@@ -90,7 +90,7 @@ heliSelectionGui =
 
 	OnHeliBuilt = function(self, heli)
 		if heli.baseEnt.force == self.player.force then
-			local flow, cam = self:buildCam(self.guiElems.camTable, self.curCamID, heli.baseEnt.position, 0.3, false, false)
+			local flow, cam = self:buildCam(self.guiElems.camTable, self.curCamID, heli.baseEnt.position, heli.baseEnt.surface_index, 0.3, false, false)
 
 			table.insert(self.guiElems.cams,
 			{
@@ -189,10 +189,12 @@ heliSelectionGui =
 
 		local pos = cam.cam.position
 		local zoom = cam.cam.zoom
+		local surfaceIndex = cam.heli.baseEnt.surface_index or 1
+		--game.print("Surface "..surfaceIndex)
 
 		flow.clear()
 
-		cam.cam = self:buildCamInner(flow, cam.ID, pos, zoom, isSelected, cam.heliController)
+		cam.cam = self:buildCamInner(flow, cam.ID, pos, surfaceIndex, zoom, isSelected, cam.heliController)
 
 		if isSelected then
 			if self.selectedCam and self.selectedCam ~= cam then
@@ -234,7 +236,7 @@ heliSelectionGui =
 		end
 	end,
 
-	buildCamInner = function(self, parent, ID, position, zoom, isSelected, hasController)
+	buildCamInner = function(self, parent, ID, position, surfaceIndex, zoom, isSelected, hasController)
 		local camParent = parent
 		local padding = 8
 		local size = 210
@@ -258,6 +260,7 @@ heliSelectionGui =
 			type = "camera",
 			name = self.prefix .. "cam_" .. tostring(ID),
 			position = position,
+			surface_index = surfaceIndex,
 			zoom = zoom,
 			tooltip = {"heli-gui-cam-tt"},
 		}
@@ -281,7 +284,7 @@ heliSelectionGui =
 		return cam
 	end,
 
-	buildCam = function(self, parent, ID, position, zoom, isSelected, hasController)
+	buildCam = function(self, parent, ID, position, surfaceIndex, zoom, isSelected, hasController)
 		local flow = parent.add
 		{
 			type = "flow",
@@ -293,7 +296,7 @@ heliSelectionGui =
 		flow.style.maximal_width = 214
 		flow.style.maximal_height = 214
 
-		return flow, self:buildCamInner(flow, ID, position, zoom, isSelected, hasController)
+		return flow, self:buildCamInner(flow, ID, position, surfaceIndex, zoom, isSelected, hasController)
 	end,
 
 	buildGui = function(self, selectedIndex)
@@ -390,7 +393,7 @@ heliSelectionGui =
 						(curDriver and curDriver.valid and curDriver.name == self.player.name)) then
 
 					local controller = searchInTable(storage.heliControllers, curHeli, "heli")
-					local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
+					local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, curHeli.baseEnt.surface_index, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
 
 					table.insert(els.cams,
 					{
