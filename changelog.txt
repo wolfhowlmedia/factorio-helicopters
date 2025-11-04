@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.5
 Date: 2025-11-04
+  Info:
+    - helis aren't yet surface aware, the cameras could show "ghost"-helis, we are working on it
   Bugfixes:
     - fixed some oudated code that caused an error when toggling the remote while remote driving
 ---------------------------------------------------------------------------------------------------
