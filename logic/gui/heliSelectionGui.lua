@@ -57,7 +57,7 @@ heliSelectionGui =
 		local name = e.element.name
 
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
-			self:OnCamClicked(e)
+			self:OnCamClicked(e) --Heli Selected Clicked
 
 		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
 			self.manager:OnChildEvent(self, "cancel")
@@ -74,13 +74,13 @@ heliSelectionGui =
 					self.manager:OnChildEvent(self, "showTargetSelectionGui", playerSelectionGui)
 				end
 
-			elseif name == self.prefix .. "btn_toMap" then
+			elseif name == self.prefix .. "btn_toMap" then --To Map Marker Button Pressed
 				self.manager:OnChildEvent(self, "showTargetSelectionGui", markerSelectionGui)
 
-			elseif name == self.prefix .. "btn_toPad" then
+			elseif name == self.prefix .. "btn_toPad" then --To Pad Button Pressed
 				self.manager:OnChildEvent(self, "showTargetSelectionGui", heliPadSelectionGui)
 
-			elseif name == self.prefix .. "btn_stop" then
+			elseif name == self.prefix .. "btn_stop" then --Stop Button Pressed
 				if self.selectedCam.heliController then
 					self.selectedCam.heliController:stopAndDestroy()
 				end
@@ -90,7 +90,7 @@ heliSelectionGui =
 
 	OnHeliBuilt = function(self, heli)
 		if heli.baseEnt.force == self.player.force then
-			local flow, cam = self:buildCam(self.guiElems.camTable, self.curCamID, heli.baseEnt.position, 0.3, false, false)
+			local flow, cam = self:buildCam(self.guiElems.camTable, self.curCamID, heli.baseEnt.position, heli.baseEnt.surface_index, 0.3, false, false)
 
 			table.insert(self.guiElems.cams,
 			{
@@ -281,7 +281,7 @@ heliSelectionGui =
 		return cam
 	end,
 
-	buildCam = function(self, parent, ID, position, zoom, isSelected, hasController)
+	buildCam = function(self, parent, ID, position, surfaceIndex, zoom, isSelected, hasController)
 		local flow = parent.add
 		{
 			type = "flow",
@@ -390,7 +390,7 @@ heliSelectionGui =
 						(curDriver and curDriver.valid and curDriver.name == self.player.name)) then
 
 					local controller = searchInTable(storage.heliControllers, curHeli, "heli")
-					local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
+					local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, curHeli.baseEnt.surface_index, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
 
 					table.insert(els.cams,
 					{
