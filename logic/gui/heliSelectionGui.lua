@@ -278,8 +278,19 @@ heliSelectionGui =
 			}
 
 			label.style.font = "pixelated"
+			label.style.left_padding = 3
+			label.style.top_padding = 16
 			label.style.font_color = {r = 1, g = 0, b = 0}
 		end
+
+		local surface = cam.add
+		{
+			type = "label",
+			caption = titleCase(game.surfaces[surfaceIndex].name),
+		}
+		surface.style.font = "pixelated"
+		surface.style.left_padding = 3
+		surface.style.font_color = {r = 1, g = 1, b = 1}
 
 		return cam
 	end,
