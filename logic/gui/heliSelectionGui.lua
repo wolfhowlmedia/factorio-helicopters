@@ -387,7 +387,7 @@ heliSelectionGui =
 
 				if curHeli.baseEnt.force == self.player.force and
 					(curDriver == nil or curHeli.hasRemoteController or
-						(curDriver.player and curDriver.player.valid and curDriver.player.name == self.player.name)) then
+						(curDriver and curDriver.valid and curDriver.name == self.player.name)) then
 
 					local controller = searchInTable(storage.heliControllers, curHeli, "heli")
 					local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
