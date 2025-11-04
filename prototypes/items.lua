@@ -143,7 +143,6 @@ data:extend({
         pick_sound = data.raw["item"]["night-vision-equipment"].pick_sound,
         drop_sound = data.raw["item"]["night-vision-equipment"].drop_sound,
         stack_size = 1,
-        default_request_amount = 1,
     },
     {
         type = "item",
