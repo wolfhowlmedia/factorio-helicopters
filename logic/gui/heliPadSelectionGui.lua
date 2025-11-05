@@ -50,10 +50,18 @@ heliPadSelectionGui =
 			local cam = searchInTable(self.guiElems.cams, camID, "ID")
 			local heliSurface = self.manager.guis.heliSelection.selectedCam.heli.surface.index --heli
 			local padSurface = cam.heliPad.surface.index --pad
-			if heliSurface == padSurface then
+
+			if heliSurface == padSurface then --if case made here so that pad UI doesn't close
 				self.manager:OnChildEvent(self, "selectedPosition", cam.heliPad.baseEnt.position)
 			else
-				game.print("Can't do that, surfaces missmatch!")
+				local player = game.players[e.player_index]
+				player.create_local_flying_text{
+					text = {"heli-gui-heliSelection-missmatch"},
+					create_at_cursor = true,
+					color = {1,0,0,1},
+					time_to_live = 120,
+				}
+				player.play_sound{path = "heli-cant-do"}
 			end
 		elseif e.button == defines.mouse_button_type.right then
 			local zoomMax = 1.0125

@@ -119,6 +119,12 @@ data:extend({
 		filename = "__HelicopterRevival__/sound/fuel_warning.ogg",
 		volume = 0.5,
 	},
+	{
+		type = "sound",
+		name = "heli-cant-do",
+		filename = "__core__/sound/cannot-build.ogg",
+		volume = 1,
+	},
 })
 
 --Technologies

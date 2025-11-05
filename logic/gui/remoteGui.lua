@@ -117,7 +117,7 @@ remoteGui =
 			self.guis.heliSelection:setVisible(false)
 			self.guis.targetSelection = prot.new(self, self.player)
 
-		elseif evtName == "selectedPosition" then
+		elseif evtName == "selectedPosition" then --clicked to let heli approach pad
 			local pos = ...
 			local heli = self.guis.heliSelection.selectedCam.heli
 
@@ -129,18 +129,27 @@ remoteGui =
 			end
 			self.guis.heliSelection:setVisible(true)
 
-		elseif evtName == "selectedPlayer" then
+		elseif evtName == "selectedPlayer" then --clicked to let heli follow player
 			local p = ...
 			local heli = self.guis.heliSelection.selectedCam.heli
 
-			assignHeliController(self.player, heli, p, true)
+			if heli.baseEnt.surface_index == self.player.surface_index then
+				assignHeliController(self.player, heli, p, true)
 
-			if child ~= self.guis.heliSelection then
-				child:destroy()
-				self.guis.targetSelection = nil
+				if child ~= self.guis.heliSelection then
+					child:destroy()
+					self.guis.targetSelection = nil
+				end
+				self.guis.heliSelection:setVisible(true)
+			else
+				self.player.create_local_flying_text{
+					text = {"heli-gui-heliSelection-missmatch"},
+					create_at_cursor = true,
+					color = {1,0,0,1},
+					time_to_live = 120,
+				}
+				self.player.play_sound{path = "heli-cant-do"}
 			end
-			self.guis.heliSelection:setVisible(true)
-
 		elseif evtName == "OnSelectedHeliIsInvalid" then
 			if self.guis.targetSelection then
 				self.guis.targetSelection:destroy()

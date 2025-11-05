@@ -230,8 +230,18 @@ function OnHeliFollow(e)
 		local heli, dist = findNearestAvailableHeli(p.position, p.force, p)
 
 		if heli then
-			assignHeliController(p, heli, p, true)
-			p.add_custom_alert(heli.baseEnt, {type = "item", name = "helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
+			if heli.surface_index == p.surface_index then
+				assignHeliController(p, heli, p, true)
+				p.add_custom_alert(heli.baseEnt, {type = "item", name = "helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
+			else
+				p.create_local_flying_text{
+					text = {"heli-gui-heliSelection-missmatch"},
+					position = p.position,
+					color = {1,0,0,1},
+					time_to_live = 120,
+				}
+				p.play_sound{path = "heli-cant-do"}
+			end
 		end
 	end
 end
