@@ -53,7 +53,7 @@ heliPadSelectionGui =
 			if heliSurface == padSurface then
 				self.manager:OnChildEvent(self, "selectedPosition", cam.heliPad.baseEnt.position)
 			else
-				game.print("Can't do that, surfaces missmatch!")
+				game.print("Can't do that, surfaces mismatch!")
 			end
 		elseif e.button == defines.mouse_button_type.right then
 			local zoomMax = 1.0125
