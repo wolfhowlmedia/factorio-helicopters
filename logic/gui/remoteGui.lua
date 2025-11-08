@@ -112,12 +112,12 @@ remoteGui =
 	end,
 
 	OnChildEvent = function(self, child, evtName, ...)
-		if evtName == "showTargetSelectionGui" then
+		if evtName == "showTargetSelectionGui" then --clicked map marker menu button
 			local prot = ...
 			self.guis.heliSelection:setVisible(false)
 			self.guis.targetSelection = prot.new(self, self.player)
 
-		elseif evtName == "selectedPosition" then --clicked to let heli approach pad
+		elseif evtName == "selectedPosition" then --clicked map marker or heli pad
 			local pos = ...
 			local heli = self.guis.heliSelection.selectedCam.heli
 

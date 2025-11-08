@@ -189,7 +189,10 @@ heliSelectionGui =
 
 		local pos = cam.cam.position
 		local zoom = cam.cam.zoom
-		local surfaceIndex = cam.heli.baseEnt.surface_index or 1
+		local surfaceIndex = 1
+		if cam.heli.baseEnt.valid then
+			surfaceIndex = cam.heli.baseEnt.surface_index or 1
+		end
 		--game.print("Surface "..surfaceIndex)
 
 		flow.clear()
@@ -397,29 +400,31 @@ heliSelectionGui =
 			local selectedSomething = false
 
 			for k, curHeli in pairs(storage.helis) do
-				local curDriver = curHeli.baseEnt.get_driver()
+				if curHeli.baseEnt.valid then
+					local curDriver = curHeli.baseEnt.get_driver()
 
-				if curHeli.baseEnt.force == self.player.force and
-					(curDriver == nil or curHeli.hasRemoteController or
-						(curDriver and curDriver.valid and curDriver.name == self.player.name)) then
+					if curHeli.baseEnt.force == self.player.force and
+						(curDriver == nil or curHeli.hasRemoteController or
+							(curDriver and curDriver.valid and curDriver.name == self.player.name)) then
 
-					local controller = searchInTable(storage.heliControllers, curHeli, "heli")
-					local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, curHeli.baseEnt.surface_index, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
+						local controller = searchInTable(storage.heliControllers, curHeli, "heli")
+						local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, curHeli.baseEnt.surface_index, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
 
-					table.insert(els.cams,
-					{
-						flow = flow,
-						cam = cam,
-						heli = curHeli,
-						heliController = controller,
-						ID = self.curCamID,
-					})
+						table.insert(els.cams,
+						{
+							flow = flow,
+							cam = cam,
+							heli = curHeli,
+							heliController = controller,
+							ID = self.curCamID,
+						})
 
-					self.curCamID = self.curCamID + 1
+						self.curCamID = self.curCamID + 1
 
-					if curHeli == lastSelected then
-						selectedSomething = true
-						self:setCamStatus(els.cams[self.curCamID], true, els.cams[self.curCamID].heliController)
+						if curHeli == lastSelected then
+							selectedSomething = true
+							self:setCamStatus(els.cams[self.curCamID], true, els.cams[self.curCamID].heliController)
+						end
 					end
 				end
 			end
