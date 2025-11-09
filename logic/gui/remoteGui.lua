@@ -96,7 +96,7 @@ remoteGui =
 
 		for _, curGui in pairs(self.guis) do
 			if name:match("^" .. curGui.prefix .. ".+") and curGui.OnGuiClick then
-				curGui:OnGuiClick(e)
+				return curGui:OnGuiClick(e)
 			end
 		end
 	end,

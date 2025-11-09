@@ -64,14 +64,21 @@ heliSelectionGui =
 
 		elseif self.selectedCam then
 			if name == self.prefix .. "btn_toPlayer" then
-				if e.button == defines.mouse_button_type.left then
-					if e.shift then
-						self.manager:OnChildEvent(self, "selectedPosition", self.player.position)
+				if e.surfaceSwap == nil then
+					if e.button == defines.mouse_button_type.left then
+						if e.shift then --land on current player position
+							self.manager:OnChildEvent(self, "selectedPosition", self.player.position)
+						else
+							self.manager:OnChildEvent(self, "selectedPlayer", self.player)
+						end
 					else
-						self.manager:OnChildEvent(self, "selectedPlayer", self.player)
+						self.manager:OnChildEvent(self, "showTargetSelectionGui", playerSelectionGui)
 					end
 				else
-					self.manager:OnChildEvent(self, "showTargetSelectionGui", playerSelectionGui)
+					if self.selectedCam.heli.curState.name ~= "landed" and self.selectedCam.heli.remoteController and self.selectedCam.heli.remoteController.targetIsPlayer == true then
+						self.manager:OnChildEvent(self, "selectedPosition", self.selectedCam.heli.baseEnt.position)--heli was on the way to player, but player changed surface -> landing at last spot
+						return true
+					end
 				end
 
 			elseif name == self.prefix .. "btn_toMap" then --To Map Marker Button Pressed

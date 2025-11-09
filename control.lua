@@ -246,6 +246,29 @@ function OnHeliFollow(e)
 	end
 end
 
+function OnSurfaceChange(e)
+	--e.surface_index = FROM which surface
+	local p = game.players[e.player_index]
+
+	--throws a fake event with fake event data where flag is set and heli position will be taken
+	local fakeEvent = {
+		player_index = e.player_index,
+		shift = true,
+		surfaceSwap = true,
+		element = {
+			name = "heli_heliSelectionGui_btn_toPlayer",
+		}
+	}
+	if OnGuiClick(fakeEvent) == true then
+		p.create_local_flying_text{
+			text = {"heli-gui-heliSelection-surfSwap"},
+			position = p.position,
+			color = {1,0,0,1},
+		}
+		p.play_sound{path = "heli-cant-do"}
+	end
+end
+
 function OnRemoteOpen(e)
 	local p = game.players[e.player_index]
 
@@ -302,7 +325,7 @@ function OnGuiClick(e)
 			local i = searchIndexInTable(storage.remoteGuis, p, "player")
 
 			if i then
-				storage.remoteGuis[i]:OnGuiClick(e)
+				return storage.remoteGuis[i]:OnGuiClick(e)
 			end
 		end
 	end
@@ -439,6 +462,7 @@ script.on_event("heli-zba-toogle-floodlight", OnHeliToggleFloodlight)
 script.on_event("heli-zca-remote-heli-follow", OnHeliFollow)
 script.on_event("heli-zcb-remote-open", OnRemoteOpen)
 
+script.on_event(defines.events.on_player_changed_surface, OnSurfaceChange)
 
 script.on_event(defines.events.on_player_placed_equipment, OnPlacedEquipment)
 script.on_event(defines.events.on_player_removed_equipment, OnRemovedEquipment)
