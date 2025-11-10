@@ -10,13 +10,7 @@ data:extend({
     collision_box = {{-3.5, -3.5}, {3.5, 3.5}},
     collision_mask = {layers = {object=true, water_tile=true}},
     selection_box = {{-3.5, -3.5}, {3.5, 3.5}},
-    minable =
-    {
-      mining_time = 2,
-      result = "helicopter-pad",
-      count = 1
-    },
-
+    minable = {mining_time = 2, result = "helicopter-pad"},
     count_as_rock_for_filtered_deconstruction = false,
     mined_sound = {filename = "__base__/sound/deconstruct-bricks.ogg"},
     render_layer = "object",
@@ -44,7 +38,6 @@ data:extend({
         percent = 100
       }
     },
-
     pictures =
     {
       {
@@ -70,13 +63,7 @@ data:extend({
     is_military_target = false,
     hidden_in_factoriopedia = true,
     factoriopedia_alternative = "helicopter-pad",
-    minable =
-    {
-      mining_time = 2,
-      result = "helicopter-pad",
-      count = 1
-    },
-
+    minable = {mining_time = 2, result = "helicopter-pad"},
     count_as_rock_for_filtered_deconstruction = false,
     mined_sound = {filename = "__base__/sound/deconstruct-bricks.ogg"},
     render_layer = "decorative",
@@ -104,7 +91,6 @@ data:extend({
         percent = 100
       }
     },
-
     pictures =
     {
       {

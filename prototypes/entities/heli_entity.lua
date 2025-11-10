@@ -40,12 +40,10 @@ data:extend({
     terrain_friction_modifier = 0,
     weight = settings.startup["heli-weight"].value,
     deliver_category = "vehicle",
-
     guns = gun_slots,
     rotation_speed = 0.005,
     inventory_size = inventory_slots,
     equipment_grid = "heli-equipment-grid",
-
     animation = {
       layers = {
         {
@@ -162,8 +160,8 @@ data:extend({
         volume = 0.6
       },
     },
-    open_sound = { filename = "__base__/sound/car-door-open.ogg", volume = 0.7 },
-    close_sound = { filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },
+    open_sound = {filename = "__base__/sound/car-door-open.ogg", volume = 0.7 },
+    close_sound = {filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },
     mined_sound = data.raw["car"]["tank"].mined_sound,
     guns = gun_slots,
     turret_rotation_speed = 1 / 60,
@@ -249,7 +247,7 @@ data:extend({
         },
       }
     },
-    vehicle_impact_sound = { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
   },
 ----------------------landed collision--------------------
   {
@@ -318,7 +316,7 @@ data:extend({
         },
       }
     },
-    vehicle_impact_sound = { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
   },
 
   {
@@ -387,7 +385,7 @@ data:extend({
         },
       }
     },
-    vehicle_impact_sound = { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
   },
   ---------------body--------------
   {
@@ -690,7 +688,7 @@ data:extend({
         },
       }
     },
-    vehicle_impact_sound = { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
 
     light =
     {
@@ -701,7 +699,7 @@ data:extend({
       {
         filename = "__core__/graphics/light-cone.png",
         priority = "extra-high",
-        flags = { "light" },
+        flags = {"light" },
         scale = 2.5,
         width = 200,
         height = 200
