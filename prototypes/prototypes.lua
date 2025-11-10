@@ -31,7 +31,7 @@ data:extend({
 		categories = {"armor"}
 	},
 	-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	{ -- Gunship grid
+	{-- Gunship grid
 		type = "equipment-grid",
 		name = "heli-equipment-grid",
 		width = 8,
@@ -118,6 +118,12 @@ data:extend({
 		name = "heli-fuel-warning",
 		filename = "__HelicopterRevival__/sound/fuel_warning.ogg",
 		volume = 0.5,
+	},
+	{
+		type = "sound",
+		name = "heli-cant-do",
+		filename = "__core__/sound/cannot-build.ogg",
+		volume = 1,
 	},
 })
 

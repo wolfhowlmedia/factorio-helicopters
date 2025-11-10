@@ -24,7 +24,7 @@ data:extend({
         priority = "high",
         animation_speed = 0.25,
         filename = "__base__/graphics/entity/smoke/smoke.png",
-        flags = { "smoke" }
+        flags = {"smoke"}
       }
     }
 })

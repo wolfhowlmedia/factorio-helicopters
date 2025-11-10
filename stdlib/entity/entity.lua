@@ -97,7 +97,7 @@ function Entity.set_data(entity, data)
                 return prev
             end
         end
-        table.insert(entity_category, { entity = entity, data = data })
+        table.insert(entity_category, {entity = entity, data = data})
     end
     return nil
 end

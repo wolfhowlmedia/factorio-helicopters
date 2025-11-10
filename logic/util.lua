@@ -1,3 +1,9 @@
+function titleCase(str)
+    return (str:gsub("(%a)([%w_']*)", function(first, rest)
+        return first:upper() .. rest:lower()
+    end))
+end
+
 function isNil(value)
     return value == nil
 end

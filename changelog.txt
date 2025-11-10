@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+Date: 2025-11-10
+  Major Features:
+    - Remote GUI functions are surface aware now (cams show correct surface of helis; helis can't reach pads/players/markers on different surfaces)
+  Features:
+    - Surface name overlay on cams
+---------------------------------------------------------------------------------------------------
 Version: 0.4.5
 Date: 2025-11-04
   Info:

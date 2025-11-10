@@ -134,7 +134,7 @@ markerSelectionGui =
 
 				if curBtn.text ~= curBtn.tag.text then
 					curBtn.text = curBtn.tag.text
-					curBtn.btn.caption = "                " .. curBtn.tag.text
+					curBtn.btn.caption = curBtn.tag.text
 				end
 
 				if not curBtn.icon and curBtn.tag.icon then
@@ -186,7 +186,8 @@ markerSelectionGui =
 	end,
 
 	getFilteredChartTags = function(self)
-		local tagList = self.player.force.find_chart_tags(self.player.surface)
+		local heliSurface = game.surfaces[self.manager.guis.heliSelection.selectedCam.heli.baseEnt.surface_index]
+		local tagList = self.player.force.find_chart_tags(heliSurface)
 
 		for i = #tagList, 1, -1 do
 			if not string.find(tagList[i].text, self.guiElems.searchField.text) then
@@ -223,7 +224,7 @@ markerSelectionGui =
 			type = "button",
 			name = self.prefix .. "btn_" .. tostring(tag.tag_number),
 			style = "heli-listbox_button",
-			caption = "                " .. tag.text,
+			caption = tag.text,
 		}
 		btn.style.minimal_height = 38
 		btn.style.minimal_width = 290

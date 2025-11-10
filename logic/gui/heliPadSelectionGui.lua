@@ -48,8 +48,21 @@ heliPadSelectionGui =
 		if e.button == defines.mouse_button_type.left then
 			local camID = tonumber(e.element.name:match("%d+"))
 			local cam = searchInTable(self.guiElems.cams, camID, "ID")
-			self.manager:OnChildEvent(self, "selectedPosition", cam.heliPad.baseEnt.position)
+			local heliSurface = self.manager.guis.heliSelection.selectedCam.heli.surface.index --heli
+			local padSurface = cam.heliPad.surface.index --pad
 
+			if heliSurface == padSurface then --if case made here so that pad UI doesn't close
+				self.manager:OnChildEvent(self, "selectedPosition", cam.heliPad.baseEnt.position)
+			else
+				local player = game.players[e.player_index]
+				player.create_local_flying_text{
+					text = {"heli-gui-heliSelection-missmatch"},
+					create_at_cursor = true,
+					color = {1,0,0,1},
+					time_to_live = 120,
+				}
+				player.play_sound{path = "heli-cant-do"}
+			end
 		elseif e.button == defines.mouse_button_type.right then
 			local zoomMax = 1.0125
 			local zoomMin = 0.025
@@ -73,7 +86,7 @@ heliPadSelectionGui =
 		if heliPad.baseEnt.force == self.player.force then
 			table.insert(self.guiElems.cams,
 			{
-				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad.baseEnt.position, self:getDefaultZoom()),
+				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad.baseEnt.position, heliPad.baseEnt.surface_index, self:getDefaultZoom()),
 				ID = self.curCamID,
 				heliPad = heliPad,
 			})
@@ -106,7 +119,7 @@ heliPadSelectionGui =
 		return self.player.mod_settings["heli-gui-heliPadSelection-defaultZoom"].value
 	end,
 
-	buildCam = function(self, parent, ID, position, zoom)
+	buildCam = function(self, parent, ID, position, surfaceIndex, zoom)
 		local padding = 8
 		local size = 210
 		local camSize = size - padding
@@ -116,6 +129,7 @@ heliPadSelectionGui =
 			type = "camera",
 			name = self.prefix .. "cam_" .. tostring(ID),
 			position = position,
+			surface_index = surfaceIndex,
 			zoom = zoom,
 			tooltip = {"heli-gui-cam-tt"},
 		}
@@ -125,18 +139,14 @@ heliPadSelectionGui =
 		cam.style.minimal_width = camSize
 		cam.style.minimal_height = camSize
 
-		--[[
-		if hasController then
-			local label = cam.add
-			{
-				type = "label",
-				caption = "  CONTROLLED",
-			}
-
-			label.style.font = "pixelated"
-			label.style.font_color = {r = 1, g = 0, b = 0}
-		end
-		]]
+		local surface = cam.add
+		{
+			type = "label",
+			caption = titleCase(game.surfaces[surfaceIndex].name),
+		}
+		surface.style.font = "pixelated"
+		surface.style.left_padding = 3
+		surface.style.font_color = {r = 1, g = 1, b = 1}
 
 		return cam
 	end,
@@ -205,7 +215,7 @@ heliPadSelectionGui =
 					hasCams = true
 					table.insert(els.cams,
 					{
-						cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, self:getDefaultZoom()),
+						cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, curPad.baseEnt.surface_index, self:getDefaultZoom()),
 						ID = self.curCamID,
 						heliPad = curPad,
 					})
