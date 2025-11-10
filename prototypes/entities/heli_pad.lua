@@ -2,7 +2,7 @@ data:extend({
   {
     type = "simple-entity-with-force",
     name = "helicopter-pad",
-    flags = {"placeable-neutral", "player-creation"},
+    flags = {"placeable-neutral", "player-creation", "not-flammable"},
     icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
     icon_size = 64,
     subgroup = "grass",
@@ -52,7 +52,7 @@ data:extend({
   {
     type = "simple-entity-with-force",
     name = "heli-pad-entity",
-    flags = {"placeable-neutral", "player-creation"},
+    flags = {"placeable-neutral", "player-creation", "not-flammable"},
     icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
     icon_size = 64,
     subgroup = "grass",
