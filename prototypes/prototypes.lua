@@ -67,6 +67,26 @@ data:extend({
 		},
 		results = {{type = "item", name = "helicopter", amount = 1},},
 	},
+    {
+        type = "recipe",
+        name = "helicopter-scout",
+        enabled = false,
+        ingredients = {
+            { type = "item", name = "iron-gear-wheel", amount = 10 },
+        },
+        energy_required = 60,
+        --[[
+        ingredients = {
+            { type = "item", name = "engine-unit",     amount = 150 },
+            { type = "item", name = "steel-plate",     amount = 150 },
+            { type = "item", name = "iron-gear-wheel", amount = 250 },
+            { type = "item", name = "processing-unit", amount = 250 },
+            { type = "item", name = "gun-turret",      amount = 10 },
+            { type = "item", name = "rocket-launcher", amount = 10 },
+        },
+        ]]
+        results = { { type = "item", name = "helicopter-scout", amount = 1 }, },
+    },
 	{
 		type = "recipe",
         name = "helicopter-remote-equipment",
@@ -167,6 +187,10 @@ data:extend({
             {
                 type = "unlock-recipe",
                 recipe = "helicopter"
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "helicopter-scout"
             },
             {
                 type = "unlock-recipe",

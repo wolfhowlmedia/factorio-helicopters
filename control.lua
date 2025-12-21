@@ -8,6 +8,7 @@ require("logic.simpleNoise")
 
 require("logic.heliBase")
 require("logic.heliAttack")
+require("logic.heliScout")
 
 require("logic.heliPad")
 require("logic.heliController")
@@ -28,8 +29,12 @@ end
 function OnLoad(e)
 	if storage.helis then
 		for _, heli in pairs(storage.helis) do
-			if not heli.type or heli.type == "heliAttack" then
-				setmetatable(heli, {__index = heliAttack})
+			if not heli.type or heli.type == "heliAttack" or heli.type == "heliScout" then
+				if heli.type == "heliAttack" or not heli.type then
+					setmetatable(heli, {__index = heliAttack})
+				elseif heli.type == "heliScout" then
+					setmetatable(heli, {__index = heliScout})
+				end
 			end
 		end
 	end
@@ -58,7 +63,7 @@ end
 
 function OnConfigChanged(e)
 	if storage.helis then
-		for k, curHeli in pairs(storage.helis) do
+		for _, curHeli in pairs(storage.helis) do
 			if not curHeli.curState then
 				if curHeli.goUp then
 					curHeli:changeState(curHeli.engineStarting)
@@ -139,6 +144,15 @@ function OnBuilt(e)
 
 	if ent.name == "helicopter" then
 		local newHeli = insertInGlobal("helis", heliAttack.new(ent))
+
+		if storage.remoteGuis then
+			for _,rg in pairs(storage.remoteGuis) do
+				rg:OnHeliBuilt(newHeli)
+			end
+		end
+
+	elseif ent.name == "helicopter-scout" then
+		local newHeli = insertInGlobal("helis", heliScout.new(ent))
 
 		if storage.remoteGuis then
 			for _,rg in pairs(storage.remoteGuis) do
