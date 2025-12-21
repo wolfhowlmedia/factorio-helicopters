@@ -6,7 +6,6 @@ end
 
 local fuel_slots = 5
 local inventory_slots = 80
-local namePre = "heli-scout-"
 
 ---------------------------
 local dim =
@@ -923,5 +922,216 @@ data:extend({
 	        color = {r = 0.92, g = 0.77, b = 0.3}
 	      },
 	    },
-	}
+	},
+
+	----------------------ROTOR---------------
+	{
+		type = "car",
+		name = "heli-scout-rotor-entity-_-",
+		icon = "__base__/graphics/icons/car.png",
+		icon_size = 32,
+		flags = { "placeable-off-grid", "not-on-map" },
+		minable = { mining_time = 1, result = "helicopter-scout" },
+		has_belt_immunity = true,
+		max_health = 1500,
+		corpse = "medium-remnants",
+		selection_box = { { 0, 0 }, { 0, 0 } },
+		collision_box = { { 0, 0 }, { 0, 0 } },
+		collision_mask = { layers = {} },
+		energy_per_hit_point = 1,
+		effectivity = 0.5,
+		braking_power = "100kW",
+		breaking_speed = 0.03,
+		energy_source = {
+			type = "burner",
+			effectivity = 1,
+			emissions = 0,
+			fuel_inventory_size = 1,
+		},
+		consumption = "100kW",
+		friction = 0.01,
+
+		animation = {
+			layers = {
+				{
+					priority = "high",
+					width = dim.rotor[1],
+					height = dim.rotor[2],
+					frame_count = 1,
+					direction_count = 64,
+					shift = off.rotor,
+					animation_speed = 8,
+					max_advance = 0.2,
+					stripes =
+					{
+						{
+							filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Lo-0.png",
+							width_in_frames = 4,
+							height_in_frames = 4,
+						},
+						{
+							filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Lo-1.png",
+							width_in_frames = 4,
+							height_in_frames = 4,
+						},
+						{
+							filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Lo-2.png",
+							width_in_frames = 4,
+							height_in_frames = 4,
+						},
+						{
+							filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Lo-3.png",
+							width_in_frames = 4,
+							height_in_frames = 4,
+						},
+					},
+
+					hr_version =
+					{
+						priority = "high",
+						width = dim.hr.rotor[1],
+						height = dim.hr.rotor[2],
+						frame_count = 1,
+						direction_count = 64,
+						shift = off.hr.rotor,
+						animation_speed = 8,
+						max_advance = 0.2,
+						stripes =
+						{
+							{
+								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-0.png",
+								width_in_frames = 4,
+								height_in_frames = 4,
+							},
+							{
+								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-1.png",
+								width_in_frames = 4,
+								height_in_frames = 4,
+							},
+							{
+								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-2.png",
+								width_in_frames = 4,
+								height_in_frames = 4,
+							},
+							{
+								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-3.png",
+								width_in_frames = 4,
+								height_in_frames = 4,
+							},
+						},
+						scale = 0.5,
+					},
+				},
+			}
+		},
+		inventory_size = 0,
+		rotation_speed = 0.005,
+		weight = 50,
+	},
+	------------shadow------------------
+	{
+		type = "car",
+		name = "heli-scout-rotor-shadow-entity-_-",
+		icon = "__base__/graphics/icons/car.png",
+		icon_size = 32,
+		flags = { "placeable-off-grid", "not-on-map" },
+		minable = {mining_time = 1, result = "helicopter-scout"},
+		has_belt_immunity = true,
+		max_health = 1500,
+		corpse = "medium-remnants",
+		selection_box = { { 0, 0 }, { 0, 0 } },
+		collision_box = { { 0, 0 }, { 0, 0 } },
+		collision_mask = { layers = {} },
+		energy_per_hit_point = 1,
+		effectivity = 0.5,
+		braking_power = "100kW",
+		breaking_speed = 0.03,
+		energy_source = {
+			type = "burner",
+			effectivity = 1,
+			emissions = 0,
+			fuel_inventory_size = 1,
+		},
+		consumption = "100kW",
+		friction = 0.01,
+
+		animation = {
+			layers = {
+				{
+					priority = "very-low",
+					width = dim.rotorShadow[1],
+					height = dim.rotorShadow[2],
+					frame_count = 1,
+					draw_as_shadow = true,
+					direction_count = 64,
+					shift = off.rotorShadow,
+					animation_speed = 8,
+					max_advance = 0.2,
+					stripes =
+					{
+						{
+							filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Lo-0.png",
+							width_in_frames = 4,
+							height_in_frames = 4,
+						},
+						{
+							filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Lo-1.png",
+							width_in_frames = 4,
+							height_in_frames = 4,
+						},
+						{
+							filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Lo-2.png",
+							width_in_frames = 4,
+							height_in_frames = 4,
+						},
+						{
+							filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Lo-3.png",
+							width_in_frames = 4,
+							height_in_frames = 4,
+						},
+					},
+
+					hr_version = 
+					{
+						priority = "very-low",
+						width = dim.hr.rotorShadow[1],
+						height = dim.hr.rotorShadow[2],
+						frame_count = 1,
+						draw_as_shadow = true,
+						direction_count = 64,
+						shift = off.hr.rotorShadow,
+						animation_speed = 8,
+						max_advance = 0.2,
+						stripes =
+						{
+							{
+								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/RotorShadow_Hi-0.png",
+								width_in_frames = 4,
+								height_in_frames = 4,
+							},
+							{
+								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/RotorShadow_Hi-1.png",
+								width_in_frames = 4,
+								height_in_frames = 4,
+							},
+							{
+								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/RotorShadow_Hi-2.png",
+								width_in_frames = 4,
+								height_in_frames = 4,
+							},
+							{
+								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/RotorShadow_Hi-3.png",
+								width_in_frames = 4,
+								height_in_frames = 4,
+							},
+						},
+						scale = 0.5,
+					},
+				},
+			}
+		},
+		inventory_size = 0,
+		rotation_speed = 0.005,
+		weight = 50,
+	},
 })

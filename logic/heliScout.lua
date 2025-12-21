@@ -3,7 +3,12 @@ heliScout =
 	type = "heliScout",
 	bodyOffset = 5,
 	rotorOffset = 5.1,
-			
+
+	rotorRPFacceleration = 0.0002,
+	rotorMaxRPF = 240/60/60, --revolutions per frame
+
+	engineReduction = 7.5,
+
 	new = function(placementEnt)
 		local baseEnt = placementEnt.surface.create_entity{name = "heli-scout-entity-_-", force = placementEnt.force, position = placementEnt.position}
 
