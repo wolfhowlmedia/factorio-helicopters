@@ -8,6 +8,7 @@ require("logic.simpleNoise")
 
 require("logic.heliBase")
 require("logic.heliAttack")
+require("logic.heliScout")
 
 require("logic.heliPad")
 require("logic.heliController")
@@ -58,7 +59,7 @@ end
 
 function OnConfigChanged(e)
 	if storage.helis then
-		for k, curHeli in pairs(storage.helis) do
+		for _, curHeli in pairs(storage.helis) do
 			if not curHeli.curState then
 				if curHeli.goUp then
 					curHeli:changeState(curHeli.engineStarting)
