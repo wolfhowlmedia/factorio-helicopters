@@ -310,6 +310,7 @@ stateFuncs = {
 		end,
 
 		OnUp = function(heli)
+			print("descend OnUp")
 			heli:changeState(heli.ascend)
 		end,
 	},
@@ -1027,7 +1028,7 @@ heliBase = {
 		end
 
 
-		for _, curGG in pairs(self.gaugeGuis) do
+		for k, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_hr", "rpm", self.rotorRPF * 3600 * self.engineReduction + math.abs(self.baseEnt.speed) * 100)
 		end
 	end,
