@@ -403,7 +403,11 @@ heliSelectionGui =
 		self.curCamID = 0
 
 		if storage.helis then
+
+			-- Retrieve last heli that was selected in this GUI
 			local lastSelected = Entity.get_data(self.player, "heliSelectionGui_lastSelectedHeli")
+
+			-- Flag to track whether a heli was explicitly selected
 			local selectedSomething = false
 
 			for k, curHeli in pairs(storage.helis) do
@@ -414,9 +418,21 @@ heliSelectionGui =
 						(curDriver == nil or curHeli.hasRemoteController or
 							(curDriver and curDriver.valid and curDriver.name == self.player.name)) then
 
+						-- Look up existing controller object for this heli
 						local controller = searchInTable(storage.heliControllers, curHeli, "heli")
-						local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, curHeli.baseEnt.surface_index, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
 
+						-- Build camera GUI elements for this heli
+						local flow, cam = self:buildCam(
+							els.camTable,                  -- Parent GUI container
+							self.curCamID,
+							curHeli.baseEnt.position,
+							curHeli.baseEnt.surface_index,
+							self:getDefaultZoom(),
+							selected,                      -- Selection state (external)
+							curHeli.hasRemoteController    -- Remote control flag
+						)
+
+						-- Store camera metadata for later access
 						table.insert(els.cams,
 						{
 							flow = flow,
@@ -428,6 +444,7 @@ heliSelectionGui =
 
 						self.curCamID = self.curCamID + 1
 
+						-- Restore selection if this heli was last selected
 						if curHeli == lastSelected then
 							selectedSomething = true
 							self:setCamStatus(els.cams[self.curCamID], true, els.cams[self.curCamID].heliController)
@@ -436,6 +453,7 @@ heliSelectionGui =
 				end
 			end
 
+			-- Fallback: if nothing was selected, select the first visible heli
 			if not selectedSomething and #els.cams > 0 then
 				self:setCamStatus(els.cams[1], true, els.cams[1].heliController)
 			end

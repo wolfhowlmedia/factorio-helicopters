@@ -39,10 +39,12 @@ function toggleRemoteGui(player)
 end
 
 function OnHeliControllerCreated(controller)
+	if not controller or not controller.heli then return end
 	callInGlobal("remoteGuis", "OnHeliControllerCreated", controller)
 end
 
 function OnHeliControllerDestroyed(controller)
+	if not controller or not controller.heli then return end
 	callInGlobal("remoteGuis", "OnHeliControllerDestroyed", controller)
 end
 
