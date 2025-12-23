@@ -3,8 +3,8 @@ require("logic.gui.playerSelectionGui")
 require("logic.gui.markerSelectionGui")
 require("logic.gui.heliPadSelectionGui")
 
-function setRemoteBtn(p, show)
-	local flow = mod_gui.get_button_flow(p)
+function setRemoteBtn(player, show)
+	local flow = mod_gui.get_button_flow(player)
 
 	if show and not flow.heli_remote_btn then
 		flow.add
@@ -19,7 +19,7 @@ function setRemoteBtn(p, show)
 	elseif (not show) and flow.heli_remote_btn and flow.heli_remote_btn.valid then
 		flow.heli_remote_btn.destroy()
 
-		local i = searchIndexInTable(storage.remoteGuis, p, "player")
+		local i = searchIndexInTable(storage.remoteGuis, player, "player")
 		if i then
 			storage.remoteGuis[i]:destroy()
 			table.remove(storage.remoteGuis, i)
@@ -39,27 +39,41 @@ function toggleRemoteGui(player)
 end
 
 function OnHeliControllerCreated(controller)
-	callInGlobal("remoteGuis", "OnHeliControllerCreated", controller)
+	if not controller or not controller.heli then return end
+
+	for _, rg in pairs(storage.remoteGuis) do
+		local heliGui = rg.guis and rg.guis.heliSelection
+		if heliGui and heliGui.OnHeliControllerCreated then
+			heliGui:OnHeliControllerCreated(controller)
+		end
+	end
 end
 
 function OnHeliControllerDestroyed(controller)
-	callInGlobal("remoteGuis", "OnHeliControllerDestroyed", controller)
+	if not controller or not controller.heli then return end
+
+	for _, rg in pairs(storage.remoteGuis) do
+		local heliGui = rg.guis and rg.guis.heliSelection
+		if heliGui and heliGui.OnHeliControllerDestroyed then
+			heliGui:OnHeliControllerDestroyed(controller)
+		end
+	end
 end
 
 
 remoteGui =
 {
-	new = function(p)
+	new = function(player)
 		local obj = {
 			valid = true,
 
-			player = p,
+			player = player,
 
 			guis = {}
 		}
 
 		setmetatable(obj, {__index = remoteGui})
-		obj.guis.heliSelection = heliSelectionGui.new(obj, p)
+		obj.guis.heliSelection = heliSelectionGui.new(obj, player)
 		return obj
 	end,
 
@@ -130,11 +144,11 @@ remoteGui =
 			self.guis.heliSelection:setVisible(true)
 
 		elseif evtName == "selectedPlayer" then --clicked to let heli follow player
-			local p = ...
+			local player = ...
 			local heli = self.guis.heliSelection.selectedCam.heli
 
 			if heli.baseEnt.surface_index == self.player.surface_index then
-				assignHeliController(self.player, heli, p, true)
+				assignHeliController(self.player, heli, player, true)
 
 				if child ~= self.guis.heliSelection then
 					child:destroy()
@@ -183,4 +197,50 @@ remoteGui =
 			end
 		end
 	end,
+
+	OnDrivingStateChanged = function(self, player, heli)
+
+		-- Defensive guard:
+		-- This function is invoked via callInGlobal.
+		-- If the global reference is broken or misconfigured,
+		-- self may be nil. In that case we abort safely.
+		if not self then
+			return
+		end
+
+		-- Validate that this remoteGui instance has a GUI registry.
+		-- self.guis is expected to contain references to all open GUI controllers
+		-- associated with this remoteGui (e.g. heliSelection, fuel gauge, etc.).
+		if not self.guis then
+			return
+		end
+
+		-- Retrieve the heli selection GUI controller.
+		-- This GUI may or may not be open at the time the event fires.
+		local heliSelectionGui = self.guis.heliSelection
+		if not heliSelectionGui then
+			return
+		end
+
+		-- Ensure the heli selection GUI supports rebuilding.
+		-- Rebuild() is responsible for:
+		-- - destroying the old GUI root
+		-- - recalculating visible helis
+		-- - reapplying selection state
+		if not heliSelectionGui.Rebuild then
+			return
+		end
+
+		-- Trigger a full rebuild of the heli selection GUI.
+		--
+		-- This is required when:
+		-- - the player enters a heli (filter narrows to active heli)
+		-- - the player exits a heli (filter expands again)
+		-- - lastSelectedHeli changes
+		--
+		-- The rebuild guarantees the GUI state stays consistent
+		-- with the current driving and selection logic.
+		heliSelectionGui:Rebuild()
+	end
+
 }

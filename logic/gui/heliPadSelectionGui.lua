@@ -4,16 +4,16 @@ heliPadSelectionGui =
 {
 	prefix = "heli_heliPadSelectionGui_",
 
-	new = function(mgr, p)
+	new = function(mgr, player)
 		obj =
 		{
 			valid = true,
 			manager = mgr,
-			player = p,
+			player = player,
 
 			guiElems =
 			{
-				parent = mod_gui.get_frame_flow(p),
+				parent = mod_gui.get_frame_flow(player),
 			},
 			prefix = "heli_heliPadSelectionGui_",
 		}

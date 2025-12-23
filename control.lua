@@ -19,11 +19,11 @@ Entity = require("stdlib.entity.entity")
 
 mod_gui = require("mod-gui")
 
-function playerIsInHeli(p)
-    if not p.driving or not p.vehicle then
-        return false
-    end
-    return string.find(heliBaseEntityNames, p.vehicle.name .. ",", 1, true) ~= nil
+function playerIsInHeli(player)
+	if not player.driving or not player.vehicle then
+		return false
+	end
+	return string.find(heliBaseEntityNames, player.vehicle.name .. ",", 1, true) ~= nil
 end
 
 function OnLoad(e)
@@ -100,15 +100,15 @@ function OnConfigChanged(e)
 		end
 	end
 
-	for k, p in pairs(game.players) do
-		local flow = mod_gui.get_button_flow(p)
+	for k, player in pairs(game.players) do
+		local flow = mod_gui.get_button_flow(player)
 
 		if flow.heli_remote_btn and flow.heli_remote_btn.valid then
 			flow.heli_remote_btn.destroy()
 		end
 
-		OnArmorInventoryChanged({player_index = p.index})
-		reSetGaugeGui(p)
+		OnArmorInventoryChanged({player_index = player.index})
+		reSetGaugeGui(player)
 	end
 
 	if storage.heliControllers then
@@ -122,8 +122,8 @@ function OnConfigChanged(e)
 	--fixing left open guis when saved
 	if storage.remoteGuis then
 		storage.remoteGuis = {}
-		for _,p in pairs(game.players) do
-			local flow = mod_gui.get_frame_flow(p)
+		for _,player in pairs(game.players) do
+			local flow = mod_gui.get_frame_flow(player)
 			if flow["heli_heliSelectionGui_rootFrame"] then
 				flow["heli_heliSelectionGui_rootFrame"].destroy()
 			end
@@ -203,58 +203,58 @@ function OnRemoved(e)
 end
 
 function OnHeliUp(e)
-	local p = game.players[e.player_index]
-	if playerIsInHeli(p) then
-		getHeliFromBaseEntity(p.vehicle):OnUp()
+	local player = game.players[e.player_index]
+	if playerIsInHeli(player) then
+		getHeliFromBaseEntity(player.vehicle):OnUp()
 	end
 end
 
 function OnHeliDown(e)
-	local p = game.players[e.player_index]
-	if playerIsInHeli(p) then
-		getHeliFromBaseEntity(p.vehicle):OnDown()
+	local player = game.players[e.player_index]
+	if playerIsInHeli(player) then
+		getHeliFromBaseEntity(player.vehicle):OnDown()
 	end
 end
 
 function OnHeliIncreaseMaxHeight(e)
-	local p = game.players[e.player_index]
-	if playerIsInHeli(p) then
-		getHeliFromBaseEntity(p.vehicle):OnIncreaseMaxHeight()
+	local player = game.players[e.player_index]
+	if playerIsInHeli(player) then
+		getHeliFromBaseEntity(player.vehicle):OnIncreaseMaxHeight()
 	end
 end
 
 function OnHeliDecreaseMaxHeight(e)
-	local p = game.players[e.player_index]
-	if playerIsInHeli(p) then
-		getHeliFromBaseEntity(p.vehicle):OnDecreaseMaxHeight()
+	local player = game.players[e.player_index]
+	if playerIsInHeli(player) then
+		getHeliFromBaseEntity(player.vehicle):OnDecreaseMaxHeight()
 	end
 end
 
 function OnHeliToggleFloodlight(e)
-	local p = game.players[e.player_index]
-	if playerIsInHeli(p) then
-		getHeliFromBaseEntity(p.vehicle):OnToggleFloodlight()
+	local player = game.players[e.player_index]
+	if playerIsInHeli(player) then
+		getHeliFromBaseEntity(player.vehicle):OnToggleFloodlight()
 	end
 end
 
 function OnHeliFollow(e)
-	local p = game.players[e.player_index]
+	local player = game.players[e.player_index]
 
-	if playerHasEquipment(p, "helicopter-remote-equipment") then
-		local heli, dist = findNearestAvailableHeli(p.position, p.force, p)
+	if playerHasEquipment(player, "helicopter-remote-equipment") then
+		local heli, dist = findNearestAvailableHeli(player.position, player.force, player)
 
 		if heli then
-			if heli.surface_index == p.surface_index then
-				assignHeliController(p, heli, p, true)
-				p.add_custom_alert(heli.baseEnt, {type = "item", name = "helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
+			if heli.surface_index == player.surface_index then
+				assignHeliController(player, heli, player, true)
+				player.add_custom_alert(heli.baseEnt, {type = "item", name = "helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
 			else
-				p.create_local_flying_text{
+				player.create_local_flying_text{
 					text = {"heli-gui-heliSelection-missmatch"},
-					position = p.position,
+					position = player.position,
 					color = {1,0,0,1},
 					time_to_live = 120,
 				}
-				p.play_sound{path = "heli-cant-do"}
+				player.play_sound{path = "heli-cant-do"}
 			end
 		end
 	end
@@ -262,7 +262,7 @@ end
 
 function OnSurfaceChange(e)
 	--e.surface_index = FROM which surface
-	local p = game.players[e.player_index]
+	local player = game.players[e.player_index]
 
 	--throws a fake event with fake event data where flag is set and heli position will be taken
 	local fakeEvent = {
@@ -274,48 +274,48 @@ function OnSurfaceChange(e)
 		}
 	}
 	if OnGuiClick(fakeEvent) == true then
-		p.create_local_flying_text{
+		player.create_local_flying_text{
 			text = {"heli-gui-heliSelection-surfSwap"},
-			position = p.position,
+			position = player.position,
 			color = {1,0,0,1},
 		}
-		p.play_sound{path = "heli-cant-do"}
+		player.play_sound{path = "heli-cant-do"}
 	end
 end
 
 function OnRemoteOpen(e)
-	local p = game.players[e.player_index]
+	local player = game.players[e.player_index]
 
-	if playerHasEquipment(p, "helicopter-remote-equipment") then
-		toggleRemoteGui(p)
+	if playerHasEquipment(player, "helicopter-remote-equipment") then
+		toggleRemoteGui(player)
 	end
 end
 
 function OnPlacedEquipment(e)
 	if e.equipment.name == "helicopter-remote-equipment" then
-		local p = game.players[e.player_index]
+		local player = game.players[e.player_index]
 
-		setRemoteBtn(p, true)
+		setRemoteBtn(player, true)
 	end
 end
 
 function OnRemovedEquipment(e)
 	if e.equipment == "helicopter-remote-equipment" then
-		local p = game.players[e.player_index]
+		local player = game.players[e.player_index]
 
 		if not equipmentGridHasItem(e.grid, "helicopter-remote-equipment") then
-			setRemoteBtn(p, false)
+			setRemoteBtn(player, false)
 		end
 	end
 end
 
 function OnArmorInventoryChanged(e)
-	local p = game.players[e.player_index]
+	local player = game.players[e.player_index]
 
-	if playerHasEquipment(p, "helicopter-remote-equipment") then
-		setRemoteBtn(p, true)
+	if playerHasEquipment(player, "helicopter-remote-equipment") then
+		setRemoteBtn(player, true)
 	else
-		setRemoteBtn(p, false)
+		setRemoteBtn(player, false)
 	end
 end
 
@@ -323,20 +323,20 @@ function OnGuiClick(e)
 	local name = e.element.name
 
 	if name:match("^heli_") then
-		local p = game.players[e.player_index]
+		local player = game.players[e.player_index]
 
 		if name == "heli_remote_btn" then
-			toggleRemoteGui(p)
+			toggleRemoteGui(player)
 
 		elseif gaugeGui.hasMyPrefix(name) then
-			local i = searchIndexInTable(storage.gaugeGuis, p, "player")
+			local i = searchIndexInTable(storage.gaugeGuis, player, "player")
 
 			if i then
 				storage.gaugeGuis[i]:OnGuiClick(e)
 			end
 
 		elseif remoteGui.hasMyPrefix(name) then
-			local i = searchIndexInTable(storage.remoteGuis, p, "player")
+			local i = searchIndexInTable(storage.remoteGuis, player, "player")
 
 			if i then
 				return storage.remoteGuis[i]:OnGuiClick(e)
@@ -349,8 +349,8 @@ function OnGuiTextChanged(e)
 	local name = e.element.name
 
 	if name:match("^heli_") then
-		local p = game.players[e.player_index]
-		local i = searchIndexInTable(storage.remoteGuis, p, "player")
+		local player = game.players[e.player_index]
+		local i = searchIndexInTable(storage.remoteGuis, player, "player")
 
 		if i then
 			storage.remoteGuis[i]:OnGuiTextChanged(e)
@@ -359,29 +359,29 @@ function OnGuiTextChanged(e)
 end
 
 function OnPlayerChangedForce(e)
-	local p = game.players[e.player_index]
+	local player = game.players[e.player_index]
 
-	callInGlobal("remoteGuis", "OnPlayerChangedForce", p)
+	callInGlobal("remoteGuis", "OnPlayerChangedForce", player)
 end
 
 function OnPlayerDied(e)
-	local p = game.players[e.player_index]
+	local player = game.players[e.player_index]
 
-	setRemoteBtn(p, false)
+	setRemoteBtn(player, false)
 
-	callInGlobal("remoteGuis", "OnPlayerDied", p)
+	callInGlobal("remoteGuis", "OnPlayerDied", player)
 end
 
 function OnPlayerLeft(e)
-	local p = game.players[e.player_index]
-	local i = searchIndexInTable(storage.remoteGuis, p, "player")
+	local player = game.players[e.player_index]
+	local i = searchIndexInTable(storage.remoteGuis, player, "player")
 
 	if i then
 		storage.remoteGuis[i]:destroy()
 		table.remove(storage.remoteGuis, i)
 	end
 
-	callInGlobal("remoteGuis", "OnPlayerLeft", p)
+	callInGlobal("remoteGuis", "OnPlayerLeft", player)
 end
 
 function OnPlayerRespawned(e)
@@ -389,28 +389,79 @@ function OnPlayerRespawned(e)
 end
 
 function OnDrivingStateChanged(e)
-	local p = game.players[e.player_index]
-	local ent = e.entity
 
-	if ent then
-		local entName = ent.name
+	-- Resolve the player from the event.
+	-- Defensive access: e or e.player_index may be nil in edge cases.
+	local player = e and e.player_index and game.players[e.player_index] or nil
 
-		if string.find(heliEntityNames, entName .. ",", 1, true)  then
-			local heli
-			for i, curHeli in ipairs(storage.helis) do
-				if curHeli:isBaseOrChild(ent) then
-					heli = curHeli
-					break
-				end
-			end
+	-- Resolve the entity involved in the driving change (vehicle entered/exited).
+	local entity = e and e.entity or nil
 
-			reSetGaugeGui(p)
+	-- Abort early if:
+	-- - player could not be resolved
+	-- - no entity is associated with the event
+	-- - entity is already invalid (destroyed, deconstructed, etc.)
+	if not player or not entity or not entity.valid then
+		return
+	end
 
-			if not p.driving then
-				heli:OnPlayerEjected(p)
-			end
+	-- Cache entity name for repeated use.
+	local entityName = entity.name
+
+	-- Filter: only react to helicopter-related entities.
+	-- heliEntityNames is a comma-separated string containing all valid heli base
+	-- and heli child entity names.
+	-- Non-heli vehicles or unrelated entities are ignored completely.
+	if not string.find(heliEntityNames, entityName .. ",", 1, true) then
+		return
+	end
+
+	-- Determine which logical heli instance this entity belongs to.
+	-- A heli consists of a base entity and multiple child entities
+	-- (collision parts, rotor, shadow, etc.).
+	local heli = nil
+	for _, currentHeli in ipairs(storage.helis) do
+		-- isBaseOrChild returns true if the entity belongs to this heli
+		if currentHeli:isBaseOrChild(entity) then
+			heli = currentHeli
+			break
 		end
 	end
+
+	-- Safety check:
+	-- If no heli instance could be resolved, abort.
+	-- This should not normally happen but prevents hard crashes.
+	if not heli then
+		return
+	end
+
+	-- Update / reset gauge GUI state.
+	-- This keeps cockpit-related UI elements in sync with the current vehicle state.
+	reSetGaugeGui(player)
+
+	if player.driving then
+		-- CASE: player just entered a heli
+		--
+		-- Store this heli as the "last selected heli" for the heli selection GUI.
+		-- The GUI uses this value to:
+		-- - preselect the active heli
+		-- - show only this heli while the player is inside it
+		Entity.set_data(player, heli, "heliSelectionGui_lastSelectedHeli")
+	else
+		-- CASE: player just exited a heli
+		--
+		-- Execute heli-specific eject logic.
+		-- This typically handles cleanup, state resets, or delayed actions.
+		heli:OnPlayerEjected(player)
+	end
+
+	-- Notify all remote GUI controllers that the driving state changed.
+	-- callInGlobal dispatches to the globally registered "remoteGuis" object.
+	--
+	-- This triggers a rebuild of open GUIs (e.g. heliSelectionGui),
+	-- ensuring the UI immediately reflects the new driving state
+	-- without requiring manual reopen.
+	callInGlobal("remoteGuis", "OnDrivingStateChanged", player, heli)
 end
 
 function OnPlayerJoined(e)
@@ -425,13 +476,13 @@ function OnRuntimeSettingsChanged(e)
 	local name = e.setting
 
 	if name:match("^heli-") then
-		local p = game.players[e.player_index]
+		local player = game.players[e.player_index]
 
 		if e.setting_type == "runtime-per-user" then
-			local val = p.mod_settings[name].value
+			local val = player.mod_settings[name].value
 
 			if name == "heli-gaugeGui-show" then
-				reSetGaugeGui(p)
+				reSetGaugeGui(player)
 			end
 
 		--elseif e.setting_type == "runtime-global" then

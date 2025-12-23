@@ -256,8 +256,8 @@ data:extend({
         name = "heli_gui_selected",
         filename = "__HelicopterRevival__/graphics/gui/selected.png",
         priority = "medium",
-        width = 210,
-        height = 210,
+        width = 262,
+        height = 262,
         flags = {"icon"},
     },
     {

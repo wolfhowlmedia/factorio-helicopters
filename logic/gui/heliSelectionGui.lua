@@ -4,16 +4,16 @@ heliSelectionGui =
 {
 	prefix = "heli_heliSelectionGui_",
 
-	new = function(mgr, p)
+	new = function(mgr, player)
 		obj =
 		{
 			valid = true,
 			manager = mgr,
-			player = p,
+			player = player,
 
 			guiElems =
 			{
-				parent = mod_gui.get_frame_flow(p),
+				parent = mod_gui.get_frame_flow(player),
 			},
 			prefix = "heli_heliSelectionGui_",
 
@@ -321,8 +321,18 @@ heliSelectionGui =
 	end,
 
 	buildGui = function(self, selectedIndex)
-		local p = self.player
 		local els = self.guiElems
+
+		-- SAFETY: ensure guiElems table exists
+		if not els then
+			self.guiElems = {}
+			els = self.guiElems
+		end
+
+		-- SAFETY: ensure parent exists (Rebuild after driving-change!)
+		if not els.parent or not els.parent.valid then
+			els.parent = mod_gui.get_frame_flow(self.player)
+		end
 
 		els.root = els.parent.add
 		{
@@ -402,21 +412,111 @@ heliSelectionGui =
 		els.cams = {}
 		self.curCamID = 0
 
+		-- Only proceed if helicopter exists
 		if storage.helis then
+
+			-- Retrieve the last helicopter that was selected in this GUI
+			-- Used later to restore selection state if possible
 			local lastSelected = Entity.get_data(self.player, "heliSelectionGui_lastSelectedHeli")
+
+			-- Flag to track whether a helicopter was explicitly selected
 			local selectedSomething = false
 
-			for k, curHeli in pairs(storage.helis) do
-				if curHeli.baseEnt.valid then
+			-- Detect whether the player is currently sitting in a helicopter
+			-- activeHeli will be:
+			--   nil   -> player is not driving any helicopter
+			--   table -> the helicopter the player is currently inside
+			local activeHeli = nil
+
+			for _, possibleHeli in pairs(storage.helis) do
+				if possibleHeli.baseEnt and possibleHeli.baseEnt.valid then
+					local possibleDriver = possibleHeli.baseEnt.get_driver()
+
+					-- Compare entity identity, not name
+					if possibleDriver
+					   and possibleDriver.valid
+					   and self.player.character
+					   and possibleDriver == self.player.character
+					then
+						activeHeli = possibleHeli
+						break
+					end
+				end
+			end
+
+			-- Iterate over all helicopters and decide which ones appear in the GUI
+			for _, curHeli in pairs(storage.helis) do
+
+				-- Skip helicopters without a valid base entity
+				if curHeli.baseEnt and curHeli.baseEnt.valid then
+
+					-- Current driver of this helicopter (may be nil)
 					local curDriver = curHeli.baseEnt.get_driver()
 
-					if curHeli.baseEnt.force == self.player.force and
-						(curDriver == nil or curHeli.hasRemoteController or
-							(curDriver and curDriver.valid and curDriver.name == self.player.name)) then
+					-- Helicopter must belong to the same force as the player
+					local forceMatch = (curHeli.baseEnt.force == self.player.force)
 
+					-----------------------------------------------------------------
+					-- Determine whether this helicopter is allowed to appear
+					--
+					-- Two operating modes:
+					--
+					-- MODE 1: Player is NOT inside any helicopter (activeHeli == nil)
+					--   Show helicopters that are:
+					--     - unmanned, OR
+					--     - remotely controllable, OR
+					--     - driven by the player's own character
+					--
+					-- MODE 2: Player IS inside a helicopter (activeHeli ~= nil)
+					--   Show ONLY the helicopter the player is currently driving
+					-----------------------------------------------------------------
+					local driverAllowed =
+						forceMatch and
+						(
+							(
+								-- MODE 1: Player not inside a helicopter
+								activeHeli == nil and
+								(
+									-- No driver present
+									curDriver == nil
+
+									-- Helicopter allows remote control
+									or curHeli.hasRemoteController
+
+									-- Helicopter is driven by the player's character
+									or (
+										curDriver
+										and curDriver.valid
+										and self.player.character
+										and curDriver == self.player.character
+									)
+								)
+							)
+							or
+							(
+								-- MODE 2: Player is inside a helicopter
+								curHeli == activeHeli
+							)
+						)
+
+					-- If the helicopter passes all filters, create its GUI entry
+					if forceMatch and driverAllowed then
+
+						-- Look up an existing controller object for this helicopter
 						local controller = searchInTable(storage.heliControllers, curHeli, "heli")
-						local flow, cam = self:buildCam(els.camTable, self.curCamID, curHeli.baseEnt.position, curHeli.baseEnt.surface_index, self:getDefaultZoom(), selected, curHeli.hasRemoteController)
 
+						-- Build the camera GUI elements for this helicopter
+						local flow, cam = self:buildCam(
+							els.camTable,                  -- Parent GUI container
+							self.curCamID,                 -- Camera ID
+							curHeli.baseEnt.position,      -- World position
+							curHeli.baseEnt.surface_index, -- Surface index
+							self:getDefaultZoom(),          -- Initial zoom level
+							selected,                      -- Selection state (external)
+							curHeli.hasRemoteController    -- Remote control flag
+						)
+
+						-- Store camera metadata for later access
 						table.insert(els.cams,
 						{
 							flow = flow,
@@ -426,21 +526,108 @@ heliSelectionGui =
 							ID = self.curCamID,
 						})
 
+						-- Advance camera ID counter
 						self.curCamID = self.curCamID + 1
 
+						-- Restore selection if this helicopter was last selected
 						if curHeli == lastSelected then
 							selectedSomething = true
-							self:setCamStatus(els.cams[self.curCamID], true, els.cams[self.curCamID].heliController)
+							self:setCamStatus(
+								els.cams[self.curCamID],
+								true,
+								els.cams[self.curCamID].heliController
+							)
 						end
 					end
 				end
 			end
 
+			-- Fallback: if nothing was selected, select the first visible helicopter
 			if not selectedSomething and #els.cams > 0 then
 				self:setCamStatus(els.cams[1], true, els.cams[1].heliController)
 			end
 		end
 
+
+
 		self:setNothingAvailableIfNecessary()
 	end,
+
+	Rebuild = function(self)
+		-- Defensive guard:
+		-- Rebuild can be triggered indirectly via callInGlobal.
+		-- If the GUI instance was already destroyed or invalidated,
+		-- we abort safely to avoid accessing invalid LuaGuiElements.
+		if not self or not self.valid then
+			return
+		end
+
+		-- Determine the parent GUI element for rebuilding.
+		--
+		-- Preferred case:
+		--   Reuse the previously stored parent so the GUI stays
+		--   in the same GUI hierarchy location.
+		--
+		-- Fallback case:
+		--   If guiElems or parent is missing (e.g. after reload,
+		--   desync, or partial teardown), recreate the parent using
+		--   mod_gui.get_frame_flow(player).
+		local parent = nil
+		if self.guiElems and self.guiElems.parent then
+			parent = self.guiElems.parent
+		else
+			parent = mod_gui.get_frame_flow(self.player)
+		end
+
+		-- Preserve previous visibility state.
+		--
+		-- This ensures that:
+		-- - an open GUI stays open after rebuild
+		-- - a hidden GUI stays hidden
+		--
+		-- Without this, rebuilding would always force the GUI visible.
+		local wasVisible = true
+		if self.guiElems and self.guiElems.root and self.guiElems.root.valid then
+			wasVisible = self.guiElems.root.visible
+
+			-- Destroy the old root element completely.
+			-- Rebuild is a full teardown + recreation,
+			-- not an incremental update.
+			self.guiElems.root.destroy()
+		end
+
+		-- Reset GUI state.
+		--
+		-- guiElems is recreated from scratch with only the parent known.
+		-- buildGui() will repopulate:
+		-- - root
+		-- - camera elements
+		-- - selection state
+		self.guiElems = { parent = parent }
+
+		-- Reset runtime state used during buildGui().
+		--
+		-- selectedCam:
+		--   Will be recalculated based on lastSelectedHeli or defaults.
+		--
+		-- curCamID:
+		--   Must start at 0 so camera IDs are stable and predictable.
+		self.selectedCam = nil
+		self.curCamID = 0
+
+		-- Build the GUI from scratch.
+		--
+		-- buildGui() is responsible for:
+		-- - filtering visible helis
+		-- - rebuilding camera previews
+		-- - restoring selection
+		self:buildGui()
+
+		-- Restore visibility state after rebuild.
+		--
+		-- This must be done AFTER buildGui(),
+		-- because buildGui() recreates the root element.
+		self:setVisible(wasVisible)
+	end
+
 }

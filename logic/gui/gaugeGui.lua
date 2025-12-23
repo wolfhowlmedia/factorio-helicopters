@@ -1,15 +1,15 @@
-function reSetGaugeGui(p)
-	local gg = searchInTable(storage.gaugeGuis, p, "player")
+function reSetGaugeGui(player)
+	local gg = searchInTable(storage.gaugeGuis, player, "player")
 
-	local shouldHaveGG = playerIsInHeli(p) and p.mod_settings["heli-gaugeGui-show"].value
+	local shouldHaveGG = playerIsInHeli(player) and player.mod_settings["heli-gaugeGui-show"].value
 
 	if gg and not shouldHaveGG then
 		gg:destroy()
 
 	elseif not gg and shouldHaveGG then
-		local heli = getHeliFromBaseEntity(p.vehicle)
+		local heli = getHeliFromBaseEntity(player.vehicle)
 		if heli then
-			insertInGlobal("gaugeGuis", gaugeGui.new(p, heli))
+			insertInGlobal("gaugeGuis", gaugeGui.new(player, heli))
 		end
 	end
 end

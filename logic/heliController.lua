@@ -1,15 +1,15 @@
-function getHeliControllerIndexByOwner(p)
+function getHeliControllerIndexByOwner(player)
 	if storage.heliControllers then
 		for i, curController in ipairs(storage.heliControllers) do
-			if curController.owner == p then
+			if curController.owner == player then
 				return i
 			end
 		end
 	end
 end
 
-function getHeliControllerByOwner(p)
-	local i = getHeliControllerIndexByowner(p)
+function getHeliControllerByOwner(player)
+	local i = getHeliControllerIndexByowner(player)
 	if i then return storage.heliControllers[i] end
 end
 

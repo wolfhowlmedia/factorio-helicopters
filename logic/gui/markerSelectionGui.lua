@@ -5,16 +5,16 @@ markerSelectionGui =
 	prefix = "heli_markerSelectionGui_",
 	refreshCooldown = 20,
 
-	new = function(mgr, p)
+	new = function(mgr, player)
 		obj =
 		{
 			valid = true,
 			manager = mgr,
-			player = p,
+			player = player,
 
 			guiElems =
 			{
-				parent = mod_gui.get_frame_flow(p),
+				parent = mod_gui.get_frame_flow(player),
 			},
 
 			curRefreshCooldown = markerSelectionGui.refreshCooldown,
@@ -25,7 +25,7 @@ markerSelectionGui =
 
 		obj:buildGui()
 
-		if p.mod_settings["heli-auto-focus-searchfields"].value then
+		if player.mod_settings["heli-auto-focus-searchfields"].value then
 			obj.guiElems.searchField.focus()
 		end
 
