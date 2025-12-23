@@ -40,12 +40,24 @@ end
 
 function OnHeliControllerCreated(controller)
 	if not controller or not controller.heli then return end
-	callInGlobal("remoteGuis", "OnHeliControllerCreated", controller)
+
+	for _, rg in pairs(storage.remoteGuis) do
+		local heliGui = rg.guis and rg.guis.heliSelection
+		if heliGui and heliGui.OnHeliControllerCreated then
+			heliGui:OnHeliControllerCreated(controller)
+		end
+	end
 end
 
 function OnHeliControllerDestroyed(controller)
 	if not controller or not controller.heli then return end
-	callInGlobal("remoteGuis", "OnHeliControllerDestroyed", controller)
+
+	for _, rg in pairs(storage.remoteGuis) do
+		local heliGui = rg.guis and rg.guis.heliSelection
+		if heliGui and heliGui.OnHeliControllerDestroyed then
+			heliGui:OnHeliControllerDestroyed(controller)
+		end
+	end
 end
 
 
