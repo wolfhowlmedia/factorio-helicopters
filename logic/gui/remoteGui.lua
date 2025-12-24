@@ -197,4 +197,18 @@ remoteGui =
 			end
 		end
 	end,
+
+	OnDrivingStateChanged = function(self, player, heli)
+		-- if the callInGlobal reference is broken or misconfigured, self may be nil
+		if not self then return end
+
+		-- self.guis is expected to contain references to all open GUI controllers associated with this remoteGui (heliSelection, fuel gauge,...)
+		if not self.guis then return end
+
+		local heliSelectionGui = self.guis.heliSelection
+		if not heliSelectionGui or not heliSelectionGui.Rebuild then return end
+
+		-- rebuild guarantees GUI state stays consistent with current driving and selection logic
+		heliSelectionGui:Rebuild()
+	end
 }
