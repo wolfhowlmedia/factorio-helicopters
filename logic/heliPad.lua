@@ -18,6 +18,7 @@ heliPad =
 			surface = placementEnt.surface,
 
 			replacedTiles = {},
+			name = "HeliPadName",
 			baseEnt = placementEnt.surface.create_entity
 			{
 				name = "heli-pad-entity",
