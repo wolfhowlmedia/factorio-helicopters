@@ -162,7 +162,7 @@ function OnRemoved(e)
 		local entName = ent.name
 
 		if string.find(heliEntityNames, entName .. ",", 1, true) then
-			for i,val in ipairs(storage.helis) do
+			for i, val in ipairs(storage.helis) do
 				if val:isBaseOrChild(ent) then
 					val:destroy()
 					table.remove(storage.helis, i)
