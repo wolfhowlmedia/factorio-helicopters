@@ -18,7 +18,7 @@ heliPad =
 			surface = placementEnt.surface,
 
 			replacedTiles = {},
-			name = "HeliPadName",
+			name = "Helipad "..#storage["heliPads"] + 1,
 			baseEnt = placementEnt.surface.create_entity
 			{
 				name = "heli-pad-entity",
