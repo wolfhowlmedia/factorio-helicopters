@@ -389,28 +389,41 @@ function OnPlayerRespawned(e)
 end
 
 function OnDrivingStateChanged(e)
-	local p = game.players[e.player_index]
-	local ent = e.entity
+	local p = e and e.player_index and game.players[e.player_index] or nil
+	local ent = e and e.entity or nil
 
-	if ent then
-		local entName = ent.name
+	if not p or not ent or not ent.valid then return end
 
-		if string.find(heliEntityNames, entName .. ",", 1, true)  then
-			local heli
-			for i, curHeli in ipairs(storage.helis) do
-				if curHeli:isBaseOrChild(ent) then
-					heli = curHeli
-					break
-				end
-			end
+	local entityName = ent.name
 
-			reSetGaugeGui(p)
+	-- heliEntityNames = comma-separated string containing all valid heli base and heli child entity names
+	if not string.find(heliEntityNames, entityName .. ",", 1, true) then return end
 
-			if not p.driving then
-				heli:OnPlayerEjected(p)
-			end
+	local heli = nil
+	for _, currentHeli in ipairs(storage.helis) do
+		-- isBaseOrChild returns true if the entity belongs to this heli
+		if currentHeli:isBaseOrChild(ent) then
+			heli = currentHeli
+			break
 		end
 	end
+
+	if not heli then log("Warning: No Heli found!") return end
+
+	reSetGaugeGui(p)
+
+	if p.driving then -- player just entered heli 
+		-- store heli as "last selected heli" for heli selection GUI (to preselect active heli / show only this heli while the player is inside it)
+		Entity.set_data(p, heli, "heliSelectionGui_lastSelectedHeli")
+	else -- player just exited heli
+		-- execute heli-specific eject logic to  handle cleanup, state resets, delayed actions
+		heli:OnPlayerEjected(p)
+	end
+
+	-- notify all remote GUI controllers that driving state changed
+	-- callInGlobal dispatches to globally registered "remoteGuis" object
+	-- -> triggers rebuild of open GUIs, ensuring UI immediately reflects new driving state without requiring manual reopen
+	callInGlobal("remoteGuis", "OnDrivingStateChanged", p, heli)
 end
 
 function OnPlayerJoined(e)
