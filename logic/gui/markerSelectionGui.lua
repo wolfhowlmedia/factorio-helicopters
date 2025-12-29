@@ -307,7 +307,6 @@ markerSelectionGui =
 			type = "flow",
 			name = self.prefix .. "searchFieldFlow",
 			direction = "horizontal",
-
 		}
 
 		self.guiElems.searchField = self.guiElems.searchFieldFlow.add
@@ -335,13 +334,11 @@ markerSelectionGui =
 			style = "heli-clear_text_button",
 		}
 
-
 		self.guiElems.scroller = self.guiElems.root.add
 		{
 			type = "scroll-pane",
 			name = self.prefix .. "scroller",
 		}
-
 		self.guiElems.scroller.style.maximal_width = 1000
 		self.guiElems.scroller.style.maximal_height = 600
 
