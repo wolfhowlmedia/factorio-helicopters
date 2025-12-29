@@ -43,8 +43,18 @@ heliPadSelectionGui =
 		end
 	end,
 
-	OnCamClicked = function(self, e)
+	OnGuiTextConfirmed = function(self, e)
+		local name = e.element.name
+		local text = e.element.text
 
+		if name == self.prefix.."rename_field" then
+			--e.element.parent.parent.parent.name.suffix
+			--find helipad by cam index and assign new name
+			--then destroy search GUI
+		end
+	end,
+
+	OnCamClicked = function(self, e)
 		if e.button == defines.mouse_button_type.left then
 			local camID = tonumber(e.element.name:match("%d+"))
 			local cam = searchInTable(self.guiElems.cams, camID, "ID")
@@ -73,6 +83,50 @@ heliPadSelectionGui =
 				if e.element.zoom > zoomMax then
 					e.element.zoom = zoomMin
 				end
+			elseif e.alt then
+				local camID = tonumber(e.element.name:match("%d+"))
+				local cam = searchInTable(self.guiElems.cams, camID, "ID")
+				--open rename console
+				--game.players[e.player_index].gui.center.add{type="textfield", name="NAME", caption="HeliPad Name"}
+				local root = cam.cam.add{
+					type = "frame",
+					name = self.prefix.."rename_root",
+					caption = {"heli-gui-padSelection-rename-caption"},
+					--style = "frame",
+					direction = "vertical",
+					--tooltip = {"heli-gui-frame-tt"},
+					style = "goal_frame"
+				}
+				root.style.natural_width = 195
+
+				local renameFlow = root.add
+				{
+					type = "flow",
+					name = self.prefix.."rename_flow",
+					direction = "horizontal",
+				}
+
+				renameFlow.add{
+					type = "button",
+					name = self.prefix.."rename_confirm",
+					caption = "[virtual-signal=signal-check]",
+					style = "item_and_count_select_confirm",
+				}
+
+				local searchField = renameFlow.add{
+					type = "textfield",
+					name = self.prefix.."rename_field",
+					text = cam.heliPad.name or "Default",
+					--numeric = true,
+					--allow_decimal = true,
+					--allow_negative = true,
+					--lose_focus_on_confirm = true,
+					icon_selector = true,
+					style = "stretchable_textfield"
+				}
+				searchField.style.minimal_height = 26
+				searchField.style.minimal_width = 75
+				searchField.focus()
 			else
 				e.element.zoom = e.element.zoom * (1 - zoomDelta)
 				if e.element.zoom < zoomMin then
@@ -133,7 +187,7 @@ heliPadSelectionGui =
 			position = position,
 			surface_index = surfaceIndex,
 			zoom = zoom,
-			tooltip = {"heli-gui-cam-tt"},
+			tooltip = {"helipad-gui-cam-tt"},
 		}
 		cam.style.top_padding = padding
 		cam.style.left_padding = padding

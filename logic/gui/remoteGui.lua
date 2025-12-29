@@ -125,6 +125,16 @@ remoteGui =
 		end
 	end,
 
+	OnGuiTextConfirmed = function(self, e)
+		local name = e.element.name
+
+		for _, currentGui in pairs(self.guis) do
+			if name:match("^" .. currentGui.prefix .. ".+") and currentGui.OnGuiTextConfirmed then
+				currentGui:OnGuiTextConfirmed(e)
+			end
+		end
+	end,
+
 	OnChildEvent = function(self, child, evtName, ...)
 		if evtName == "showTargetSelectionGui" then --clicked map marker menu button
 			local prot = ...

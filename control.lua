@@ -344,6 +344,19 @@ function OnGuiTextChanged(e)
 	end
 end
 
+function OnGuiTextConfirmed(e)
+	local name = e.element.name
+
+	if name:match("^heli_") then
+		local p = game.players[e.player_index]
+		local i = searchIndexInTable(storage.remoteGuis, p, "player")
+
+		if i then
+			storage.remoteGuis[i]:OnGuiTextConfirmed(e)
+		end
+	end
+end
+
 function OnPlayerChangedForce(e)
 	local p = game.players[e.player_index]
 
@@ -481,6 +494,7 @@ script.on_event(defines.events.on_player_placed_equipment, OnPlacedEquipment)
 script.on_event(defines.events.on_player_removed_equipment, OnRemovedEquipment)
 script.on_event(defines.events.on_gui_click, OnGuiClick)
 script.on_event(defines.events.on_gui_text_changed, OnGuiTextChanged)
+script.on_event(defines.events.on_gui_confirmed, OnGuiTextConfirmed)
 
 script.on_event(defines.events.on_player_changed_force, OnPlayerChangedForce)
 script.on_event(defines.events.on_player_died, OnPlayerDied)
