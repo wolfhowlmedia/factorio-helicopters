@@ -47,6 +47,9 @@ heliPadSelectionGui =
 
 		elseif name == self.prefix.."rename_confirm" then
 			renameEntity(self, e, "pad")
+
+		elseif name == self.prefix.."rename_close" then
+			e.element.parent.parent.destroy()
 		end
 	end,
 
@@ -94,11 +97,34 @@ heliPadSelectionGui =
 				local root = cam.cam.add{
 					type = "frame",
 					name = self.prefix.."rename_root",
-					caption = {"heli-gui-padSelection-rename-caption"},
 					direction = "vertical",
-					style = "goal_frame"
 				}
 				root.style.natural_width = 195
+
+				local flow = root.add{
+					type = "flow",
+					name = self.prefix.."flow",
+					direction = "horizontal",
+				}
+
+				flow.add{
+					type = "label",
+					name = self.prefix.."rename_label",
+					caption = {"heli-gui-padSelection-rename-caption"},
+					style = "frame_title"
+				}
+				local ew = flow.add{
+					type = "empty-widget",
+					name = self.prefix.."rename_ew",
+				}
+				ew.style.horizontally_stretchable = true
+
+				flow.add{
+					type = "sprite-button",
+					name = self.prefix.."rename_close",
+					sprite = "utility/close",
+					style = "close_button",
+				}
 
 				local renameFlow = root.add
 				{
@@ -108,9 +134,9 @@ heliPadSelectionGui =
 				}
 
 				renameFlow.add{
-					type = "button",
+					type = "sprite-button",
 					name = self.prefix.."rename_confirm",
-					caption = "[virtual-signal=signal-check]",
+					sprite = "utility/check_mark",
 					style = "item_and_count_select_confirm",
 				}
 

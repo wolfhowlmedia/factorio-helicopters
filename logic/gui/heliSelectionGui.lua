@@ -65,6 +65,9 @@ heliSelectionGui =
 		elseif name == self.prefix.."rename_confirm" then
 			renameEntity(self, e, "heli")
 
+		elseif name == self.prefix.."rename_close" then
+			e.element.parent.parent.destroy()
+
 		elseif self.selectedCam then
 			if name == self.prefix .. "btn_toPlayer" then
 				if e.surfaceSwap == nil then
@@ -182,11 +185,34 @@ heliSelectionGui =
 				local root = cam.cam.add{
 					type = "frame",
 					name = self.prefix.."rename_root",
-					caption = {"heli-gui-heliSelection-rename-caption"},
 					direction = "vertical",
-					style = "goal_frame"
 				}
 				root.style.natural_width = 195
+
+				local flow = root.add{
+					type = "flow",
+					name = self.prefix.."flow",
+					direction = "horizontal",
+				}
+
+				flow.add{
+					type = "label",
+					name = self.prefix.."rename_label",
+					caption = {"heli-gui-heliSelection-rename-caption"},
+					style = "frame_title"
+				}
+				local ew = flow.add{
+					type = "empty-widget",
+					name = self.prefix.."rename_ew",
+				}
+				ew.style.horizontally_stretchable = true
+
+				flow.add{
+					type = "sprite-button",
+					name = self.prefix.."rename_close",
+					sprite = "utility/close",
+					style = "close_button",
+				}
 
 				local renameFlow = root.add
 				{
@@ -196,9 +222,9 @@ heliSelectionGui =
 				}
 
 				renameFlow.add{
-					type = "button",
+					type = "sprite-button",
 					name = self.prefix.."rename_confirm",
-					caption = "[virtual-signal=signal-check]",
+					sprite = "utility/check_mark",
 					style = "item_and_count_select_confirm",
 				}
 
@@ -353,6 +379,8 @@ heliSelectionGui =
 		name.style.font = "pixelated_normal"
 		name.style.left_padding = 3
 		name.style.font_color = {r = 1, g = 1, b = 1}
+		--name.style.single_line = false
+		--name.style.maximal_width = 200
 
 		local surface = cam.add
 		{
