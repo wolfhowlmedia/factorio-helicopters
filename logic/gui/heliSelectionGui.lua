@@ -97,7 +97,7 @@ heliSelectionGui =
 
 	OnHeliBuilt = function(self, heli)
 		if heli.baseEnt.force == self.player.force then
-			local flow, cam = self:buildCam(self.guiElems.camTable, self.curCamID, heli.baseEnt.position, heli.baseEnt.surface_index, 0.3, false, false)
+			local flow, cam = self:buildCam(self.guiElems.camTable, self.curCamID, heli, 0.3, false, false)
 
 			table.insert(self.guiElems.cams,
 			{
@@ -204,7 +204,7 @@ heliSelectionGui =
 
 		flow.clear()
 
-		cam.cam = self:buildCamInner(flow, cam.ID, pos, surfaceIndex, zoom, isSelected, cam.heliController)
+		cam.cam = self:buildCamInner(flow, cam.ID, cam.heli, zoom, isSelected, cam.heliController)
 
 		if isSelected then
 			if self.selectedCam and self.selectedCam ~= cam then
@@ -246,11 +246,16 @@ heliSelectionGui =
 		end
 	end,
 
-	buildCamInner = function(self, parent, ID, position, surfaceIndex, zoom, isSelected, hasController)
+	buildCamInner = function(self, parent, ID, heli, zoom, isSelected, hasController)
 		local camParent = parent
 		local padding = 8
 		local size = 210
 		local camSize = size - padding
+		local position = heli.baseEnt.position
+		local surfaceIndex = 1
+		if heli.baseEnt.valid then
+			surfaceIndex = heli.baseEnt.surface_index or 1
+		end
 
 		if isSelected then
 			camParent = camParent.add
@@ -289,7 +294,7 @@ heliSelectionGui =
 
 			label.style.font = "pixelated"
 			label.style.left_padding = 3
-			label.style.top_padding = 16
+			label.style.top_padding = 40
 			label.style.font_color = {r = 1, g = 0, b = 0}
 		end
 
@@ -302,10 +307,20 @@ heliSelectionGui =
 		surface.style.left_padding = 3
 		surface.style.font_color = {r = 1, g = 1, b = 1}
 
+		local name = cam.add
+		{
+			type = "label",
+			caption = titleCase(heli.name or "Helicopter"),
+		}
+		name.style.font = "pixelated"
+		name.style.left_padding = 3
+		name.style.top_padding = 20
+		name.style.font_color = {r = 1, g = 1, b = 1}
+
 		return cam
 	end,
 
-	buildCam = function(self, parent, ID, position, surfaceIndex, zoom, isSelected, hasController)
+	buildCam = function(self, parent, ID, heli, zoom, isSelected, hasController)
 		local flow = parent.add
 		{
 			type = "flow",
@@ -317,7 +332,7 @@ heliSelectionGui =
 		flow.style.maximal_width = 214
 		flow.style.maximal_height = 214
 
-		return flow, self:buildCamInner(flow, ID, position, surfaceIndex, zoom, isSelected, hasController)
+		return flow, self:buildCamInner(flow, ID, heli, zoom, isSelected, hasController)
 	end,
 
 	buildGui = function(self, selectedIndex)
@@ -491,8 +506,7 @@ heliSelectionGui =
 						local flow, cam = self:buildCam(
 							els.camTable,                  -- Parent GUI container
 							self.curCamID,
-							curHeli.baseEnt.position,
-							curHeli.baseEnt.surface_index,
+							curHeli,
 							self:getDefaultZoom(),
 							selected,                      -- Selection state (external)
 							curHeli.hasRemoteController    -- Remote control flag
