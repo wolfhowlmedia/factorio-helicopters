@@ -59,8 +59,7 @@ heliSelectionGui =
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
 			self:OnCamClicked(e) --Heli Selected Clicked
 
-		elseif (name == self.prefix .. "rootFrame" or name == self.prefix .. "camTable")
-			and e.button == defines.mouse_button_type.right then
+		elseif name == self.prefix .. "close" and e.button == defines.mouse_button_type.left then
 			self.manager:OnChildEvent(self, "cancel")
 
 		elseif name == self.prefix.."rename_confirm" then
@@ -115,7 +114,6 @@ heliSelectionGui =
 			})
 
 			self.curCamID = self.curCamID + 1
-
 			self:setNothingAvailableIfNecessary()
 		end
 	end,
@@ -338,10 +336,7 @@ heliSelectionGui =
 				name = self.prefix .. "camBox_selected_" .. tostring(ID),
 				sprite = "heli_gui_selected",
 			}
-			camParent.style.minimal_width = size
-			camParent.style.minimal_height = size
-			camParent.style.maximal_width = size
-			camParent.style.maximal_height = size
+			camParent.style.size = size
 		end
 
 		local cam = camParent.add
@@ -356,8 +351,7 @@ heliSelectionGui =
 		cam.style.top_padding = padding
 		cam.style.left_padding = padding
 
-		cam.style.minimal_width = camSize
-		cam.style.minimal_height = camSize
+		cam.style.size = camSize
 
 		if hasController then
 			local label = cam.add
@@ -403,10 +397,7 @@ heliSelectionGui =
 			name = self.prefix .. "camFlow_" .. tostring(ID),
 		}
 
-		flow.style.minimal_width = 214
-		flow.style.minimal_height = 214
-		flow.style.maximal_width = 214
-		flow.style.maximal_height = 214
+		flow.style.size = 214
 
 		return flow, self:buildCamInner(flow, ID, heli, zoom, isSelected, hasController)
 	end,
@@ -423,26 +414,14 @@ heliSelectionGui =
 			els.parent = mod_gui.get_frame_flow(self.player)
 		end
 
-		els.root = els.parent.add
-		{
-			type = "frame",
-			name = self.prefix .. "rootFrame",
-			caption = {"heli-gui-heliSelection-frame-caption"},
-			style = "frame",
-			direction = "vertical",
-			tooltip = {"heli-gui-frame-tt"},
-		}
-
-		els.root.style.maximal_width = 1000
-		els.root.style.maximal_height = 700
+		buildBaseGUI(self, els, "heli-gui-heliSelection-frame-caption")
 
 		els.buttonFlow = els.root.add
 		{
 			type = "flow",
 			name = self.prefix .. "btnFlow",
 		}
-		els.buttonFlow.style.left_padding = 7
-
+		els.buttonFlow.style.horizontal_spacing = 15
 		els.btnToPlayer = els.buttonFlow.add
 		{
 			type = "sprite-button",
@@ -451,7 +430,6 @@ heliSelectionGui =
 			style = mod_gui.button_style,
 			tooltip = {"heli-gui-heliSelection-to-player-btn-tt"},
 		}
-
 		els.btnToMap = els.buttonFlow.add
 		{
 			type = "sprite-button",
@@ -460,7 +438,6 @@ heliSelectionGui =
 			style = mod_gui.button_style,
 			tooltip = {"heli-gui-heliSelection-to-map-btn-tt"},
 		}
-
 		els.btnToPad = els.buttonFlow.add
 		{
 			type = "sprite-button",
@@ -469,7 +446,6 @@ heliSelectionGui =
 			style = mod_gui.button_style,
 			tooltip = {"heli-gui-heliSelection-to-pad-btn-tt"},
 		}
-
 		els.btnStop = els.buttonFlow.add
 		{
 			type = "sprite-button",
@@ -479,6 +455,13 @@ heliSelectionGui =
 			tooltip = {"heli-gui-heliSelection-stop-btn-tt"},
 		}
 		self:setControlBtnsStatus(false, false)
+
+		els.separator = els.root.add
+		{
+			type = "line",
+			name = self.prefix .. "separator",
+		}
+		els.separator.style.bottom_padding = 10
 
 		els.scrollPane = els.root.add
 		{

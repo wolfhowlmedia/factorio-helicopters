@@ -42,8 +42,7 @@ heliPadSelectionGui =
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
 			self:OnCamClicked(e)
 
-		elseif (name == self.prefix .. "rootFrame" or name == self.prefix .. "camTable")
-			and e.button == defines.mouse_button_type.right then
+		elseif name == self.prefix .. "close" and e.button == defines.mouse_button_type.left then
 			self.manager:OnChildEvent(self, "cancel")
 
 		elseif name == self.prefix.."rename_confirm" then
@@ -164,9 +163,10 @@ heliPadSelectionGui =
 			table.insert(self.guiElems.cams,
 			{
 				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad, self:getDefaultZoom()),
-				ID = self.curCamID,
 				heliPad = heliPad,
+				ID = self.curCamID,
 			})
+
 			self.curCamID = self.curCamID + 1
 			self:setNothingAvailable(false)
 		end
@@ -215,8 +215,7 @@ heliPadSelectionGui =
 		cam.style.top_padding = padding
 		cam.style.left_padding = padding
 
-		cam.style.minimal_width = camSize
-		cam.style.minimal_height = camSize
+		cam.style.size = camSize
 
 		local name = cam.add
 		{
@@ -262,19 +261,7 @@ heliPadSelectionGui =
 	buildGui = function(self)
 		local els = self.guiElems
 
-		els.root = els.parent.add
-		{
-			type = "frame",
-			name = self.prefix .. "rootFrame",
-			caption = {"heli-gui-padSelection-frame-caption"},
-			style = "frame",
-			direction = "vertical",
-			tooltip = {"heli-gui-frame-tt"},
-		}
-
-		els.root.style.maximal_width = 1000
-		els.root.style.maximal_height = 700
-
+		buildBaseGUI(self, els, "heli-gui-padSelection-frame-caption")
 
 		els.scrollPane = els.root.add
 		{
@@ -290,7 +277,7 @@ heliPadSelectionGui =
 			type = "table",
 			name = self.prefix .. "camTable",
 			column_count = 4,
-			tooltip = {"heli-gui-frame-tt"},
+			--tooltip = {"heli-gui-frame-tt"},
 		}
 		els.camTable.style.horizontal_spacing = 10
 		els.camTable.style.vertical_spacing = 10

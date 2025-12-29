@@ -122,7 +122,7 @@ end
 
 function callInGlobal(gName, kName, ...)
 	if storage[gName] then
-		for k,v in pairs(storage[gName]) do
+		for _, v in pairs(storage[gName]) do
 			if v[kName] then v[kName](v, ...) end
 		end
 	end
@@ -264,4 +264,40 @@ function guiHasChild(gui, name)
 	end
 
 	return false
+end
+
+--builds the base GUI with close button
+function buildBaseGUI(self, els, caption)
+	els.root = els.parent.add
+	{
+		type = "frame",
+		name = self.prefix .. "rootFrame",
+		direction = "vertical",
+	}
+	els.root.style.maximal_width = 1000
+	els.root.style.maximal_height = 700
+	els.flow = els.root.add{
+		type = "flow",
+		name = self.prefix.."flow",
+		direction = "horizontal",
+	}
+	els.flow.add{
+		type = "label",
+		name = self.prefix.."title",
+		caption = {caption},
+		style = "frame_title"
+	}
+	els.ew = els.flow.add{
+		type = "empty-widget",
+		name = self.prefix.."ew",
+		style = "draggable_space_header",
+	}
+	els.ew.style.horizontally_stretchable = true
+	els.ew.style.height = 24
+	els.flow.add{
+		type = "sprite-button",
+		name = self.prefix.."close",
+		sprite = "utility/close",
+		style = "frame_action_button",
+	}
 end
