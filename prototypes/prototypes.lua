@@ -42,12 +42,22 @@ data:extend({
 
 --Font
 data:extend({
-  {
-    type = "font",
-    name = "pixelated",
-    from = "pixelated",
-    size = 12
-  },
+    {
+        type = "font",
+        name = "pixelated_normal",
+        from = "pixelated",
+        border = true,
+        border_color = {0,0,0},
+        size = 12,
+    },
+    {
+        type = "font",
+        name = "pixelated_small",
+        from = "pixelated",
+        border = true,
+        border_color = {0,0,0},
+        size = 9
+    },
 })
 
 --Recipes

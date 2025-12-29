@@ -191,25 +191,24 @@ heliPadSelectionGui =
 		cam.style.minimal_width = camSize
 		cam.style.minimal_height = camSize
 
-		local surface = cam.add
-		{
-			type = "label",
-			caption = titleCase(game.surfaces[surfaceIndex].name),
-		}
-		surface.style.font = "pixelated"
-		surface.style.left_padding = 3
-		surface.style.font_color = {r = 1, g = 1, b = 1}
-
 		local name = cam.add
 		{
 			type = "label",
 			caption = titleCase(heliPad.name or "Default"),
 		}
-		name.style.font = "pixelated"
+		name.style.font = "pixelated_normal"
 		name.style.left_padding = 3
-		name.style.top_padding = 20
 		name.style.font_color = {r = 1, g = 1, b = 1}
-		--name.style.font_color = {r = 0.86, g = 0.5, b = 0.12}
+
+		local surface = cam.add
+		{
+			type = "label",
+			caption = titleCase(game.surfaces[surfaceIndex].name),
+		}
+		surface.style.font = "pixelated_small"
+		surface.style.left_padding = 3
+		surface.style.top_padding = 20
+		surface.style.font_color = {r = 1, g = 1, b = 1}
 
 		return cam
 	end,
