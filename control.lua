@@ -141,14 +141,19 @@ function OnBuilt(e)
 		local newHeli = insertInGlobal("helis", heliAttack.new(ent))
 
 		if storage.remoteGuis then
-			for _,rg in pairs(storage.remoteGuis) do
+			for _, rg in pairs(storage.remoteGuis) do
 				rg:OnHeliBuilt(newHeli)
 			end
 		end
 
 	elseif ent.name == "helicopter-pad" then
 		local newPad = insertInGlobal("heliPads", heliPad.new(ent))
-		callInGlobal("remoteGuis", "OnHeliPadBuilt", newPad)
+
+		if storage.remoteGuis then
+			for _, rg in pairs(storage.remoteGuis) do
+				rg:OnHeliPadBuilt(newPad)
+			end
+		end
 
 	elseif ent.type == "inserter" then
 		ent.active = true

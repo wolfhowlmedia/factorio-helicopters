@@ -193,7 +193,7 @@ remoteGui =
 	end,
 
 	OnHeliRemoved = function(self, heli)
-		for _,gui in pairs(self.guis) do
+		for _, gui in pairs(self.guis) do
 			if gui.OnHeliRemoved then
 				gui:OnHeliRemoved(heli)
 			end
@@ -201,9 +201,17 @@ remoteGui =
 	end,
 
 	OnHeliBuilt = function(self, heli)
-		for _,gui in pairs(self.guis) do
+		for _, gui in pairs(self.guis) do
 			if gui.OnHeliBuilt then
 				gui:OnHeliBuilt(heli)
+			end
+		end
+	end,
+
+	OnHeliPadBuilt = function(self, heli)
+		for _, gui in pairs(self.guis) do
+			if gui.OnHeliPadBuilt then
+				gui:OnHeliPadBuilt(heli)
 			end
 		end
 	end,
