@@ -62,6 +62,9 @@ heliSelectionGui =
 		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
 			self.manager:OnChildEvent(self, "cancel")
 
+		elseif name == self.prefix.."rename_confirm" then
+			renameEntity(self, e, "heli")
+
 		elseif self.selectedCam then
 			if name == self.prefix .. "btn_toPlayer" then
 				if e.surfaceSwap == nil then
@@ -146,6 +149,12 @@ heliSelectionGui =
 		end
 	end,
 
+	OnGuiTextConfirmed = function(self, e)
+		if e.element.name == self.prefix.."rename_field" then
+			renameEntity(self, e, "heli")
+		end
+	end,
+
 	OnCamClicked = function(self, e)
 		if e.button == defines.mouse_button_type.left then
 			local camID = tonumber(e.element.name:match("%d+"))
@@ -164,6 +173,44 @@ heliSelectionGui =
 				if e.element.zoom > zoomMax then
 					e.element.zoom = zoomMin
 				end
+			elseif e.alt then
+				local camID = tonumber(e.element.name:match("%d+"))
+				local cam = searchInTable(self.guiElems.cams, camID, "ID")
+
+				if guiHasChild(cam.cam, self.prefix.."rename_root") then return end
+
+				local root = cam.cam.add{
+					type = "frame",
+					name = self.prefix.."rename_root",
+					caption = {"heli-gui-heliSelection-rename-caption"},
+					direction = "vertical",
+					style = "goal_frame"
+				}
+				root.style.natural_width = 195
+
+				local renameFlow = root.add
+				{
+					type = "flow",
+					name = self.prefix.."rename_flow",
+					direction = "horizontal",
+				}
+
+				renameFlow.add{
+					type = "button",
+					name = self.prefix.."rename_confirm",
+					caption = "[virtual-signal=signal-check]",
+					style = "item_and_count_select_confirm",
+				}
+
+				local searchField = renameFlow.add{
+					type = "textfield",
+					name = self.prefix.."rename_field",
+					text = cam.heli.name or "Helicopter",
+					style = "stretchable_textfield"
+				}
+				searchField.style.minimal_height = 26
+				searchField.style.minimal_width = 75
+				searchField.focus()
 			else
 				e.element.zoom = e.element.zoom * (1 - zoomDelta)
 				if e.element.zoom < zoomMin then

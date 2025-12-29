@@ -32,6 +32,10 @@ heliPadSelectionGui =
 		end
 	end,
 
+	setVisible = function(self, val)
+		self.guiElems.root.visible = val
+	end,
+
 	OnGuiClick = function(self, e)
 		local name = e.element.name
 
@@ -40,17 +44,15 @@ heliPadSelectionGui =
 
 		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
 			self.manager:OnChildEvent(self, "cancel")
+
+		elseif name == self.prefix.."rename_confirm" then
+			renameEntity(self, e, "pad")
 		end
 	end,
 
 	OnGuiTextConfirmed = function(self, e)
-		local name = e.element.name
-		local text = e.element.text
-
-		if name == self.prefix.."rename_field" then
-			--e.element.parent.parent.parent.name.suffix
-			--find helipad by cam index and assign new name
-			--then destroy search GUI
+		if e.element.name == self.prefix.."rename_field" then
+			renameEntity(self, e, "pad")
 		end
 	end,
 
@@ -86,15 +88,14 @@ heliPadSelectionGui =
 			elseif e.alt then
 				local camID = tonumber(e.element.name:match("%d+"))
 				local cam = searchInTable(self.guiElems.cams, camID, "ID")
-				--open rename console
-				--game.players[e.player_index].gui.center.add{type="textfield", name="NAME", caption="HeliPad Name"}
+
+				if guiHasChild(cam.cam, self.prefix.."rename_root") then return end
+
 				local root = cam.cam.add{
 					type = "frame",
 					name = self.prefix.."rename_root",
 					caption = {"heli-gui-padSelection-rename-caption"},
-					--style = "frame",
 					direction = "vertical",
-					--tooltip = {"heli-gui-frame-tt"},
 					style = "goal_frame"
 				}
 				root.style.natural_width = 195
@@ -117,11 +118,6 @@ heliPadSelectionGui =
 					type = "textfield",
 					name = self.prefix.."rename_field",
 					text = cam.heliPad.name or "Default",
-					--numeric = true,
-					--allow_decimal = true,
-					--allow_negative = true,
-					--lose_focus_on_confirm = true,
-					icon_selector = true,
 					style = "stretchable_textfield"
 				}
 				searchField.style.minimal_height = 26
@@ -296,4 +292,41 @@ heliPadSelectionGui =
 			self:setNothingAvailable(true)
 		end
 	end,
+
+	-- Rebuild() is responsible for:
+	-- reapplying new pad name
+	Rebuild = function(self)
+		if not self or not self.valid then return end
+
+		-- Determine parent GUI element for rebuilding
+		-- Preferred: Reuse previously stored parent so GUI stays in same GUI hierarchy location
+		-- Fallback: If guiElems/parent missing (after reload, desync, partial teardown), recreate parent using mod_gui.get_frame_flow(player)
+		local parent = nil
+		if self.guiElems and self.guiElems.parent then
+			parent = self.guiElems.parent
+		else
+			parent = mod_gui.get_frame_flow(self.player)
+		end
+
+		-- Preserve previous visibility state to ensure: an open GUI stays open after rebuild / a hidden GUI stays hidden
+		-- Without: rebuilding would always force GUI visible
+		local wasVisible = true
+		if self.guiElems and self.guiElems.root and self.guiElems.root.valid then
+			wasVisible = self.guiElems.root.visible
+
+			-- Rebuild = full teardown + recreation
+			self.guiElems.root.destroy()
+		end
+
+		-- Reset GUI state
+		-- guiElems is recreated from scratch with only the parent known
+		-- buildGui() will repopulate: root / camera elements / selection state
+		self.guiElems = {parent = parent}
+
+		-- buildGui() is responsible for: filtering visible helis / rebuilding camera previews / restoring selection
+		self:buildGui()
+
+		-- Restore visibility must be done after buildGui(), because buildGui() recreates the root element
+		self:setVisible(wasVisible)
+	end
 }

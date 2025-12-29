@@ -227,3 +227,41 @@ function playerHasEquipment(p, equipName)
 		p.character.grid and p.character.grid.valid and
 		equipmentGridHasItem(p.character.grid, equipName)
 end
+
+--finds heli by cam id and assigns new name
+function renameEntity(self, e, mode)
+	local guiName = "heli_heliSelectionGui"
+	local text = ""
+
+	if e.name == 1 then --on_gui_click
+		text = e.element.parent.children[2].text
+	else --on_gui_confirmed
+		text = e.element.text
+	end
+
+	if mode == "pad" then
+		guiName = "heli_heliPadSelectionGui"
+	end
+
+	local id = string.gsub(e.element.parent.parent.parent.name, guiName.."_cam_", "")
+
+	if mode == "heli" then
+		storage.helis[tonumber(id) + 1].name = text
+	else
+		storage.heliPads[tonumber(id) + 1].name = text
+	end
+
+	e.element.parent.parent.destroy()
+	self:Rebuild()
+end
+
+--checks whether child already existing
+function guiHasChild(gui, name)
+	for _, v in ipairs(gui.children) do
+		if v.name == name then
+			return true
+		end
+	end
+
+	return false
+end
