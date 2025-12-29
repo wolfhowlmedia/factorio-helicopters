@@ -59,7 +59,8 @@ heliSelectionGui =
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
 			self:OnCamClicked(e) --Heli Selected Clicked
 
-		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
+		elseif (name == self.prefix .. "rootFrame" or name == self.prefix .. "camTable")
+			and e.button == defines.mouse_button_type.right then
 			self.manager:OnChildEvent(self, "cancel")
 
 		elseif name == self.prefix.."rename_confirm" then
@@ -493,6 +494,7 @@ heliSelectionGui =
 			type = "table",
 			name = self.prefix .. "camTable",
 			column_count = 4,
+			tooltip = {"heli-gui-frame-tt"},
 		}
 		els.camTable.style.horizontal_spacing = 10
 		els.camTable.style.vertical_spacing = 10
