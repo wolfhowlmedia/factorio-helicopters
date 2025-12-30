@@ -8,7 +8,6 @@ require("logic.simpleNoise")
 
 require("logic.heliBase")
 require("logic.heliAttack")
-require("logic.heliScout")
 
 require("logic.heliPad")
 require("logic.heliController")

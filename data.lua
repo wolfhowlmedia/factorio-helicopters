@@ -1,5 +1,4 @@
 require("prototypes.entities.heli_entity")
-require("prototypes.entities.heli_scout")
 require("prototypes.entities.rotor_entity")
 require("prototypes.entities.smoke")
 require("prototypes.entities.heli_pad")
