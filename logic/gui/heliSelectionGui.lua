@@ -503,7 +503,7 @@ heliSelectionGui =
 			else
 				self.filtered = not self.filtered
 			end
-		else
+		elseif filtered == nil then
 			self.filtered = false
 		end
 

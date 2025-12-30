@@ -180,11 +180,11 @@ function getIndexedPos(pos)
 end
 
 string.startswith = function(str, strSub)
-  if str:len() < strSub:len() then
-    return false
-  end
- 
-  return str:sub(1, strSub:len()) == strSub
+	if str:len() < strSub:len() then
+		return false
+	end
+
+	return str:sub(1, strSub:len()) == strSub
 end
 
 function chopDecimal(val, place)
@@ -246,13 +246,13 @@ function renameEntity(self, e, mode)
 	local id = string.gsub(e.element.parent.parent.parent.name, guiName.."_cam_", "")
 
 	if mode == "heli" then
-		storage.helis[tonumber(id) + 1].name = text
+		self.guiElems.cams[tonumber(id) + 1].heli.name = text
 	else
-		storage.heliPads[tonumber(id) + 1].name = text
+		self.guiElems.cams[tonumber(id) + 1].heliPad.name = text
 	end
 
 	e.element.parent.parent.destroy()
-	self:Rebuild()
+	self:Rebuild(false)
 end
 
 --checks whether child already existing
