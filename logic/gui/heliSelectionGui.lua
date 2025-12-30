@@ -408,6 +408,16 @@ heliSelectionGui =
 	buildGui = function(self, filtered)
 		local els = self.guiElems
 
+		if filtered == true then
+			if self.filtered == nil then
+				self.filtered = true
+			else
+				self.filtered = not self.filtered
+			end
+		elseif filtered == nil then
+			self.filtered = false
+		end
+
 		if not els then
 			self.guiElems = {}
 			els = self.guiElems
@@ -423,7 +433,8 @@ heliSelectionGui =
 				name = self.prefix.."surface",
 				sprite = "heli-map",
 				style = "frame_action_button",
-				tooltip = {"heli-gui-filter"},
+				tooltip = {"heli-gui-filter-heli"},
+				toggled = self.filtered,
 			},
 		}
 		buildBaseGUI(self, els, "heli-gui-heliSelection-frame-caption", surfButton)
@@ -496,16 +507,6 @@ heliSelectionGui =
 
 		els.cams = {}
 		self.curCamID = 0
-
-		if filtered == true then
-			if self.filtered == nil then
-				self.filtered = true
-			else
-				self.filtered = not self.filtered
-			end
-		elseif filtered == nil then
-			self.filtered = false
-		end
 
 		if storage.helis then
 			local playerSurface = self.player.surface.index

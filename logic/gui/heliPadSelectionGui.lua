@@ -263,13 +263,25 @@ heliPadSelectionGui =
 
 	buildGui = function(self, filtered)
 		local els = self.guiElems
+
+		if filtered == true then
+			if self.filtered == nil then
+				self.filtered = true
+			else
+				self.filtered = not self.filtered
+			end
+		elseif filtered == nil then
+			self.filtered = false
+		end
+
 		local surfButton = 	{
 			content = {
 				type = "sprite-button",
 				name = self.prefix.."surface",
 				sprite = "heli-map",
 				style = "frame_action_button",
-				tooltip = {"heli-gui-filter"},
+				tooltip = {"heli-gui-filter-pad"},
+				toggled = self.filtered,
 			},
 		}
 		buildBaseGUI(self, els, "heli-gui-padSelection-frame-caption", surfButton)
@@ -294,16 +306,6 @@ heliPadSelectionGui =
 
 		self.curCamID = 0
 		els.cams = {}
-
-		if filtered == true then
-			if self.filtered == nil then
-				self.filtered = true
-			else
-				self.filtered = not self.filtered
-			end
-		elseif filtered == nil then
-			self.filtered = false
-		end
 
 		local hasCams = false
 		if storage.heliPads then
