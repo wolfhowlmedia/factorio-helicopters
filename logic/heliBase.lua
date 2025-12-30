@@ -387,6 +387,8 @@ heliBase = {
 
 			surface = placementEnt.surface,
 
+			name = "Helicopter "..#storage["helis"] + 1,
+
 			deactivatedInserters = {},
 		}
 

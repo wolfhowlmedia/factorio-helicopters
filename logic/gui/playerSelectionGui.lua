@@ -42,7 +42,7 @@ playerSelectionGui =
 				self.manager:OnChildEvent(self, "selectedPlayer", searchInTable(self.guiElems.btns, e.element, "btn").player)
 			end
 
-		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
+		elseif name == self.prefix .. "close" then
 			self.manager:OnChildEvent(self, "cancel")
 		end
 	end,
@@ -99,14 +99,7 @@ playerSelectionGui =
 	buildGui = function(self)
 		local els = self.guiElems
 
-		els.root = els.parent.add
-		{
-			type = "frame",
-			name = self.prefix .. "rootFrame",
-			caption = {"heli-gui-playerSelection-frame-caption"},
-			style = "frame",
-			tooltip = {"heli-gui-frame-tt"},
-		}
+		buildBaseGUI(self, els, "heli-gui-playerSelection-frame-caption")
 
 		els.scroller = els.root.add
 		{

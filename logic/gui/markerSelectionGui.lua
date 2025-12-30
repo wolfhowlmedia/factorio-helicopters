@@ -72,7 +72,7 @@ markerSelectionGui =
 				end
 			end
 
-		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
+		elseif name == self.prefix .. "close" then
 			self.manager:OnChildEvent(self, "cancel")
 
 		elseif name == self.prefix .. "searchFieldClearBtn" then
@@ -292,60 +292,52 @@ markerSelectionGui =
 	end,
 
 	buildGui = function(self)
-		self.guiElems.root = self.guiElems.parent.add
-		{
-			type = "frame",
-			name = self.prefix .. "rootFrame",
-			caption = {"heli-gui-markerSelection-frame-caption"},
-			direction = "vertical",
-			style = "frame",
-			tooltip = {"heli-gui-frame-tt"},
-		}
+		local els = self.guiElems
 
-		self.guiElems.searchFieldFlow = self.guiElems.root.add
+		buildBaseGUI(self, els, "heli-gui-markerSelection-frame-caption")
+
+		els.searchFieldFlow = els.root.add
 		{
 			type = "flow",
 			name = self.prefix .. "searchFieldFlow",
 			direction = "horizontal",
-
 		}
 
-		self.guiElems.searchField = self.guiElems.searchFieldFlow.add
+		els.searchField = els.searchFieldFlow.add
 		{
 			type = "textfield",
 			name = self.prefix .. "searchField",
 			style = "stretchable_textfield",
 		}
-		self.guiElems.searchField.style.left_padding = 22
-		self.guiElems.searchField.style.minimal_height = 26
-		self.guiElems.searchField.style.maximal_height = 32
+		els.searchField.style.left_padding = 22
+		els.searchField.style.minimal_height = 26
 
 		self.lastSearchFieldText = ""
 
-		self.guiElems.searchField.add{
+		els.searchField.add{
 			type = "sprite",
 			name = self.prefix .. "searchIcon",
 			sprite = "heli_search_icon",
+			--sprite = "utility/search_icon",
 		}
 
-		self.guiElems.searchFieldClearBtn = self.guiElems.searchFieldFlow.add
+		els.searchFieldClearBtn = els.searchFieldFlow.add
 		{
-			type = "button",
+			type = "sprite-button",
 			name = self.prefix .. "searchFieldClearBtn",
-			style = "heli-clear_text_button",
+			sprite = "utility/close",
+			style = "tool_button_red",
 		}
 
-
-		self.guiElems.scroller = self.guiElems.root.add
+		els.scroller = els.root.add
 		{
 			type = "scroll-pane",
 			name = self.prefix .. "scroller",
 		}
+		els.scroller.style.maximal_width = 1000
+		els.scroller.style.maximal_height = 600
 
-		self.guiElems.scroller.style.maximal_width = 1000
-		self.guiElems.scroller.style.maximal_height = 600
-
-		self.guiElems.table = self.guiElems.scroller.add
+		els.table = els.scroller.add
 		{
 			type = "flow",
 			name = self.prefix .. "flow",

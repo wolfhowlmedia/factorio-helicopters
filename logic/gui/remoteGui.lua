@@ -79,9 +79,9 @@ remoteGui =
 
 	destroy = function(self)
 		self.valid = false
-		for k, curGui in pairs(self.guis) do
-			if curGui.valid then
-				curGui:destroy()
+		for k, currentGui in pairs(self.guis) do
+			if currentGui.valid then
+				currentGui:destroy()
 			end
 		end
 	end,
@@ -97,9 +97,9 @@ remoteGui =
 		if not self.player.valid then
 			self:destroy()
 		else
-			for _, curGui in pairs(self.guis) do
-				if curGui.OnTick then
-					curGui:OnTick()
+			for _, currentGui in pairs(self.guis) do
+				if currentGui.OnTick then
+					currentGui:OnTick()
 				end
 			end
 		end
@@ -108,9 +108,9 @@ remoteGui =
 	OnGuiClick = function(self, e)
 		local name = e.element.name
 
-		for _, curGui in pairs(self.guis) do
-			if name:match("^" .. curGui.prefix .. ".+") and curGui.OnGuiClick then
-				return curGui:OnGuiClick(e)
+		for _, currentGui in pairs(self.guis) do
+			if name:match("^" .. currentGui.prefix .. ".+") and currentGui.OnGuiClick then
+				return currentGui:OnGuiClick(e)
 			end
 		end
 	end,
@@ -118,9 +118,19 @@ remoteGui =
 	OnGuiTextChanged = function(self, e)
 		local name = e.element.name
 
-		for k, curGui in pairs(self.guis) do
-			if name:match("^" .. curGui.prefix .. ".+") and curGui.OnGuiTextChanged then
-				curGui:OnGuiTextChanged(e)
+		for _, currentGui in pairs(self.guis) do
+			if name:match("^" .. currentGui.prefix .. ".+") and currentGui.OnGuiTextChanged then
+				currentGui:OnGuiTextChanged(e)
+			end
+		end
+	end,
+
+	OnGuiTextConfirmed = function(self, e)
+		local name = e.element.name
+
+		for _, currentGui in pairs(self.guis) do
+			if name:match("^" .. currentGui.prefix .. ".+") and currentGui.OnGuiTextConfirmed then
+				currentGui:OnGuiTextConfirmed(e)
 			end
 		end
 	end,
@@ -183,7 +193,7 @@ remoteGui =
 	end,
 
 	OnHeliRemoved = function(self, heli)
-		for _,gui in pairs(self.guis) do
+		for _, gui in pairs(self.guis) do
 			if gui.OnHeliRemoved then
 				gui:OnHeliRemoved(heli)
 			end
@@ -191,9 +201,17 @@ remoteGui =
 	end,
 
 	OnHeliBuilt = function(self, heli)
-		for _,gui in pairs(self.guis) do
+		for _, gui in pairs(self.guis) do
 			if gui.OnHeliBuilt then
 				gui:OnHeliBuilt(heli)
+			end
+		end
+	end,
+
+	OnHeliPadBuilt = function(self, heli)
+		for _, gui in pairs(self.guis) do
+			if gui.OnHeliPadBuilt then
+				gui:OnHeliPadBuilt(heli)
 			end
 		end
 	end,

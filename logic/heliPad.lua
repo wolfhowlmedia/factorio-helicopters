@@ -18,6 +18,7 @@ heliPad =
 			surface = placementEnt.surface,
 
 			replacedTiles = {},
+			name = "Helipad "..#storage["heliPads"] + 1,
 			baseEnt = placementEnt.surface.create_entity
 			{
 				name = "heli-pad-entity",
@@ -80,7 +81,8 @@ heliPad =
 
 		for i = -3, 3 do
 			for j = -3, 3 do
-				if self.surface.get_tile(self.baseEnt.position.x + i, self.baseEnt.position.y + j).name == "heli-pad-concrete" then
+				local tile = self.surface.get_tile(self.baseEnt.position.x + i, self.baseEnt.position.y + j).name
+				if tile == "heli-pad-concrete" or tile == "frozen-heli-pad-concrete" or tile == "frozen-refined-concrete" then
 					self:migrateTile(self.replacedTiles[i][j])
 
 					table.insert(restoredTiles, self.replacedTiles[i][j])

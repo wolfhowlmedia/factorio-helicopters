@@ -146,7 +146,7 @@ function OnBuilt(e)
 		local newHeli = insertInGlobal("helis", heliAttack.new(ent))
 
 		if storage.remoteGuis then
-			for _,rg in pairs(storage.remoteGuis) do
+			for _, rg in pairs(storage.remoteGuis) do
 				rg:OnHeliBuilt(newHeli)
 			end
 		end
@@ -162,7 +162,12 @@ function OnBuilt(e)
 
 	elseif ent.name == "helicopter-pad" then
 		local newPad = insertInGlobal("heliPads", heliPad.new(ent))
-		callInGlobal("remoteGuis", "OnHeliPadBuilt", newPad)
+
+		if storage.remoteGuis then
+			for _, rg in pairs(storage.remoteGuis) do
+				rg:OnHeliPadBuilt(newPad)
+			end
+		end
 
 	elseif ent.type == "inserter" then
 		ent.active = true
@@ -176,7 +181,7 @@ function OnRemoved(e)
 		local entName = ent.name
 
 		if string.find(heliEntityNames, entName .. ",", 1, true) then
-			for i,val in ipairs(storage.helis) do
+			for i, val in ipairs(storage.helis) do
 				if val:isBaseOrChild(ent) then
 					val:destroy()
 					table.remove(storage.helis, i)
@@ -358,6 +363,19 @@ function OnGuiTextChanged(e)
 	end
 end
 
+function OnGuiTextConfirmed(e)
+	local name = e.element.name
+
+	if name:match("^heli_") then
+		local p = game.players[e.player_index]
+		local i = searchIndexInTable(storage.remoteGuis, p, "player")
+
+		if i then
+			storage.remoteGuis[i]:OnGuiTextConfirmed(e)
+		end
+	end
+end
+
 function OnPlayerChangedForce(e)
 	local p = game.players[e.player_index]
 
@@ -495,6 +513,7 @@ script.on_event(defines.events.on_player_placed_equipment, OnPlacedEquipment)
 script.on_event(defines.events.on_player_removed_equipment, OnRemovedEquipment)
 script.on_event(defines.events.on_gui_click, OnGuiClick)
 script.on_event(defines.events.on_gui_text_changed, OnGuiTextChanged)
+script.on_event(defines.events.on_gui_confirmed, OnGuiTextConfirmed)
 
 script.on_event(defines.events.on_player_changed_force, OnPlayerChangedForce)
 script.on_event(defines.events.on_player_died, OnPlayerDied)

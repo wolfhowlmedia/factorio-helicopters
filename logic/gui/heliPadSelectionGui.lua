@@ -32,19 +32,37 @@ heliPadSelectionGui =
 		end
 	end,
 
+	setVisible = function(self, val)
+		self.guiElems.root.visible = val
+	end,
+
 	OnGuiClick = function(self, e)
 		local name = e.element.name
 
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
 			self:OnCamClicked(e)
 
-		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
+		elseif name == self.prefix .. "close" then
 			self.manager:OnChildEvent(self, "cancel")
+
+		elseif name == self.prefix .. "surface" then
+			self:Rebuild(true)
+
+		elseif name == self.prefix.."rename_confirm" then
+			renameEntity(self, e, "pad")
+
+		elseif name == self.prefix.."rename_close" then
+			e.element.parent.parent.destroy()
+		end
+	end,
+
+	OnGuiTextConfirmed = function(self, e)
+		if e.element.name == self.prefix.."rename_field" then
+			renameEntity(self, e, "pad")
 		end
 	end,
 
 	OnCamClicked = function(self, e)
-
 		if e.button == defines.mouse_button_type.left then
 			local camID = tonumber(e.element.name:match("%d+"))
 			local cam = searchInTable(self.guiElems.cams, camID, "ID")
@@ -73,6 +91,67 @@ heliPadSelectionGui =
 				if e.element.zoom > zoomMax then
 					e.element.zoom = zoomMin
 				end
+			elseif e.alt then
+				local camID = tonumber(e.element.name:match("%d+"))
+				local cam = searchInTable(self.guiElems.cams, camID, "ID")
+
+				if guiHasChild(cam.cam, self.prefix.."rename_root") then return end
+
+				local root = cam.cam.add{
+					type = "frame",
+					name = self.prefix.."rename_root",
+					direction = "vertical",
+				}
+				root.style.natural_width = 195
+
+				local flow = root.add{
+					type = "flow",
+					name = self.prefix.."flow",
+					direction = "horizontal",
+				}
+
+				flow.add{
+					type = "label",
+					name = self.prefix.."rename_label",
+					caption = {"heli-gui-rename-caption"},
+					style = "frame_title"
+				}
+				local ew = flow.add{
+					type = "empty-widget",
+					name = self.prefix.."rename_ew",
+				}
+				ew.style.horizontally_stretchable = true
+
+				flow.add{
+					type = "sprite-button",
+					name = self.prefix.."rename_close",
+					sprite = "utility/close",
+					style = "close_button",
+				}
+
+				local renameFlow = root.add
+				{
+					type = "flow",
+					name = self.prefix.."rename_flow",
+					direction = "horizontal",
+				}
+
+				renameFlow.add{
+					type = "sprite-button",
+					name = self.prefix.."rename_confirm",
+					sprite = "utility/check_mark",
+					style = "item_and_count_select_confirm",
+				}
+
+				local searchField = renameFlow.add{
+					type = "textfield",
+					name = self.prefix.."rename_field",
+					text = cam.heliPad.name or "Default",
+					style = "stretchable_textfield"
+				}
+				searchField.style.minimal_height = 26
+				searchField.style.minimal_width = 75
+				searchField.focus()
 			else
 				e.element.zoom = e.element.zoom * (1 - zoomDelta)
 				if e.element.zoom < zoomMin then
@@ -86,10 +165,11 @@ heliPadSelectionGui =
 		if heliPad.baseEnt.force == self.player.force then
 			table.insert(self.guiElems.cams,
 			{
-				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad.baseEnt.position, heliPad.baseEnt.surface_index, self:getDefaultZoom()),
-				ID = self.curCamID,
+				cam = self:buildCam(self.guiElems.camTable, self.curCamID, heliPad, self:getDefaultZoom()),
 				heliPad = heliPad,
+				ID = self.curCamID,
 			})
+
 			self.curCamID = self.curCamID + 1
 			self:setNothingAvailable(false)
 		end
@@ -119,10 +199,12 @@ heliPadSelectionGui =
 		return self.player.mod_settings["heli-gui-heliPadSelection-defaultZoom"].value
 	end,
 
-	buildCam = function(self, parent, ID, position, surfaceIndex, zoom)
+	buildCam = function(self, parent, ID, heliPad, zoom)
 		local padding = 8
 		local size = 210
 		local camSize = size - padding
+		local position = heliPad.baseEnt.position
+		local surfaceIndex = heliPad.baseEnt.surface_index
 
 		local cam = parent.add
 		{
@@ -136,16 +218,25 @@ heliPadSelectionGui =
 		cam.style.top_padding = padding
 		cam.style.left_padding = padding
 
-		cam.style.minimal_width = camSize
-		cam.style.minimal_height = camSize
+		cam.style.size = camSize
+
+		local name = cam.add
+		{
+			type = "label",
+			caption = titleCase(heliPad.name or "Default"),
+		}
+		name.style.font = "pixelated_normal"
+		name.style.left_padding = 3
+		name.style.font_color = {r = 1, g = 1, b = 1}
 
 		local surface = cam.add
 		{
 			type = "label",
 			caption = titleCase(game.surfaces[surfaceIndex].name),
 		}
-		surface.style.font = "pixelated"
+		surface.style.font = "pixelated_small"
 		surface.style.left_padding = 3
+		surface.style.top_padding = 20
 		surface.style.font_color = {r = 1, g = 1, b = 1}
 
 		return cam
@@ -170,22 +261,30 @@ heliPadSelectionGui =
 		end
 	end,
 
-	buildGui = function(self)
+	buildGui = function(self, filtered)
 		local els = self.guiElems
 
-		els.root = els.parent.add
-		{
-			type = "frame",
-			name = self.prefix .. "rootFrame",
-			caption = {"heli-gui-padSelection-frame-caption"},
-			style = "frame",
-			direction = "vertical",
-			tooltip = {"heli-gui-frame-tt"},
+		if filtered == true then
+			if self.filtered == nil then
+				self.filtered = true
+			else
+				self.filtered = not self.filtered
+			end
+		elseif filtered == nil then
+			self.filtered = false
+		end
+
+		local surfButton = 	{
+			content = {
+				type = "sprite-button",
+				name = self.prefix.."surface",
+				sprite = "heli-map",
+				style = "frame_action_button",
+				tooltip = {"heli-gui-filter-pad"},
+				toggled = self.filtered,
+			},
 		}
-
-		els.root.style.maximal_width = 1000
-		els.root.style.maximal_height = 700
-
+		buildBaseGUI(self, els, "heli-gui-padSelection-frame-caption", surfButton)
 
 		els.scrollPane = els.root.add
 		{
@@ -210,17 +309,29 @@ heliPadSelectionGui =
 
 		local hasCams = false
 		if storage.heliPads then
-			for k, curPad in pairs(storage.heliPads) do
-				if curPad.baseEnt.force == self.player.force then
-					hasCams = true
-					table.insert(els.cams,
-					{
-						cam = self:buildCam(els.camTable, self.curCamID, curPad.baseEnt.position, curPad.baseEnt.surface_index, self:getDefaultZoom()),
-						ID = self.curCamID,
-						heliPad = curPad,
-					})
+			local heliSurface = self.manager.guis.heliSelection.selectedCam.heli.surface.index
 
-					self.curCamID = self.curCamID + 1
+			for _, curPad in pairs(storage.heliPads) do
+				local filterOut = false
+
+				if curPad.baseEnt.force == self.player.force then
+					if self.filtered == true then
+						if heliSurface ~= curPad.surface.index then
+							filterOut = true
+						end
+					end
+
+					if filterOut == false then
+						hasCams = true
+						table.insert(els.cams,
+						{
+							cam = self:buildCam(els.camTable, self.curCamID, curPad, self:getDefaultZoom()),
+							ID = self.curCamID,
+							heliPad = curPad,
+						})
+
+						self.curCamID = self.curCamID + 1
+					end
 				end
 			end
 		end
@@ -229,4 +340,41 @@ heliPadSelectionGui =
 			self:setNothingAvailable(true)
 		end
 	end,
+
+	-- Rebuild() is responsible for:
+	-- reapplying new pad name
+	Rebuild = function(self, filter)
+		if not self or not self.valid then return end
+
+		-- Determine parent GUI element for rebuilding
+		-- Preferred: Reuse previously stored parent so GUI stays in same GUI hierarchy location
+		-- Fallback: If guiElems/parent missing (after reload, desync, partial teardown), recreate parent using mod_gui.get_frame_flow(player)
+		local parent = nil
+		if self.guiElems and self.guiElems.parent then
+			parent = self.guiElems.parent
+		else
+			parent = mod_gui.get_frame_flow(self.player)
+		end
+
+		-- Preserve previous visibility state to ensure: an open GUI stays open after rebuild / a hidden GUI stays hidden
+		-- Without: rebuilding would always force GUI visible
+		local wasVisible = true
+		if self.guiElems and self.guiElems.root and self.guiElems.root.valid then
+			wasVisible = self.guiElems.root.visible
+
+			-- Rebuild = full teardown + recreation
+			self.guiElems.root.destroy()
+		end
+
+		-- Reset GUI state
+		-- guiElems is recreated from scratch with only the parent known
+		-- buildGui() will repopulate: root / camera elements / selection state
+		self.guiElems = {parent = parent}
+
+		-- buildGui() is responsible for: filtering visible helis / rebuilding camera previews / restoring selection
+		self:buildGui(filter)
+
+		-- Restore visibility must be done after buildGui(), because buildGui() recreates the root element
+		self:setVisible(wasVisible)
+	end
 }

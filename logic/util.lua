@@ -122,7 +122,7 @@ end
 
 function callInGlobal(gName, kName, ...)
 	if storage[gName] then
-		for k,v in pairs(storage[gName]) do
+		for _, v in pairs(storage[gName]) do
 			if v[kName] then v[kName](v, ...) end
 		end
 	end
@@ -180,11 +180,11 @@ function getIndexedPos(pos)
 end
 
 string.startswith = function(str, strSub)
-  if str:len() < strSub:len() then
-    return false
-  end
- 
-  return str:sub(1, strSub:len()) == strSub
+	if str:len() < strSub:len() then
+		return false
+	end
+
+	return str:sub(1, strSub:len()) == strSub
 end
 
 function chopDecimal(val, place)
@@ -226,4 +226,87 @@ function playerHasEquipment(p, equipName)
 	return p.character and p.character.valid and
 		p.character.grid and p.character.grid.valid and
 		equipmentGridHasItem(p.character.grid, equipName)
+end
+
+--finds heli by cam id and assigns new name
+function renameEntity(self, e, mode)
+	local guiName = "heli_heliSelectionGui"
+	local text = ""
+
+	if e.name == 1 then --on_gui_click
+		text = e.element.parent.children[2].text
+	else --on_gui_confirmed
+		text = e.element.text
+	end
+
+	if mode == "pad" then
+		guiName = "heli_heliPadSelectionGui"
+	end
+
+	local id = string.gsub(e.element.parent.parent.parent.name, guiName.."_cam_", "")
+
+	if mode == "heli" then
+		self.guiElems.cams[tonumber(id) + 1].heli.name = text
+	else
+		self.guiElems.cams[tonumber(id) + 1].heliPad.name = text
+	end
+
+	e.element.parent.parent.destroy()
+	self:Rebuild(false)
+end
+
+--checks whether child already existing
+function guiHasChild(gui, name)
+	for _, v in ipairs(gui.children) do
+		if v.name == name then
+			return true
+		end
+	end
+
+	return false
+end
+
+--builds the base GUI with close button
+function buildBaseGUI(self, els, caption, extra)
+	els.root = els.parent.add
+	{
+		type = "frame",
+		name = self.prefix .. "rootFrame",
+		direction = "vertical",
+	}
+	els.root.style.maximal_width = 1000
+	els.root.style.maximal_height = 700
+	els.flow = els.root.add{
+		type = "flow",
+		name = self.prefix.."flow",
+		direction = "horizontal",
+	}
+	els.flow.add{
+		type = "label",
+		name = self.prefix.."title",
+		caption = {caption},
+		style = "frame_title"
+	}
+	if extra ~= nil then
+		els.flow.add(extra.content)
+
+		if extra.properties ~= nil then
+			for property, value in pairs(extra.properties) do
+				els.flow[property] = value
+			end
+		end
+	end
+	els.ew = els.flow.add{
+		type = "empty-widget",
+		name = self.prefix.."ew",
+		style = "draggable_space_header",
+	}
+	els.ew.style.horizontally_stretchable = true
+	els.ew.style.height = 24
+	els.flow.add{
+		type = "sprite-button",
+		name = self.prefix.."close",
+		sprite = "utility/close",
+		style = "frame_action_button",
+	}
 end

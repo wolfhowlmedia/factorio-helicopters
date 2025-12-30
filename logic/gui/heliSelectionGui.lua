@@ -59,8 +59,17 @@ heliSelectionGui =
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
 			self:OnCamClicked(e) --Heli Selected Clicked
 
-		elseif name == self.prefix .. "rootFrame" and e.button == defines.mouse_button_type.right then
+		elseif name == self.prefix .. "close" then
 			self.manager:OnChildEvent(self, "cancel")
+
+		elseif name == self.prefix .. "surface" then
+			self:Rebuild(true)
+
+		elseif name == self.prefix.."rename_confirm" then
+			renameEntity(self, e, "heli")
+
+		elseif name == self.prefix.."rename_close" then
+			e.element.parent.parent.destroy()
 
 		elseif self.selectedCam then
 			if name == self.prefix .. "btn_toPlayer" then
@@ -97,7 +106,7 @@ heliSelectionGui =
 
 	OnHeliBuilt = function(self, heli)
 		if heli.baseEnt.force == self.player.force then
-			local flow, cam = self:buildCam(self.guiElems.camTable, self.curCamID, heli.baseEnt.position, heli.baseEnt.surface_index, 0.3, false, false)
+			local flow, cam = self:buildCam(self.guiElems.camTable, self.curCamID, heli, 0.3, false, false)
 
 			table.insert(self.guiElems.cams,
 			{
@@ -108,7 +117,6 @@ heliSelectionGui =
 			})
 
 			self.curCamID = self.curCamID + 1
-
 			self:setNothingAvailableIfNecessary()
 		end
 	end,
@@ -146,6 +154,12 @@ heliSelectionGui =
 		end
 	end,
 
+	OnGuiTextConfirmed = function(self, e)
+		if e.element.name == self.prefix.."rename_field" then
+			renameEntity(self, e, "heli")
+		end
+	end,
+
 	OnCamClicked = function(self, e)
 		if e.button == defines.mouse_button_type.left then
 			local camID = tonumber(e.element.name:match("%d+"))
@@ -164,6 +178,67 @@ heliSelectionGui =
 				if e.element.zoom > zoomMax then
 					e.element.zoom = zoomMin
 				end
+			elseif e.alt then
+				local camID = tonumber(e.element.name:match("%d+"))
+				local cam = searchInTable(self.guiElems.cams, camID, "ID")
+
+				if guiHasChild(cam.cam, self.prefix.."rename_root") then return end
+
+				local root = cam.cam.add{
+					type = "frame",
+					name = self.prefix.."rename_root",
+					direction = "vertical",
+				}
+				root.style.natural_width = 195
+
+				local flow = root.add{
+					type = "flow",
+					name = self.prefix.."flow",
+					direction = "horizontal",
+				}
+
+				flow.add{
+					type = "label",
+					name = self.prefix.."rename_label",
+					caption = {"heli-gui-rename-caption"},
+					style = "frame_title"
+				}
+				local ew = flow.add{
+					type = "empty-widget",
+					name = self.prefix.."rename_ew",
+				}
+				ew.style.horizontally_stretchable = true
+
+				flow.add{
+					type = "sprite-button",
+					name = self.prefix.."rename_close",
+					sprite = "utility/close",
+					style = "close_button",
+				}
+
+				local renameFlow = root.add
+				{
+					type = "flow",
+					name = self.prefix.."rename_flow",
+					direction = "horizontal",
+				}
+
+				renameFlow.add{
+					type = "sprite-button",
+					name = self.prefix.."rename_confirm",
+					sprite = "utility/check_mark",
+					style = "item_and_count_select_confirm",
+				}
+
+				local searchField = renameFlow.add{
+					type = "textfield",
+					name = self.prefix.."rename_field",
+					text = cam.heli.name or "Helicopter",
+					style = "stretchable_textfield"
+				}
+				searchField.style.minimal_height = 26
+				searchField.style.minimal_width = 75
+				searchField.focus()
 			else
 				e.element.zoom = e.element.zoom * (1 - zoomDelta)
 				if e.element.zoom < zoomMin then
@@ -204,7 +279,7 @@ heliSelectionGui =
 
 		flow.clear()
 
-		cam.cam = self:buildCamInner(flow, cam.ID, pos, surfaceIndex, zoom, isSelected, cam.heliController)
+		cam.cam = self:buildCamInner(flow, cam.ID, cam.heli, zoom, isSelected, cam.heliController)
 
 		if isSelected then
 			if self.selectedCam and self.selectedCam ~= cam then
@@ -246,11 +321,16 @@ heliSelectionGui =
 		end
 	end,
 
-	buildCamInner = function(self, parent, ID, position, surfaceIndex, zoom, isSelected, hasController)
+	buildCamInner = function(self, parent, ID, heli, zoom, isSelected, hasController)
 		local camParent = parent
 		local padding = 8
 		local size = 210
 		local camSize = size - padding
+		local position = heli.baseEnt.position
+		local surfaceIndex = 1
+		if heli.baseEnt.valid then
+			surfaceIndex = heli.baseEnt.surface_index or 1
+		end
 
 		if isSelected then
 			camParent = camParent.add
@@ -259,10 +339,7 @@ heliSelectionGui =
 				name = self.prefix .. "camBox_selected_" .. tostring(ID),
 				sprite = "heli_gui_selected",
 			}
-			camParent.style.minimal_width = size
-			camParent.style.minimal_height = size
-			camParent.style.maximal_width = size
-			camParent.style.maximal_height = size
+			camParent.style.size = size
 		end
 
 		local cam = camParent.add
@@ -277,8 +354,7 @@ heliSelectionGui =
 		cam.style.top_padding = padding
 		cam.style.left_padding = padding
 
-		cam.style.minimal_width = camSize
-		cam.style.minimal_height = camSize
+		cam.style.size = camSize
 
 		if hasController then
 			local label = cam.add
@@ -287,41 +363,60 @@ heliSelectionGui =
 				caption = {"heli-gui-heliSelection-controlled"},
 			}
 
-			label.style.font = "pixelated"
+			label.style.font = "pixelated_normal"
 			label.style.left_padding = 3
-			label.style.top_padding = 16
+			label.style.top_padding = 37
 			label.style.font_color = {r = 1, g = 0, b = 0}
 		end
+
+		local name = cam.add
+		{
+			type = "label",
+			caption = titleCase(heli.name or "Helicopter"),
+		}
+		name.style.font = "pixelated_normal"
+		name.style.left_padding = 3
+		name.style.font_color = {r = 1, g = 1, b = 1}
+		--name.style.single_line = false
+		--name.style.maximal_width = 200
 
 		local surface = cam.add
 		{
 			type = "label",
 			caption = titleCase(game.surfaces[surfaceIndex].name),
 		}
-		surface.style.font = "pixelated"
+		surface.style.font = "pixelated_small"
 		surface.style.left_padding = 3
+		surface.style.top_padding = 20
 		surface.style.font_color = {r = 1, g = 1, b = 1}
 
 		return cam
 	end,
 
-	buildCam = function(self, parent, ID, position, surfaceIndex, zoom, isSelected, hasController)
+	buildCam = function(self, parent, ID, heli, zoom, isSelected, hasController)
 		local flow = parent.add
 		{
 			type = "flow",
 			name = self.prefix .. "camFlow_" .. tostring(ID),
 		}
 
-		flow.style.minimal_width = 214
-		flow.style.minimal_height = 214
-		flow.style.maximal_width = 214
-		flow.style.maximal_height = 214
+		flow.style.size = 214
 
-		return flow, self:buildCamInner(flow, ID, position, surfaceIndex, zoom, isSelected, hasController)
+		return flow, self:buildCamInner(flow, ID, heli, zoom, isSelected, hasController)
 	end,
 
-	buildGui = function(self, selectedIndex)
+	buildGui = function(self, filtered)
 		local els = self.guiElems
+
+		if filtered == true then
+			if self.filtered == nil then
+				self.filtered = true
+			else
+				self.filtered = not self.filtered
+			end
+		elseif filtered == nil then
+			self.filtered = false
+		end
 
 		if not els then
 			self.guiElems = {}
@@ -332,26 +427,24 @@ heliSelectionGui =
 			els.parent = mod_gui.get_frame_flow(self.player)
 		end
 
-		els.root = els.parent.add
-		{
-			type = "frame",
-			name = self.prefix .. "rootFrame",
-			caption = {"heli-gui-heliSelection-frame-caption"},
-			style = "frame",
-			direction = "vertical",
-			tooltip = {"heli-gui-frame-tt"},
+		local surfButton = 	{
+			content = {
+				type = "sprite-button",
+				name = self.prefix.."surface",
+				sprite = "heli-map",
+				style = "frame_action_button",
+				tooltip = {"heli-gui-filter-heli"},
+				toggled = self.filtered,
+			},
 		}
-
-		els.root.style.maximal_width = 1000
-		els.root.style.maximal_height = 700
+		buildBaseGUI(self, els, "heli-gui-heliSelection-frame-caption", surfButton)
 
 		els.buttonFlow = els.root.add
 		{
 			type = "flow",
 			name = self.prefix .. "btnFlow",
 		}
-		els.buttonFlow.style.left_padding = 7
-
+		els.buttonFlow.style.horizontal_spacing = 15
 		els.btnToPlayer = els.buttonFlow.add
 		{
 			type = "sprite-button",
@@ -360,7 +453,6 @@ heliSelectionGui =
 			style = mod_gui.button_style,
 			tooltip = {"heli-gui-heliSelection-to-player-btn-tt"},
 		}
-
 		els.btnToMap = els.buttonFlow.add
 		{
 			type = "sprite-button",
@@ -369,7 +461,6 @@ heliSelectionGui =
 			style = mod_gui.button_style,
 			tooltip = {"heli-gui-heliSelection-to-map-btn-tt"},
 		}
-
 		els.btnToPad = els.buttonFlow.add
 		{
 			type = "sprite-button",
@@ -378,7 +469,6 @@ heliSelectionGui =
 			style = mod_gui.button_style,
 			tooltip = {"heli-gui-heliSelection-to-pad-btn-tt"},
 		}
-
 		els.btnStop = els.buttonFlow.add
 		{
 			type = "sprite-button",
@@ -388,6 +478,13 @@ heliSelectionGui =
 			tooltip = {"heli-gui-heliSelection-stop-btn-tt"},
 		}
 		self:setControlBtnsStatus(false, false)
+
+		els.separator = els.root.add
+		{
+			type = "line",
+			name = self.prefix .. "separator",
+		}
+		els.separator.style.bottom_padding = 10
 
 		els.scrollPane = els.root.add
 		{
@@ -403,6 +500,7 @@ heliSelectionGui =
 			type = "table",
 			name = self.prefix .. "camTable",
 			column_count = 4,
+			tooltip = {"heli-gui-frame-tt"},
 		}
 		els.camTable.style.horizontal_spacing = 10
 		els.camTable.style.vertical_spacing = 10
@@ -411,11 +509,9 @@ heliSelectionGui =
 		self.curCamID = 0
 
 		if storage.helis then
-			-- Retrieve last heli that was selected in this GUI
+			local playerSurface = self.player.surface.index
 			local lastSelected = Entity.get_data(self.player, "heliSelectionGui_lastSelectedHeli")
-
-			-- Flag to track whether a heli was explicitly selected
-			local selectedSomething = false
+			local selectedSomething = false --Flag to track whether a heli was explicitly selected
 
 			--[[
 			local activeHeli = nil
@@ -439,6 +535,8 @@ heliSelectionGui =
 
 			-- decide which helis to appear in the GUI
 			for _, curHeli in pairs(storage.helis) do
+				local filterOut = false
+
 				if curHeli.baseEnt and curHeli.baseEnt.valid then
 
 					--[[
@@ -484,36 +582,40 @@ heliSelectionGui =
 
 					-- If heli passes filters, create GUI entry
 					if (curHeli.baseEnt.force == self.player.force) --[[and showHeli]] then
+						if self.filtered == true then
+							if playerSurface ~= curHeli.surface.index then
+								filterOut = true
+							end
+						end
 						-- Look up existing controller object for this heli
 						local controller = searchInTable(storage.heliControllers, curHeli, "heli")
 
-						-- Build camera GUI elements for this heli
-						local flow, cam = self:buildCam(
-							els.camTable,                  -- Parent GUI container
-							self.curCamID,
-							curHeli.baseEnt.position,
-							curHeli.baseEnt.surface_index,
-							self:getDefaultZoom(),
-							selected,                      -- Selection state (external)
-							curHeli.hasRemoteController    -- Remote control flag
-						)
+						if filterOut == false then
+							local flow, cam = self:buildCam(
+								els.camTable,                  -- Parent GUI container
+								self.curCamID,
+								curHeli,
+								self:getDefaultZoom(),
+								curHeli.hasRemoteController    -- Remote control flag
+							)
 
-						-- Store camera metadata for later access
-						table.insert(els.cams,
-						{
-							flow = flow,
-							cam = cam,
-							heli = curHeli,
-							heliController = controller,
-							ID = self.curCamID,
-						})
+							-- Store camera metadata for later access
+							table.insert(els.cams,
+							{
+								flow = flow,
+								cam = cam,
+								heli = curHeli,
+								heliController = controller,
+								ID = self.curCamID,
+							})
 
-						self.curCamID = self.curCamID + 1
+							self.curCamID = self.curCamID + 1
 
-						-- Restore selection if this heli was last selected
-						if curHeli == lastSelected then
-							selectedSomething = true
-							self:setCamStatus(els.cams[self.curCamID], true, els.cams[self.curCamID].heliController)
+							-- Restore selection if this heli was last selected
+							if curHeli == lastSelected then
+								selectedSomething = true
+								self:setCamStatus(els.cams[self.curCamID], true, els.cams[self.curCamID].heliController)
+							end
 						end
 					end
 				end
@@ -530,7 +632,7 @@ heliSelectionGui =
 
 	-- Rebuild() is responsible for:
 	-- destroying the old GUI root / recalculating visible helis / reapplying selection state
-	Rebuild = function(self)
+	Rebuild = function(self, filter)
 		if not self or not self.valid then return end
 
 		-- Determine parent GUI element for rebuilding
@@ -564,7 +666,7 @@ heliSelectionGui =
 		self.curCamID = 0
 
 		-- buildGui() is responsible for: filtering visible helis / rebuilding camera previews / restoring selection
-		self:buildGui()
+		self:buildGui(filter)
 
 		-- Restore visibility must be done after buildGui(), because buildGui() recreates the root element
 		self:setVisible(wasVisible)

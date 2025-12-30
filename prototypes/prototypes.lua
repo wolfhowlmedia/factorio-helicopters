@@ -42,12 +42,33 @@ data:extend({
 
 --Font
 data:extend({
-  {
-    type = "font",
-    name = "pixelated",
-    from = "pixelated",
-    size = 12
-  },
+    {
+        type = "font",
+        name = "pixelated_normal",
+        from = "pixelated",
+        border = true,
+        border_color = {0,0,0},
+        size = 12,
+    },
+    {
+        type = "font",
+        name = "pixelated_small",
+        from = "pixelated",
+        border = true,
+        border_color = {0,0,0},
+        size = 9
+    },
+    {
+        type = "sprite",
+        name = "heli-map",
+        filename = "__core__/graphics/icons/mip/map.png",
+        priority = "extra-high-no-scale",
+        size = 32,
+        scale = 0.5,
+        mipmap_count = 2,
+        flags = {"gui-icon"},
+        invert_colors = true,
+    },
 })
 
 --Recipes
