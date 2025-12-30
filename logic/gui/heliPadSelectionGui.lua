@@ -42,7 +42,7 @@ heliPadSelectionGui =
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
 			self:OnCamClicked(e)
 
-		elseif name == self.prefix .. "close" and e.button == defines.mouse_button_type.left then
+		elseif name == self.prefix .. "close" then
 			self.manager:OnChildEvent(self, "cancel")
 
 		elseif name == self.prefix.."rename_confirm" then
@@ -110,7 +110,7 @@ heliPadSelectionGui =
 				flow.add{
 					type = "label",
 					name = self.prefix.."rename_label",
-					caption = {"heli-gui-padSelection-rename-caption"},
+					caption = {"heli-gui-rename-caption"},
 					style = "frame_title"
 				}
 				local ew = flow.add{
@@ -210,7 +210,7 @@ heliPadSelectionGui =
 			position = position,
 			surface_index = surfaceIndex,
 			zoom = zoom,
-			tooltip = {"helipad-gui-cam-tt"},
+			tooltip = {"heli-gui-cam-tt"},
 		}
 		cam.style.top_padding = padding
 		cam.style.left_padding = padding
@@ -277,7 +277,6 @@ heliPadSelectionGui =
 			type = "table",
 			name = self.prefix .. "camTable",
 			column_count = 4,
-			--tooltip = {"heli-gui-frame-tt"},
 		}
 		els.camTable.style.horizontal_spacing = 10
 		els.camTable.style.vertical_spacing = 10

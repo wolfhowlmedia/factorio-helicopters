@@ -59,7 +59,7 @@ heliSelectionGui =
 		if name:match("^" .. self.prefix .. "cam_%d+$") then
 			self:OnCamClicked(e) --Heli Selected Clicked
 
-		elseif name == self.prefix .. "close" and e.button == defines.mouse_button_type.left then
+		elseif name == self.prefix .. "close" then
 			self.manager:OnChildEvent(self, "cancel")
 
 		elseif name == self.prefix.."rename_confirm" then
@@ -197,7 +197,7 @@ heliSelectionGui =
 				flow.add{
 					type = "label",
 					name = self.prefix.."rename_label",
-					caption = {"heli-gui-heliSelection-rename-caption"},
+					caption = {"heli-gui-rename-caption"},
 					style = "frame_title"
 				}
 				local ew = flow.add{
@@ -486,11 +486,9 @@ heliSelectionGui =
 		self.curCamID = 0
 
 		if storage.helis then
-			-- Retrieve last heli that was selected in this GUI
+			local playerSurface = self.player.surface.index
 			local lastSelected = Entity.get_data(self.player, "heliSelectionGui_lastSelectedHeli")
-
-			-- Flag to track whether a heli was explicitly selected
-			local selectedSomething = false
+			local selectedSomething = false --Flag to track whether a heli was explicitly selected
 
 			--[[
 			local activeHeli = nil

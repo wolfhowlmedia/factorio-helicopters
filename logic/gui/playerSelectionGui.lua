@@ -42,7 +42,7 @@ playerSelectionGui =
 				self.manager:OnChildEvent(self, "selectedPlayer", searchInTable(self.guiElems.btns, e.element, "btn").player)
 			end
 
-		elseif name == self.prefix .. "close" and e.button == defines.mouse_button_type.left then
+		elseif name == self.prefix .. "close" then
 			self.manager:OnChildEvent(self, "cancel")
 		end
 	end,
