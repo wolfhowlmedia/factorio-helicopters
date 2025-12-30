@@ -1,8 +1,19 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.0
-Date: ????.??.??
+Date: 2025-12-30
   Major Features:
-    - Add scout heli from version of Helicopters, renders curtesy of Zumf
+    - GUI visually improved
+    - GUI received proper close button
+    - Helis/Pads can be filtered by current/Heli surface
+    - Heli and Pad custom name support
+  Features:
+    - GUI now refreshing when adding new Pads
+    - GUI now refreshing after Heli receives command
+  Locale:
+    - Unification of some wordings
+    - German: added missing locale
+  Bugfixes:
+    - Deconstructing Helipads on Aquilo now properly removes concrete tiles 
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.6
 Date: 2025-11-10
