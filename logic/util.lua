@@ -267,7 +267,7 @@ function guiHasChild(gui, name)
 end
 
 --builds the base GUI with close button
-function buildBaseGUI(self, els, caption)
+function buildBaseGUI(self, els, caption, extra)
 	els.root = els.parent.add
 	{
 		type = "frame",
@@ -287,6 +287,15 @@ function buildBaseGUI(self, els, caption)
 		caption = {caption},
 		style = "frame_title"
 	}
+	if extra ~= nil then
+		els.flow.add(extra.content)
+
+		if extra.properties ~= nil then
+			for property, value in pairs(extra.properties) do
+				els.flow[property] = value
+			end
+		end
+	end
 	els.ew = els.flow.add{
 		type = "empty-widget",
 		name = self.prefix.."ew",

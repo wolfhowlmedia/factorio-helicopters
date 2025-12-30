@@ -45,6 +45,9 @@ heliPadSelectionGui =
 		elseif name == self.prefix .. "close" then
 			self.manager:OnChildEvent(self, "cancel")
 
+		elseif name == self.prefix .. "surface" then
+			self:Rebuild(true)
+
 		elseif name == self.prefix.."rename_confirm" then
 			renameEntity(self, e, "pad")
 
@@ -258,10 +261,18 @@ heliPadSelectionGui =
 		end
 	end,
 
-	buildGui = function(self)
+	buildGui = function(self, filtered)
 		local els = self.guiElems
-
-		buildBaseGUI(self, els, "heli-gui-padSelection-frame-caption")
+		local surfButton = 	{
+			content = {
+				type = "sprite-button",
+				name = self.prefix.."surface",
+				sprite = "heli-map",
+				style = "frame_action_button",
+				tooltip = {"heli-gui-filter"},
+			},
+		}
+		buildBaseGUI(self, els, "heli-gui-padSelection-frame-caption", surfButton)
 
 		els.scrollPane = els.root.add
 		{
@@ -284,19 +295,41 @@ heliPadSelectionGui =
 		self.curCamID = 0
 		els.cams = {}
 
+		if filtered == true then
+			if self.filtered == nil then
+				self.filtered = true
+			else
+				self.filtered = not self.filtered
+			end
+		else
+			self.filtered = false
+		end
+
 		local hasCams = false
 		if storage.heliPads then
-			for k, curPad in pairs(storage.heliPads) do
-				if curPad.baseEnt.force == self.player.force then
-					hasCams = true
-					table.insert(els.cams,
-					{
-						cam = self:buildCam(els.camTable, self.curCamID, curPad, self:getDefaultZoom()),
-						ID = self.curCamID,
-						heliPad = curPad,
-					})
+			local heliSurface = self.manager.guis.heliSelection.selectedCam.heli.surface.index
 
-					self.curCamID = self.curCamID + 1
+			for _, curPad in pairs(storage.heliPads) do
+				local filterOut = false
+
+				if curPad.baseEnt.force == self.player.force then
+					if self.filtered == true then
+						if heliSurface ~= curPad.surface.index then
+							filterOut = true
+						end
+					end
+
+					if filterOut == false then
+						hasCams = true
+						table.insert(els.cams,
+						{
+							cam = self:buildCam(els.camTable, self.curCamID, curPad, self:getDefaultZoom()),
+							ID = self.curCamID,
+							heliPad = curPad,
+						})
+
+						self.curCamID = self.curCamID + 1
+					end
 				end
 			end
 		end
@@ -308,7 +341,7 @@ heliPadSelectionGui =
 
 	-- Rebuild() is responsible for:
 	-- reapplying new pad name
-	Rebuild = function(self)
+	Rebuild = function(self, filter)
 		if not self or not self.valid then return end
 
 		-- Determine parent GUI element for rebuilding
@@ -337,7 +370,7 @@ heliPadSelectionGui =
 		self.guiElems = {parent = parent}
 
 		-- buildGui() is responsible for: filtering visible helis / rebuilding camera previews / restoring selection
-		self:buildGui()
+		self:buildGui(filter)
 
 		-- Restore visibility must be done after buildGui(), because buildGui() recreates the root element
 		self:setVisible(wasVisible)
