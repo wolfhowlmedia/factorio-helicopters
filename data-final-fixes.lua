@@ -1,5 +1,3 @@
-local tile_graphics = require("__base__/prototypes/tile/tile-graphics")
-local tile_sounds = require("__space-age__/prototypes/tile/tile-sounds")
 
 --Heli Pad Concrete
 local heliConcrete = table.deepcopy(data.raw.tile["refined-concrete"])
@@ -37,35 +35,40 @@ end
 ]]
 
 
-local function frozen_concrete(base_name, item_name, transition_merge_tile)
-  local frozen_name = "frozen-" .. base_name
-  local base_prototype = data.raw.tile[base_name]
-  base_prototype.frozen_variant = frozen_name
-  local frozen_concrete = table.deepcopy(base_prototype)
-  frozen_concrete.order = "z[frozen-concrete]-" .. frozen_name
-  frozen_concrete.subgroup = "aquilo-tiles"
-  frozen_concrete.name = frozen_name
-  frozen_concrete.can_be_part_of_blueprint = true
-  frozen_concrete.placeable_by = {item = item_name, count = 1}
-  frozen_concrete.layer = base_prototype.layer + 1
-  frozen_concrete.sprite_usage_surface = "aquilo"
-  frozen_concrete.variants =
-  {
-    material_background =
-    {
-      picture = "__space-age__/graphics/terrain/aquilo/frozen-refined-concrete.png",
-      count = 8,
-      scale = 0.5
-    },
-    transition = tile_graphics.generic_texture_on_concrete_transition
-  }
-  frozen_concrete.transition_merges_with_tile = transition_merge_tile
-  frozen_concrete.transitions = nil
-  frozen_concrete.transitions_between_transitions = nil
-  frozen_concrete.thawed_variant = base_name
-  frozen_concrete.frozen_variant = nil
-  frozen_concrete.walking_sound = tile_sounds.walking.frozen_concrete
-  data:extend({ frozen_concrete })
-end
+if mods["space-age"] then
+  local tile_graphics = require("__base__/prototypes/tile/tile-graphics")
+  local tile_sounds = require("__space-age__/prototypes/tile/tile-sounds")
 
-frozen_concrete("heli-pad-concrete", "refined-concrete", "refined-concrete")
+  local function frozen_concrete(base_name, item_name, transition_merge_tile)
+    local frozen_name = "frozen-" .. base_name
+    local base_prototype = data.raw.tile[base_name]
+    base_prototype.frozen_variant = frozen_name
+    local frozen_concrete = table.deepcopy(base_prototype)
+    frozen_concrete.order = "z[frozen-concrete]-" .. frozen_name
+    frozen_concrete.subgroup = "aquilo-tiles"
+    frozen_concrete.name = frozen_name
+    frozen_concrete.can_be_part_of_blueprint = true
+    frozen_concrete.placeable_by = {item = item_name, count = 1}
+    frozen_concrete.layer = base_prototype.layer + 1
+    frozen_concrete.sprite_usage_surface = "aquilo"
+    frozen_concrete.variants =
+    {
+      material_background =
+      {
+        picture = "__space-age__/graphics/terrain/aquilo/frozen-refined-concrete.png",
+        count = 8,
+        scale = 0.5
+      },
+      transition = tile_graphics.generic_texture_on_concrete_transition
+    }
+    frozen_concrete.transition_merges_with_tile = transition_merge_tile
+    frozen_concrete.transitions = nil
+    frozen_concrete.transitions_between_transitions = nil
+    frozen_concrete.thawed_variant = base_name
+    frozen_concrete.frozen_variant = nil
+    frozen_concrete.walking_sound = tile_sounds.walking.frozen_concrete
+    data:extend({ frozen_concrete })
+  end
+
+  frozen_concrete("heli-pad-concrete", "refined-concrete", "refined-concrete")
+end
