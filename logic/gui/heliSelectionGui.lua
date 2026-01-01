@@ -182,7 +182,7 @@ heliSelectionGui =
 				local camID = tonumber(e.element.name:match("%d+"))
 				local cam = searchInTable(self.guiElems.cams, camID, "ID")
 
-				if guiHasChild(cam.cam, self.prefix.."rename_root") then return end
+				if guiHasChild(cam.cam, self.prefix.."rename_root") ~= nil then return end
 
 				local root = cam.cam.add{
 					type = "frame",
