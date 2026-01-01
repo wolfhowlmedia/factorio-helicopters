@@ -120,10 +120,10 @@ function checkAndTickInGlobal(name)
 	end
 end
 
-function callInGlobal(gName, kName, ...)
-	if storage[gName] then
-		for _, v in pairs(storage[gName]) do
-			if v[kName] then v[kName](v, ...) end
+function callInGlobal(storageTable, entryContent, ...)
+	if storage[storageTable] then
+		for _, entry in pairs(storage[storageTable]) do
+			if entry[entryContent] then entry[entryContent](entry, ...) end
 		end
 	end
 end
