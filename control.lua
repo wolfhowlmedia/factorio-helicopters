@@ -25,6 +25,26 @@ function playerIsInHeli(p)
     return string.find(heliBaseEntityNames, p.vehicle.name .. ",", 1, true) ~= nil
 end
 
+function throwVisualError(p, text, cursor)
+	if cursor == true then
+		p.create_local_flying_text{
+			text = {text},
+			create_at_cursor = true,
+			color = {1,0,0,1},
+			time_to_live = 120,
+		}
+		p.play_sound{path = "heli-cant-do"}
+	else
+		p.create_local_flying_text{
+			text = {"heli-gui-heliSelection-surfSwap"},
+			position = p.position,
+			color = {1,0,0,1},
+			time_to_live = 120,
+		}
+		p.play_sound{path = "heli-cant-do"}
+	end
+end
+
 function OnLoad(e)
 	if storage.helis then
 		for _, heli in pairs(storage.helis) do
@@ -173,7 +193,7 @@ function OnRemoved(e)
 					table.remove(storage.helis, i)
 
 					if storage.remoteGuis then
-						for _,rg in pairs(storage.remoteGuis) do
+						for _, rg in pairs(storage.remoteGuis) do
 							rg:OnHeliRemoved(val)
 						end
 					end
@@ -186,7 +206,11 @@ function OnRemoved(e)
 			if i then
 				storage.heliPads[i]:destroy()
 
-				callInGlobal("remoteGuis", "OnHeliPadRemoved", storage.heliPads[i])
+				if storage.remoteGuis then
+					for _, rg in pairs(storage.remoteGuis) do
+						rg:OnHeliPadRemoved(storage.heliPads[i])
+					end
+				end
 				table.remove(storage.heliPads, i)
 			end
 		end
@@ -239,13 +263,7 @@ function OnHeliFollow(e)
 				assignHeliController(p, heli, p, true)
 				p.add_custom_alert(heli.baseEnt, {type = "item", name = "helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
 			else
-				p.create_local_flying_text{
-					text = {"heli-gui-heliSelection-missmatch"},
-					position = p.position,
-					color = {1,0,0,1},
-					time_to_live = 120,
-				}
-				p.play_sound{path = "heli-cant-do"}
+				throwVisualError(p, "heli-gui-heliSelection-missmatch", false)
 			end
 		end
 	end
@@ -265,12 +283,7 @@ function OnSurfaceChange(e)
 		}
 	}
 	if OnGuiClick(fakeEvent) == true then
-		p.create_local_flying_text{
-			text = {"heli-gui-heliSelection-surfSwap"},
-			position = p.position,
-			color = {1,0,0,1},
-		}
-		p.play_sound{path = "heli-cant-do"}
+		throwVisualError(p, "heli-gui-heliSelection-surfSwap", false)
 	end
 end
 
@@ -283,15 +296,28 @@ function OnRemoteOpen(e)
 end
 
 function OnPlacedEquipment(e)
-	if e.equipment.name == "helicopter-remote-equipment" then
-		local p = game.players[e.player_index]
+	if e.player_index == nil then return end
+	local p = game.players[e.player_index]
+	local prototypes = prototypes.get_entity_filtered{{filter = "type", type = "character"}}
 
-		setRemoteBtn(p, true)
+	if e.equipment.name == "helicopter-remote-equipment" then
+		if prototypes[e.grid.entity_owner.name] ~= nil then
+			setRemoteBtn(p, true)
+		else
+			throwVisualError(p, "heli-gui-remote-place", true)
+		end
+	end
+
+	if (e.equipment.type == "equipment-ghost" and e.equipment.ghost_name == "helicopter-remote-equipment") then
+		if prototypes[e.grid.entity_owner.name] == nil then
+			throwVisualError(p, "heli-gui-remote-place", true)
+		end
 	end
 end
 
 function OnRemovedEquipment(e)
-	if e.equipment == "helicopter-remote-equipment" then
+	local prototypes = prototypes.get_entity_filtered{{filter = "type", type = "character"}}
+	if e.equipment == "helicopter-remote-equipment" and prototypes[e.grid.entity_owner.name] ~= nil then
 		local p = game.players[e.player_index]
 
 		if not equipmentGridHasItem(e.grid, "helicopter-remote-equipment") then

@@ -120,10 +120,10 @@ function checkAndTickInGlobal(name)
 	end
 end
 
-function callInGlobal(gName, kName, ...)
-	if storage[gName] then
-		for _, v in pairs(storage[gName]) do
-			if v[kName] then v[kName](v, ...) end
+function callInGlobal(storageTable, entryContent, ...)
+	if storage[storageTable] then
+		for _, entry in pairs(storage[storageTable]) do
+			if entry[entryContent] then entry[entryContent](entry, ...) end
 		end
 	end
 end
@@ -257,17 +257,22 @@ end
 
 --checks whether child already existing
 function guiHasChild(gui, name)
-	for _, v in ipairs(gui.children) do
+	for i, v in ipairs(gui.children) do
 		if v.name == name then
-			return true
+			return i
 		end
 	end
 
-	return false
+	return nil
 end
 
 --builds the base GUI with close button
 function buildBaseGUI(self, els, caption, extra)
+	local duplicate = guiHasChild(els.parent, self.prefix .. "rootFrame")
+	if duplicate ~= nil then
+		els.parent.children[duplicate].destroy()
+	end
+
 	els.root = els.parent.add
 	{
 		type = "frame",

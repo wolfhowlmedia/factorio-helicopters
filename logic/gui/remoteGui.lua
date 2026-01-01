@@ -216,6 +216,14 @@ remoteGui =
 		end
 	end,
 
+	OnHeliPadRemoved = function(self, heli)
+		for _, gui in pairs(self.guis) do
+			if gui.OnHeliPadRemoved then
+				gui:OnHeliPadRemoved(heli)
+			end
+		end
+	end,
+
 	OnDrivingStateChanged = function(self, player, heli)
 		-- if the callInGlobal reference is broken or misconfigured, self may be nil
 		if not self then return end

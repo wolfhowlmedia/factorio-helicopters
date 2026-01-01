@@ -11,6 +11,11 @@ end
 heliPad =
 {
 	new = function(placementEnt)
+		local count = 1
+		if storage["heliPads"] ~= nil then
+			count = #storage["heliPads"] + 1
+		end
+
 		local obj =
 		{
 			valid = true,
@@ -18,7 +23,7 @@ heliPad =
 			surface = placementEnt.surface,
 
 			replacedTiles = {},
-			name = "Helipad "..#storage["heliPads"] + 1,
+			name = "Helipad "..count,
 			baseEnt = placementEnt.surface.create_entity
 			{
 				name = "heli-pad-entity",

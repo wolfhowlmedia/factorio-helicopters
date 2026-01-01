@@ -40,6 +40,10 @@ data:extend({
 	},
 })
 
+if mods["Krastorio2"] then
+    data.raw["equipment-grid"]["heli-equipment-grid"].equipment_categories = {"kr-vehicle", "kr-vehicle-motor"}
+end
+
 --Font
 data:extend({
     {
