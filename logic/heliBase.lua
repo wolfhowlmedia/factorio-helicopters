@@ -377,6 +377,11 @@ heliBase = {
 		transferGridEquipment(placementEnt, baseEnt)
 		baseEnt.health = placementEnt.health
 
+		local count = 1
+		if storage["helis"] ~= nil then
+			count = #storage["helis"] + 1
+		end
+
 		local obj = {
 			version = versionStrToInt(script.active_mods.HelicopterRevival),
 
@@ -387,7 +392,7 @@ heliBase = {
 
 			surface = placementEnt.surface,
 
-			name = "Helicopter "..#storage["helis"] + 1,
+			name = "Helicopter "..count,
 
 			deactivatedInserters = {},
 		}
