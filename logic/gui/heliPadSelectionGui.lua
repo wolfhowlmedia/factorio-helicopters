@@ -310,28 +310,40 @@ heliPadSelectionGui =
 		local hasCams = false
 		if storage.heliPads then
 			local heliSurface = self.manager.guis.heliSelection.selectedCam.heli.surface.index
+			local invalidPads = {}
 
-			for _, curPad in pairs(storage.heliPads) do
+			for i, curPad in ipairs(storage.heliPads) do
 				local filterOut = false
 
-				if curPad.baseEnt.force == self.player.force then
-					if self.filtered == true then
-						if heliSurface ~= curPad.surface.index then
-							filterOut = true
+				if curPad.valid and curPad.baseEnt and curPad.baseEnt.valid then
+					if curPad.baseEnt.force == self.player.force then
+						if self.filtered == true then
+							if heliSurface ~= curPad.surface.index then
+								filterOut = true
+							end
+						end
+
+						if filterOut == false then
+							hasCams = true
+							table.insert(els.cams,
+							{
+								cam = self:buildCam(els.camTable, self.curCamID, curPad, self:getDefaultZoom()),
+								ID = self.curCamID,
+								heliPad = curPad,
+							})
+
+							self.curCamID = self.curCamID + 1
 						end
 					end
+				else
+					curPad.valid = false
+					table.insert(invalidPads, i)
+				end
+			end
 
-					if filterOut == false then
-						hasCams = true
-						table.insert(els.cams,
-						{
-							cam = self:buildCam(els.camTable, self.curCamID, curPad, self:getDefaultZoom()),
-							ID = self.curCamID,
-							heliPad = curPad,
-						})
-
-						self.curCamID = self.curCamID + 1
-					end
+			for i = #invalidPads, 1, -1 do
+				if storage.heliPads[invalidPads[i]] then
+					table.remove(storage.heliPads, invalidPads[i])
 				end
 			end
 		end
