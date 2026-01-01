@@ -206,7 +206,11 @@ function OnRemoved(e)
 			if i then
 				storage.heliPads[i]:destroy()
 
-				callInGlobal("remoteGuis", "OnHeliPadRemoved", storage.heliPads[i])
+				if storage.remoteGuis then
+					for _, rg in pairs(storage.remoteGuis) do
+						rg:OnHeliPadRemoved(storage.heliPads[i])
+					end
+				end
 				table.remove(storage.heliPads, i)
 			end
 		end
