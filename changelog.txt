@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 2026-01-01
+  Features:
+    - pad cams being removed when pad being removed
+    - placing remote in everything but character grids won't trigger GUI button
+    - hint message when placing remote in everything but character grids
+    - when using Krastorio 2, remote can only be placed in character armor grids
+  Bugfixes:
+    - crash when building first heli/pad
+    - removing invalid pads in background
+    - catching duplicate GUI creation (some mods like to f around <.<)
+  Locale:
+    - hint about uselessness of remote in everything but character grids
+---------------------------------------------------------------------------------------------------
 Version: 0.5.2
 Date: 2025-12-31
   Bugfixes:
