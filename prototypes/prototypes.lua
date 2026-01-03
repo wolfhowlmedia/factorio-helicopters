@@ -40,9 +40,26 @@ data:extend({
 	},
 })
 
+local categories = {"armor"}
 if mods["Krastorio2"] then
-    data.raw["equipment-grid"]["heli-equipment-grid"].equipment_categories = {"kr-vehicle", "kr-vehicle-motor"}
+    categories = {}
+    table.insert(categories, "kr-vehicle")
+    table.insert(categories, "kr-vehicle-motor")
+    table.insert(categories, "kr-vehicle-roboport")
 end
+
+if mods["space-exploration"] then
+    table.insert(categories, "armor")
+end
+
+if mods["space-exploration"] and mods["Krastorio2"] then
+    table.insert(categories, "reactor-equipment")
+    table.insert(categories, "armor-shield")
+    table.insert(categories, "armor-weapons")
+    table.insert(categories, "belt-immunity")
+end
+
+data.raw["equipment-grid"]["heli-equipment-grid"].equipment_categories = categories
 
 --Font
 data:extend({
