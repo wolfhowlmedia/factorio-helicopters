@@ -104,6 +104,15 @@ local frameFixes = {
 	0.984375, 	--64
 }
 
+local fallbackFuel = {name = "coal", count = 50}
+if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
+	fallbackFuel.name = "kr-fuel"
+	fallbackFuel.count = 1
+elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
+	fallbackFuel.name = "cellulose-fiber"
+	fallbackFuel.count = 1
+end
+
 --local modVersion = versionStrToInt(script.active_mods.HelicopterRevival)
 
 maxCollisionHeight = 2
@@ -402,12 +411,8 @@ heliBase = {
 		obj.baseEnt.effectivity_modifier = 0
 
 		for k,v in pairs(obj.childs) do
-			if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
-				v.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 200})
-			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-				v.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			else
-				v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+			if v.get_inventory(defines.inventory.fuel) ~= nil then
+				v.get_inventory(defines.inventory.fuel).insert({name = fallbackFuel.name, count = fallbackFuel.count})
 			end
 			v.destructible = false
 		end
@@ -851,13 +856,9 @@ heliBase = {
 		end
 
 		if self.childs.collisionEnt then
-			if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 200})
-			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			else
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
-			end
+			--[[
+			self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = fallbackFuel.name, count = fallbackFuel.count})
+			]]
 			self.childs.collisionEnt.operable = false
 		end
 	end,
@@ -866,13 +867,9 @@ heliBase = {
 		if enabled then
 			if not (self.childs.floodlightEnt and self.childs.floodlightEnt.valid) then
 				self.childs.floodlightEnt = self.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = self.baseEnt.position}
-				if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
-					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 200})
-				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-					self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-				else
-					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
-				end
+				--[[
+				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = fallbackFuel.name, count = fallbackFuel.count})
+				]]
 			end
 			self.childs.floodlightEnt.orientation = self.baseEnt.orientation
 			self.childs.floodlightEnt.operable = false
@@ -1003,12 +1000,8 @@ heliBase = {
 		if self.burnerDriver and self.burnerDriver.valid then
 			self.burnerDriver.riding_state = {acceleration = defines.riding.acceleration.accelerating, direction = defines.riding.direction.straight}
 			if self.childs.burnerEnt.burner.remaining_burning_fuel < 1000 then
-				if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
-					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 1})
-				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 1})
-				else
-					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
+				if self.childs.burnerEnt.get_inventory(defines.inventory.fuel) ~= nil then
+					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = fallbackFuel.name, count = fallbackFuel.count})
 				end
 			end
 		end

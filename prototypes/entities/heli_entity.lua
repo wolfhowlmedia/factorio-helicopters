@@ -1,8 +1,39 @@
+--[[
+  helicopter - placement entity, has all the stats so it shows in crafting
+  heli-entity-_- - actual entity that player is riding
+
+  heli-body-entity-_- - body anim entity
+  heli-shadow-entity-_- - shadow anim that is put below
+  rotor-entity-_- - rotor anim entity
+  rotor-shadow-entity-_- - rotor shadow anim that is being rotated
+  (replacable with lua rendering maybe?)
+
+  heli-burner-entity-_- - sole purpose is to emit smoke and sound
+
+  heli-floodlight-entity-_- - entity used for the floodlight (can't we just use a normal light?)
+
+  heli-flying-collision-entity-_- - collision entity when airborne
+  heli-landed-collision-end-entity-_- - landed collider front+back (needs distance input)
+  heli-landed-collision-side-entity-_- - landed collider sides (needs distance input)
+]]
+
+--cars gotta have
+--[[
+  consumption
+  effectivity
+  energy_source
+  inventory_size
+  rotation_speed
+  braking_power
+  energy_per_hit_point
+  friction
+  weight
+]]
+
 local fuel_slots = 5
 local inventory_slots = 80
 
 gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower"}
-
 if (mods["Krastorio2"] or mods["Krastorio2-spaced-out"]) and data.raw["ammo-category"]["kr-anti-materiel-rifle-ammo"] then
   -- Override  gun slots for K2
   gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower", "heli-k2-anti-material-gun"}
@@ -21,9 +52,9 @@ data:extend({
     hidden_in_factoriopedia = true,
     corpse = "medium-remnants",
     dying_explosion = "medium-explosion",
-    selection_box = {{-1.5, -1.8}, {0.9, 3}},
-    collision_box = {{-1.5, -1.8}, {0.9, 3}},
-    collision_mask = {layers = {object=true, water_tile=true, player=true}},
+    selection_box = {{-1.2, -2.4}, {1.2, 2.4}},
+    collision_box = {{-1.2, -2.4}, {1.2, 2.4}},
+    collision_mask = {layers = {object = true, water_tile = true, player = true}},
     energy_per_hit_point = 1,
     effectivity = 0.4,
     energy_source = {
@@ -50,7 +81,7 @@ data:extend({
           height = 600,
           frame_count = 1,
           direction_count = 1,
-          shift = {0, 0},
+          shift = {0.265625, 0},
           animation_speed = 8,
           max_advance = 0.2,
           scale = 0.5,
@@ -63,14 +94,13 @@ data:extend({
             },
           }
         },
-
         {
           priority = "high",
           width = 720,
           height = 600,
           frame_count = 1,
           direction_count = 1,
-          shift = {0, 0},
+          shift = {0.265625, 0},
           animation_speed = 8,
           max_advance = 0.2,
           scale = 0.5,
@@ -97,14 +127,13 @@ data:extend({
 		final_render_layer = "air-object",
     has_belt_immunity = true,
     minable = {mining_time = 1, result = "helicopter"},
-    --placeable_by = {item = "helicopter", count = 1},
     max_health = 2500,
     hidden_in_factoriopedia = true,
     factoriopedia_alternative  = "helicopter",
     corpse = "medium-remnants",
     dying_explosion = "medium-explosion",
-    selection_box = {{-1.8, -1.8}, {1.2, 3}},
-    collision_box = {{-1.8, -1.8}, {1.2, 3}},
+    selection_box = {{-1.2, -2.4}, {1.2, 2.4}},
+    collision_box = {{-1.2, -2.4}, {1.2, 2.4}},
     alert_icon_shift = {-0.25, -0.5},
     collision_mask = {layers={}},
     energy_per_hit_point = 1,
@@ -124,34 +153,11 @@ data:extend({
     weight = settings.startup["heli-weight"].value,
     is_military_target = true,
     deliver_category = "vehicle",
-
     rotation_speed = 0.005,
     tank_driving = true,
     inventory_size = inventory_slots,
     equipment_grid = "heli-equipment-grid",
-
-    animation = {
-      layers = {
-        {
-          priority = "high",
-          width = 1,
-          height = 1,
-          frame_count = 1,
-          direction_count = 64,
-          shift = {0, 0},
-          animation_speed = 8,
-          max_advance = 0.2,
-          stripes =
-          {
-            {
-              filename = "__HelicopterRevival__/graphics/void.png",
-              width_in_frames = 8,
-              height_in_frames = 8,
-            },
-          }
-        },
-      }
-    },
+    animation = util.empty_animation(1),
     sound_no_fuel =
     {
       {
@@ -186,67 +192,35 @@ data:extend({
     icon = "__HelicopterRevival__/graphics/icons/heli.png",
     icon_size = 64,
     flags = {"placeable-off-grid", "not-on-map"},
-		render_layer = "air-object",
-		final_render_layer = "air-object",
     minable = {mining_time = 1, result = "helicopter"},
     has_belt_immunity = true,
     max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
-    collision_box = {{-1.8, -0.2}, {1.2, 0.2}},
+    collision_box = {{-1.5, -0.2}, {1.5, 0.2}},
     energy_per_hit_point = 1,
-    effectivity = 0.3,
-    energy_source = {
-      type = "burner",
-      effectivity = 0.5,
-      emissions = 0,
-      fuel_inventory_size = 1,
-    },
+    effectivity = 1,
+    energy_source = {type = "void"},
     consumption = "1W",
     braking_power = "1W",
-    friction = 0.002,
+    friction = 1,
     terrain_friction_modifier = 0,
-    weight = 3000,
+    weight = 1,
     deliver_category = "vehicle",
-
-    rotation_speed = 0.005,
+    rotation_speed = 1,
     inventory_size = 0,
-
-    animation = {
-      layers = {
-        {
-          priority = "high",
-          width = 1,
-          height = 1,
-          frame_count = 1,
-          direction_count = 1,
-          shift = {0, 0},
-          animation_speed = 8,
-          max_advance = 0.2,
-          stripes =
-          {
-            {
-              filename = "__HelicopterRevival__/graphics/void.png",
-              width_in_frames = 1,
-              height_in_frames = 1,
-            },
-          }
-        },
-      }
-    },
-
+    animation = util.empty_animation(1),
     crash_trigger = {
       type = "play-sound",
       sound =
       {
         {
-        filename = "__base__/sound/car-crash.ogg",
-        volume = 0.25
+          filename = "__base__/sound/car-crash.ogg",
+          volume = 0.25
         },
       }
     },
-    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65},
   },
 ----------------------landed collision--------------------
   {
@@ -255,67 +229,35 @@ data:extend({
     icon = "__HelicopterRevival__/graphics/icons/heli.png",
     icon_size = 64,
     flags = {"placeable-off-grid", "not-on-map"},
-		-- render_layer = "air-object",
-		-- final_render_layer = "air-object",
     minable = {mining_time = 1, result = "helicopter"},
     has_belt_immunity = true,
     max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
-    collision_box = {{-0.1, -2.4}, {0.1, 2.4}}, --{{-0.1, -1.8}, {0.1, 3}},
+    collision_box = {{-0.1, -2.4}, {0.1, 2.4}},
     energy_per_hit_point = 1,
-    effectivity = 0.3,
-    energy_source = {
-      type = "burner",
-      effectivity = 0.5,
-      emissions = 0,
-      fuel_inventory_size = 1,
-    },
+    effectivity = 1,
+    energy_source = {type = "void"},
     consumption = "1W",
     braking_power = "1W",
-    friction = 0.002,
+    friction = 1,
     terrain_friction_modifier = 0,
-    weight = 3000,
+    weight = 1,
     deliver_category = "vehicle",
-
-    rotation_speed = 0.005,
+    rotation_speed = 1,
     inventory_size = 0,
-
-    animation = {
-      layers = {
-        {
-          priority = "high",
-          width = 1,
-          height = 1,
-          frame_count = 1,
-          direction_count = 1,
-          shift = {0, 0},
-          animation_speed = 8,
-          max_advance = 0.2,
-          stripes =
-          {
-            {
-              filename = "__HelicopterRevival__/graphics/void.png",
-              width_in_frames = 1,
-              height_in_frames = 1,
-            },
-          }
-        },
-      }
-    },
-
+    animation = util.empty_animation(1),
     crash_trigger = {
       type = "play-sound",
       sound =
       {
         {
-        filename = "__base__/sound/car-crash.ogg",
-        volume = 0.25
+          filename = "__base__/sound/car-crash.ogg",
+          volume = 0.25
         },
       }
     },
-    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65},
   },
 
   {
@@ -324,67 +266,35 @@ data:extend({
     icon = "__HelicopterRevival__/graphics/icons/heli.png",
     icon_size = 64,
     flags = {"placeable-off-grid", "not-on-map"},
-		-- render_layer = "air-object",
-		-- final_render_layer = "air-object",
     has_belt_immunity = true,
     minable = {mining_time = 1, result = "helicopter"},
     max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
-    collision_box = {{-1.5, -0.1}, {1.5, 0.1}}, --{{-1.8, -0.1}, {1.2, 0.1}} --{{-1.8, -1.8}, {1.2, 3}}
+    collision_box = {{-1.5, -0.1}, {1.5, 0.1}},
     energy_per_hit_point = 1,
-    effectivity = 0.3,
-    energy_source = {
-      type = "burner",
-      effectivity = 0.5,
-      emissions = 0,
-      fuel_inventory_size = 1,
-    },
+    effectivity = 1,
+    energy_source = {type = "void"},
     consumption = "1W",
     braking_power = "1W",
-    friction = 0.002,
+    friction = 1,
     terrain_friction_modifier = 0,
-    weight = 3000,
+    weight = 1,
     deliver_category = "vehicle",
-
-    rotation_speed = 0.005,
+    rotation_speed = 1,
     inventory_size = 0,
-
-    animation = {
-      layers = {
-        {
-          priority = "high",
-          width = 1,
-          height = 1,
-          frame_count = 1,
-          direction_count = 1,
-          shift = {0, 0},
-          animation_speed = 8,
-          max_advance = 0.2,
-          stripes =
-          {
-            {
-              filename = "__HelicopterRevival__/graphics/void.png",
-              width_in_frames = 1,
-              height_in_frames = 1,
-            },
-          }
-        },
-      }
-    },
-
+    animation = util.empty_animation(1),
     crash_trigger = {
       type = "play-sound",
       sound =
       {
         {
-        filename = "__base__/sound/car-crash.ogg",
-        volume = 0.25
+          filename = "__base__/sound/car-crash.ogg",
+          volume = 0.25
         },
       }
     },
-    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65},
   },
   ---------------body--------------
   {
@@ -397,25 +307,20 @@ data:extend({
 		final_render_layer = "air-object",
     minable = {mining_time = 1, result = "helicopter"},
     has_belt_immunity = true,
-    max_health = 1500,
+    max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
     collision_mask = {layers = {}},
     energy_per_hit_point = 1,
-    effectivity = 0.5,
-    braking_power = "100kW",
-    energy_source = {
-      type = "burner",
-      effectivity = 1,
-      emissions = 0,
-      fuel_inventory_size = 1,
-    },
-    consumption = "100kW",
-    friction = 0.01,
-    deliver_category = "vehicle",
-
+    effectivity = 1,
+    braking_power = "1W",
+    energy_source = {type = "void"},
+    consumption = "1W",
+    friction = 1,
+    inventory_size = 0,
+    rotation_speed = 1,
+    weight = 1,
     animation = {
       layers = {
         {
@@ -424,7 +329,7 @@ data:extend({
           height = 600,
           frame_count = 1,
           direction_count = 64,
-          shift = {0, -5},
+          shift = {0.265625, -5},
           scale = 0.5,
           animation_speed = 8,
           max_advance = 0.2,
@@ -454,9 +359,6 @@ data:extend({
         },
       }
     },
-    inventory_size = 0,
-    rotation_speed = 0.005,
-    weight = 50,
   },
   ---------------shadow------------
   {
@@ -465,28 +367,22 @@ data:extend({
     icon = "__HelicopterRevival__/graphics/icons/heli.png",
     icon_size = 64,
     flags = {"placeable-off-grid", "not-on-map"},
-		-- render_layer = "air-object",
-		-- final_render_layer = "air-object",
     minable = {mining_time = 1, result = "helicopter"},
     has_belt_immunity = true,
-    max_health = 1500,
+    max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
     collision_mask = {layers={}},
     energy_per_hit_point = 1,
-    effectivity = 0.5,
-    braking_power = "100kW",
-    energy_source = {
-      type = "burner",
-      effectivity = 1,
-      emissions = 0,
-      fuel_inventory_size = 1,
-    },
-    consumption = "100kW",
-    friction = 0.01,
-
+    braking_power = "1W",
+    effectivity = 1,
+    energy_source = {type = "void"},
+    consumption = "1W",
+    friction = 1,
+    inventory_size = 0,
+    rotation_speed = 1,
+    weight = 1,
     animation = {
       layers = {
         {
@@ -526,9 +422,6 @@ data:extend({
         },
       }
     },
-    inventory_size = 0,
-    rotation_speed = 0.005,
-    weight = 50,
   },
 ----------------------smoke and sound--------------------
   {
@@ -537,13 +430,10 @@ data:extend({
     icon = "__HelicopterRevival__/graphics/icons/heli.png",
     icon_size = 64,
     flags = {"placeable-off-grid", "not-on-map"},
-		render_layer = "air-object",
-		final_render_layer = "air-object",
     minable = {mining_time = 1, result = "helicopter"},
     has_belt_immunity = true,
     max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
     collision_mask = {layers = {}},
@@ -560,7 +450,7 @@ data:extend({
           name = "heli-smoke",
           deviation = {0,0},
           frequency = 200,
-          position = {-1, 0},
+          position = {-0.725, 0},
           starting_frame = 0,
           starting_frame_deviation = 60
         },
@@ -568,7 +458,7 @@ data:extend({
           name = "heli-smoke",
           deviation = {0,0},
           frequency = 200,
-          position = {0.45, 0},
+          position = {0.725, 0},
           starting_frame = 0,
           starting_frame_deviation = 60
         }
@@ -578,34 +468,10 @@ data:extend({
     braking_power = "1W",
     friction = 1,
     terrain_friction_modifier = 0,
-    weight = 9999,
-
-    rotation_speed = 0.005,
+    weight = 1,
+    rotation_speed = 1,
     inventory_size = 0,
-
-    animation = {
-      layers = {
-        {
-          priority = "high",
-          width = 1,
-          height = 1,
-          frame_count = 1,
-          direction_count = 1,
-          shift = {0, 0},
-          animation_speed = 8,
-          max_advance = 0.2,
-          stripes =
-          {
-            {
-              filename = "__HelicopterRevival__/graphics/void.png",
-              width_in_frames = 1,
-              height_in_frames = 1,
-            },
-          }
-        },
-      }
-    },
-
+    animation = util.empty_animation(1),
     working_sound = {
       sound = {
         filename = "__HelicopterRevival__/sound/heli_loop.ogg",
@@ -633,80 +499,38 @@ data:extend({
     has_belt_immunity = true,
     max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
     collision_mask = {layers = {}},
     energy_per_hit_point = 1,
-    effectivity = 0.3,
-    energy_source = {
-      type = "burner",
-      effectivity = 0.5,
-      emissions = 0,
-      fuel_inventory_size = 1,
-    },
+    effectivity = 1,
+    energy_source = {type = "void"},
     consumption = "1W",
     braking_power = "1W",
-    friction = 0.002,
+    friction = 1,
     terrain_friction_modifier = 0,
-    weight = 3000,
-
-    rotation_speed = 0.005,
+    weight = 1,
+    rotation_speed = 1,
     inventory_size = 0,
-
-    animation = {
-      layers = {
-        {
-          priority = "high",
-          width = 1,
-          height = 1,
-          frame_count = 1,
-          direction_count = 1,
-          shift = {0, 0},
-          animation_speed = 8,
-          max_advance = 0.2,
-          stripes =
-          {
-            {
-              filename = "__HelicopterRevival__/graphics/void.png",
-              width_in_frames = 1,
-              height_in_frames = 1,
-            },
-          }
-        },
-      }
-    },
-
-    crash_trigger = {
-      type = "play-sound",
-      sound =
-      {
-        {
-        filename = "__base__/sound/car-crash.ogg",
-        volume = 0.25
-        },
-      }
-    },
-    vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
-
+    animation = util.empty_animation(1),
     light =
     {
       {
-      type = "oriented",
-      minimum_darkness = 0.3,
-      picture =
-      {
-        filename = "__core__/graphics/light-cone.png",
-        priority = "extra-high",
-        flags = {"light" },
-        scale = 2.5,
-        width = 200,
-        height = 200
-      },
-      shift = {-0.3, -20},
-      size = 2.5,
-      intensity = 0.6,
-      color = {r = 0.92, g = 0.77, b = 0.3}
+        type = "oriented",
+        minimum_darkness = 0.3,
+        picture =
+        {
+          filename = "__core__/graphics/light-cone.png",
+          priority = "extra-high",
+          flags = {"light"},
+          scale = 2.5,
+          width = 200,
+          height = 200
+        },
+        shift = {-0.3, -20},
+        size = 2.5,
+        intensity = 0.6,
+        color = {r = 0.92, g = 0.77, b = 0.3}
       },
     },
   },

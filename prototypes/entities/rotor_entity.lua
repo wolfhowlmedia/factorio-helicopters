@@ -9,24 +9,20 @@ data:extend({
 		final_render_layer = "air-object",
     minable = {mining_time = 1, result = "helicopter"},
     has_belt_immunity = true,
-    max_health = 1500,
+    max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
     collision_mask = {layers = {}},
     energy_per_hit_point = 1,
-    effectivity = 0.5,
-    braking_power = "100kW",
-    energy_source = {
-      type = "burner",
-      effectivity = 1,
-      emissions = 0,
-      fuel_inventory_size = 1,
-    },
-    consumption = "100kW",
-    friction = 0.01,
-
+    braking_power = "1W",
+    consumption = "1W",
+    effectivity = 1,
+    energy_source = {type = "void"},
+    friction = 1,
+    inventory_size = 0,
+    rotation_speed = 1,
+    weight = 1,
     animation = {
       layers = {
         {
@@ -35,7 +31,7 @@ data:extend({
           height = 600,
           frame_count = 1,
           direction_count = 64,
-          shift = {0, -5.1},
+          shift = {0.265625, -5.1},
           scale = 0.5,
           animation_speed = 8,
           max_advance = 0.2,
@@ -65,9 +61,6 @@ data:extend({
         },
       }
     },
-    inventory_size = 0,
-    rotation_speed = 0.005,
-    weight = 50,
   },
   ------------shadow------------------
   {
@@ -76,28 +69,22 @@ data:extend({
     icon = "__base__/graphics/icons/car.png",
     icon_size = 64,
     flags = {"placeable-off-grid", "not-on-map"},
-		-- render_layer = "air-object",
-		-- final_render_layer = "air-object",
     minable = {mining_time = 1, result = "helicopter"},
     has_belt_immunity = true,
-    max_health = 1500,
+    max_health = 999999,
     hidden_in_factoriopedia = true,
-    corpse = "medium-remnants",
     selection_box = {{0,0},{0,0}},
     collision_box = {{0,0},{0,0}},
     collision_mask = {layers= {}},
     energy_per_hit_point = 1,
-    effectivity = 0.5,
-    braking_power = "100kW",
-    energy_source = {
-      type = "burner",
-      effectivity = 1,
-      emissions = 0,
-      fuel_inventory_size = 1,
-    },
-    consumption = "100kW",
-    friction = 0.01,
-
+    braking_power = "1W",
+    consumption = "1W",
+    effectivity = 1,
+    energy_source = {type = "void"},
+    friction = 1,
+    inventory_size = 0,
+    rotation_speed = 1,
+    weight = 1,
     animation = {
       layers = {
         {
@@ -107,7 +94,7 @@ data:extend({
           frame_count = 1,
           draw_as_shadow = true,
           direction_count = 64,
-          shift = {0.4, -0.5},
+          shift = {0.665625, -0.5},
           scale = 0.5,
           animation_speed = 8,
           max_advance = 0.2,
@@ -137,8 +124,5 @@ data:extend({
         },
       }
     },
-    inventory_size = 0,
-    rotation_speed = 0.005,
-    weight = 50,
   }
 })
