@@ -108,9 +108,6 @@ local fallbackFuel = {name = "coal", count = 50}
 if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
 	fallbackFuel.name = "kr-fuel"
 	fallbackFuel.count = 1
-elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-	fallbackFuel.name = "cellulose-fiber"
-	fallbackFuel.count = 1
 end
 
 --local modVersion = versionStrToInt(script.active_mods.HelicopterRevival)
@@ -935,8 +932,6 @@ heliBase = {
 
 		if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"]  then
 			remainingFuel = remainingFuel * 16
-		elseif script.active_mods["SeaBlock"] then
-			remainingFuel = remainingFuel * 9
 		end
 
 		local burner = self.baseEnt.burner
