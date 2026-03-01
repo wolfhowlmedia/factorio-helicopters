@@ -15,10 +15,10 @@
   heli-flying-collision-entity-_- - collision entity when airborne
   heli-landed-collision-end-entity-_- - landed collider front+back (needs distance input)
   heli-landed-collision-side-entity-_- - landed collider sides (needs distance input)
-]]
 
---cars gotta have
---[[
+
+cars gotta have
+
   consumption
   effectivity
   energy_source
@@ -29,14 +29,6 @@
   friction
   weight
 ]]
-
-local fuel_slots = 5
-local inventory_slots = 80
-local gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower"}
-if (mods["Krastorio2"] or mods["Krastorio2-spaced-out"]) and data.raw["ammo-category"]["kr-anti-materiel-rifle-ammo"] then
-  -- Override  gun slots for K2
-  gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower", "heli-k2-anti-material-gun"}
-end
 
 local heliEntityNames = {
   --"",
@@ -53,7 +45,57 @@ local heliEntityNames = {
   "heli-landed-collision-end-entity-_-",
   "heli-landed-collision-side-entity-_-",
 }
+local function checkArgs(args, req, opt)
+    for field, expected_type in pairs(req) do
+      if args[field] == nil then
+        error("Required field '"..field.."' is missing!", 2)
+      end
 
+      if type(args[field]) ~= expected_type then
+        error("Field '"..field.."' has to be of type '"..expected_type.."'", 2)
+      end
+    end
+
+    for field, expected_type in pairs(opt) do
+      if args[field] ~= nil then
+        if type(args[field]) ~= expected_type then
+          error("Field '"..field.."' has to be of type '"..expected_type.."'", 2)
+        end
+      end
+    end
+end
+
+local requiredFields = {
+  animation = "table",
+  animationShadow = "table",
+  animationRotor = "table",
+  animationRotorShadow = "table",
+  icon = "string",
+  iconSize = "number",
+  selBox = "table",
+  colBox = "table",
+  entityProperties = "table",
+}
+local optionalFields = {
+  smoke = "table",
+  smokePositions = "table",
+}
+local requiredFieldsEntity = {
+  max_health = "number",
+  energy_per_hit_point = "number",
+  rotation_speed = "number",
+  turret_rotation_speed = "number",
+  inventory_size = "number",
+  weight = "number",
+  effectivity = "number",
+  consumption = "string",
+  braking_power = "string",
+  friction = "number",
+  energy_source = "table",
+  animation = "table",
+}
+
+---@param args table
 function HRHelicopterMaker(args)
   --[[
   args{
@@ -62,36 +104,27 @@ function HRHelicopterMaker(args)
     iconSize,
     selBox,
     colBox,
-    animation,
-    animationShadow,
-    animationRotor,
-    animationRotorShadow,
-    animation,
-    animationShadow,
-    (light)
-    (crash_trigger)
-    (vehicle_impact_sound)
-    (smoke)
-    (smokePositions)
+      animation,
+      animationShadow,
+      animationRotor,
+      animationRotorShadow,
+      animation,
+      animationShadow,
+        (light)
+        (crash_trigger)
+        (vehicle_impact_sound)
+        (smoke)
+        (smokePositions)
+    entityProperties
   }
   ]]
 
   if args.override == nil then
-    assert(type(args.name) == "string", "Missing helicopter name!")
+    checkArgs(args, {name = "string"}, {})
     args.name = args.name.."-"
   end
-  assert(type(args.animation) == "table", "Missing animation!")
-  assert(type(args.animationShadow) == "table", "Missing animation shadow!")
-  assert(type(args.animationRotor) == "table", "Missing rotor animation!")
-  assert(type(args.animationRotorShadow) == "table", "Missing rotor shadow animation!")
-  assert(type(args.icon) == "string", "Missing helicopter icon!")
-  assert(type(args.iconSize) == "number", "Missing icon size!")
-
-  assert(type(args.selBox) == "table", "Missing selection box!")
-  assert(type(args.colBox) == "table", "Missing collision box!")
-
-  assert(type(args.animation) == "table", "Missing animation!")
-  assert(type(args.animationShadow) == "table", "Missing shadow animation!")
+  checkArgs(args, requiredFields, optionalFields)
+  checkArgs(args.entityProperties, requiredFieldsEntity, {})
 
   if args.smokePositions ~= nil then
     args.smoke = {}
@@ -107,6 +140,30 @@ function HRHelicopterMaker(args)
       )
     end
   end
+
+  local blueprintPlacement = {type = "car",}
+  for property, value in pairs(args.entityProperties) do
+    blueprintPlacement[property] = value
+  end
+
+  blueprintPlacement.icon = args.icon
+  blueprintPlacement.icon_size = args.iconSize
+  blueprintPlacement.selection_box = args.selBox
+  blueprintPlacement.collision_box = args.colBox
+  blueprintPlacement.minable = {mining_time = 1, result = args.name.."helicopter"}
+  blueprintPlacement.hidden_in_factoriopedia = true
+
+  local blueprintBase = table.deepcopy(blueprintPlacement)
+  blueprintPlacement.name = args.name.."helicopter"
+  blueprintPlacement.collision_mask = {layers = {object = true, water_tile = true, player = true}}
+  blueprintPlacement.alert_icon_shift = nil
+
+  blueprintBase.name = args.name.."heli-entity-_-"
+  blueprintBase.collision_mask = {layers={}}
+  blueprintBase.render_layer = "air-object"
+  blueprintBase.final_render_layer = "air-object"
+  blueprintBase.factoriopedia_alternative  = args.name
+  blueprintBase.animation = util.empty_animation(1)
 
   data:extend({
     ---------------rotor entity---------------
@@ -128,170 +185,27 @@ function HRHelicopterMaker(args)
       animation = args.animationRotorShadow,
     },
     ---------------placement entity---------------
-    {
-      type = "car",
-      name = args.name.."helicopter",
-      icon = args.icon,
-      icon_size = args.iconSize,
-      flags = {"placeable-neutral", "player-creation", "placeable-off-grid", "not-flammable"},
-      has_belt_immunity = true,
-      minable = {mining_time = 1, result = args.name.."helicopter"},
-      max_health = 2500,
-      hidden_in_factoriopedia = true,
-      corpse = "medium-remnants",
-      dying_explosion = "medium-explosion",
-      selection_box = args.selBox,
-      collision_box = args.colBox,
-      collision_mask = {layers = {object = true, water_tile = true, player = true}},
-      energy_per_hit_point = 1,
-      effectivity = 0.4,
-      energy_source = {
-        type = "burner",
-        effectivity = 0.5,
-        emissions = 0.005,
-        fuel_inventory_size = fuel_slots,
-      },
-      consumption = settings.startup["heli-consumption"].value,
-      braking_power = settings.startup["heli-braking-power"].value,
-      friction = 0.002,
-      terrain_friction_modifier = 0,
-      weight = settings.startup["heli-weight"].value,
-      deliver_category = "vehicle",
-      guns = gun_slots,
-      rotation_speed = 0.005,
-      inventory_size = inventory_slots,
-      equipment_grid = "heli-equipment-grid",
-      animation = {
-        layers = {
-          {
-            priority = "high",
-            width = 720,
-            height = 600,
-            frame_count = 1,
-            direction_count = 1,
-            shift = {0.265625, 0},
-            animation_speed = 8,
-            max_advance = 0.2,
-            scale = 0.5,
-            stripes =
-            {
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/body-0.png",
-                width_in_frames = 1,
-                height_in_frames = 1,
-              },
-            }
-          },
-          {
-            priority = "high",
-            width = 720,
-            height = 600,
-            frame_count = 1,
-            direction_count = 1,
-            shift = {0.265625, 0},
-            animation_speed = 8,
-            max_advance = 0.2,
-            scale = 0.5,
-            stripes =
-            {
-              {
-                filename = "__HelicopterRevival__/graphics/entities/heli/rotor-0.png",
-                width_in_frames = 1,
-                height_in_frames = 1,
-              },
-            }
-          },
-        }
-      },
-    },
+    blueprintPlacement,
     ---------------base entity---------------------
-    {
-      type = "car",
-      name = args.name.."heli-entity-_-",
-      icon = args.icon,
-      icon_size = args.iconSize,
-      flags = {"placeable-neutral", "player-creation", "placeable-off-grid", "not-flammable"},
-      render_layer = "air-object",
-      final_render_layer = "air-object",
-      has_belt_immunity = true,
-      minable = {mining_time = 1, result = args.name.."helicopter"},
-      max_health = 2500,
-      hidden_in_factoriopedia = true,
-      factoriopedia_alternative  = args.name,
-      corpse = "medium-remnants",
-      dying_explosion = "medium-explosion",
-      selection_box = args.selBox,
-      collision_box = args.colBox,
-      alert_icon_shift = {-0.25, -0.5},
-      collision_mask = {layers={}},
-      energy_per_hit_point = 1,
-      effectivity = 0.4,
-      energy_source = {
-        type = "burner",
-        effectivity = 0.5,
-        emissions = 0.005,
-        fuel_inventory_size = fuel_slots,
-      },
-      consumption = settings.startup["heli-consumption"].value,
-      braking_power = settings.startup["heli-braking-power"].value,
-      allow_remote_driving = true,
-      trash_inventory_size = 10,
-      friction = 0.002,
-      terrain_friction_modifier = 0,
-      weight = settings.startup["heli-weight"].value,
-      is_military_target = true,
-      deliver_category = "vehicle",
-      rotation_speed = 0.005,
-      tank_driving = true,
-      inventory_size = inventory_slots,
-      equipment_grid = "heli-equipment-grid",
-      animation = util.empty_animation(1),
-      sound_no_fuel =
-      {
-        {
-          filename = "__base__/sound/fight/tank-no-fuel-1.ogg",
-          volume = 0.6
-        },
-      },
-      open_sound = {filename = "__base__/sound/car-door-open.ogg", volume = 0.7 },
-      close_sound = {filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },
-      mined_sound = data.raw["car"]["tank"].mined_sound,
-      guns = gun_slots,
-      turret_rotation_speed = 1 / 60,
-      minimap_representation = {
-        filename = "__HelicopterRevival__/graphics/icons/heli-minimap-representation.png",
-        flags = {"icon"},
-        size = {40, 40},
-        scale = 0.5
-      },
-      selected_minimap_representation = {
-        filename = "__HelicopterRevival__/graphics/icons/heli-minimap-representation-selected.png",
-        flags = {"icon"},
-        size = {40, 40},
-        scale = 0.5
-      },
-      subgroup = "transport",
-      order = "b[personal-transport]-c[heli]",
-    },
+    blueprintBase,
     ---------------flying collision--------------------
     {
       type = "car",
       name = args.name.."heli-flying-collision-entity-_-",
-      collision_box = {{-1.5, -0.2}, {1.5, 0.2}},------------------------------------------------------------
+      collision_box = {{args.colBox[1][1]-0.3, -0.2}, {args.colBox[2][1]+0.3, 0.2}},
       animation = util.empty_animation(1),
     },
     ---------------landed collision--------------------
     {
       type = "car",
       name = args.name.."heli-landed-collision-side-entity-_-",
-      collision_box = {{-0.1, -2.4}, {0.1, 2.4}},------------------------------------------------------------
+      collision_box = {{-0.1, args.colBox[1][2]}, {0.1, args.colBox[2][2]}},
       animation = util.empty_animation(1),
     },
-
     {
       type = "car",
       name = args.name.."heli-landed-collision-end-entity-_-",
-      collision_box = {{-1.5, -0.1}, {1.5, 0.1}},------------------------------------------------------------
+      collision_box = {{args.colBox[1][1]-0.3, -0.1}, {args.colBox[2][1]+0.3, 0.1}},
       animation = util.empty_animation(1),
     },
     ---------------body--------------
@@ -314,9 +228,9 @@ function HRHelicopterMaker(args)
     },
   })
 
+  ---------------smoke and sound--------------------
   if args.smoke ~= nil then
     data:extend({
-      ---------------smoke and sound--------------------
       {
         type = "car",
         name = args.name.."heli-burner-entity-_-",
@@ -328,9 +242,9 @@ function HRHelicopterMaker(args)
     })
   end
 
+  ---------------flashlight--------------------
   if args.light ~= nil then
     data:extend({
-      ---------------flashlight--------------------
       {
         type = "car",
         name = args.name.."heli-floodlight-entity-_-",
