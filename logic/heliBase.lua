@@ -135,8 +135,8 @@ local transferGridEquipment = function(srcEnt, destEnt)
 	end
 end
 
-heliEntityNames = ""
-heliBaseEntityNames = ""
+--heliEntityNames = ""
+--heliBaseEntityNames = ""
 
 stateFuncs = {
 	landed = {
@@ -379,7 +379,7 @@ heliBase = {
 
 	------------------------------------------------------------
 
-	new = function(placementEnt, baseEnt, childEnts, mt)
+	new = function(prefix, placementEnt, baseEnt, childEnts, mt)
 		transferGridEquipment(placementEnt, baseEnt)
 		baseEnt.health = placementEnt.health
 
@@ -398,7 +398,9 @@ heliBase = {
 
 			surface = placementEnt.surface,
 
-			name = "Helicopter "..count,
+			name = {"", {"item-name." .. placementEnt.name}, " ", count},
+
+			prefix = prefix,
 
 			deactivatedInserters = {},
 		}

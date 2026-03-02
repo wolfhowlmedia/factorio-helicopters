@@ -372,7 +372,7 @@ heliSelectionGui =
 		local name = cam.add
 		{
 			type = "label",
-			caption = titleCase(heli.name or "Helicopter"),
+			caption = heli.name or "Helicopter",
 		}
 		name.style.font = "pixelated_normal"
 		name.style.left_padding = 3

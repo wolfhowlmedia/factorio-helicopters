@@ -1,3 +1,22 @@
+local transferralEntityName = "hr-heli-names"
+
+local function addTransferralEntity(name)
+  data:extend{
+    {
+      type = "entity-ghost",
+      name = transferralEntityName,
+      icon = "__core__/graphics/empty.png",
+      icon_size = 1,
+      stack_size = 1,
+      flags = {"not-on-map", "hide-alt-info", "not-blueprintable", "not-flammable"},
+      localised_name = "BIGDATA",
+      localised_description = serpent.dump(name),
+      hidden_in_factoriopedia = true,
+      order = "z",
+    }
+  }
+end
+
 --[[
   helicopter - placement entity, has all the stats so it shows in crafting
   heli-entity-_- - actual entity that player is riding
@@ -162,7 +181,7 @@ function HRHelicopterMaker(args)
   blueprintBase.collision_mask = {layers={}}
   blueprintBase.render_layer = "air-object"
   blueprintBase.final_render_layer = "air-object"
-  blueprintBase.factoriopedia_alternative  = args.name
+  blueprintBase.factoriopedia_alternative  = args.name.."helicopter"
   blueprintBase.animation = util.empty_animation(1)
 
   data:extend({
@@ -287,5 +306,17 @@ function HRHelicopterMaker(args)
       fuel_inventory_size = 1,
       smoke = args.smoke,
     }
+  end
+
+  if data.raw["entity-ghost"][transferralEntityName] == nil then
+    addTransferralEntity({args.name})
+  else
+    local _, datas = serpent.load(data.raw["entity-ghost"][transferralEntityName].localised_description)
+    if datas ~= nil then
+      table.insert(datas, args.name)
+    else
+      datas = {}
+    end
+    addTransferralEntity(datas)
   end
 end

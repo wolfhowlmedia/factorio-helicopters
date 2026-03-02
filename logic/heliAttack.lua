@@ -1,3 +1,5 @@
+local transferralEntityName = "hr-heli-names"
+
 heliAttack =
 {
 	type = "heliAttack",
@@ -11,28 +13,64 @@ heliAttack =
 
 	fuelSlots = 5,
 
-	new = function(placementEnt)
-		local baseEnt = placementEnt.surface.create_entity {name = "heli-entity-_-", force = placementEnt.force, position = placementEnt.position, quality = placementEnt.quality}
+	new = function(prefix, placementEnt)
+		local baseEnt = placementEnt.surface.create_entity {name = prefix.."heli-entity-_-", force = placementEnt.force, position = placementEnt.position, quality = placementEnt.quality}
 
 		local childs =
 		{
-			bodyEnt = placementEnt.surface.create_entity{name = "heli-body-entity-_-", force = game.forces.neutral, position = {x = baseEnt.position.x, y = baseEnt.position.y + heliAttack.bodyOffset}},
-			rotorEnt = placementEnt.surface.create_entity{name = "rotor-entity-_-", force = game.forces.neutral, position = {x = baseEnt.position.x, y = baseEnt.position.y + heliAttack.rotorOffset}},
+			bodyEnt = placementEnt.surface.create_entity{name = prefix.."heli-body-entity-_-", force = game.forces.neutral, position = {x = baseEnt.position.x, y = baseEnt.position.y + heliAttack.bodyOffset}},
+			rotorEnt = placementEnt.surface.create_entity{name = prefix.."rotor-entity-_-", force = game.forces.neutral, position = {x = baseEnt.position.x, y = baseEnt.position.y + heliAttack.rotorOffset}},
 
-			bodyEntShadow = placementEnt.surface.create_entity{name = "heli-shadow-entity-_-", force = game.forces.neutral, position = baseEnt.position},
-			rotorEntShadow = placementEnt.surface.create_entity{name = "rotor-shadow-entity-_-", force = game.forces.neutral, position = baseEnt.position},
+			bodyEntShadow = placementEnt.surface.create_entity{name = prefix.."heli-shadow-entity-_-", force = game.forces.neutral, position = baseEnt.position},
+			rotorEntShadow = placementEnt.surface.create_entity{name = prefix.."rotor-shadow-entity-_-", force = game.forces.neutral, position = baseEnt.position},
 
-			burnerEnt = placementEnt.surface.create_entity{name = "heli-burner-entity-_-", force = game.forces.neutral, position = {x = baseEnt.position.x, y = baseEnt.position.y + 1.3}},
+			burnerEnt = placementEnt.surface.create_entity{name = prefix.."heli-burner-entity-_-", force = game.forces.neutral, position = {x = baseEnt.position.x, y = baseEnt.position.y + 1.3}},
 
-			floodlightEnt = placementEnt.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = baseEnt.position},
+			floodlightEnt = placementEnt.surface.create_entity{name = prefix.."heli-floodlight-entity-_-", force = game.forces.neutral, position = baseEnt.position},
 		}
 
-		return heliBase.new(placementEnt, baseEnt, childs, {__index = heliAttack})
+		return heliBase.new(prefix, placementEnt, baseEnt, childs, {__index = heliAttack})
 	end,
 }
 
 setmetatable(heliAttack, {__index = heliBase})
 
+
+local _, datas = serpent.load(prototypes.entity[transferralEntityName].localised_description)
+if datas == nil then
+	datas = {""}
+end
+
+local heliEntityNamesSuffix = {
+	"heli-entity-_-",
+	"heli-body-entity-_-",
+	"heli-landed-collision-end-entity-_-",
+	"heli-landed-collision-side-entity-_-",
+	"heli-shadow-entity-_-",
+	"heli-flying-collision-entity-_-",
+	"heli-burner-entity-_-",
+	"heli-floodlight-entity-_-",
+	"rotor-entity-_-",
+	"rotor-shadow-entity-_-",
+}
+
+heliEntityNames = {}
+for _, prefix in pairs(datas) do
+	for _, suffix in pairs(heliEntityNamesSuffix) do
+		table.insert(heliEntityNames, prefix..suffix)
+	end
+end
+
+heliBaseEntityNames = {}
+for _, prefix in pairs(datas) do
+	heliBaseEntityNames[prefix.."heli-entity-_-"] = prefix
+end
+
+heliPlacementEntityNames = {}
+for _, prefix in pairs(datas) do
+	heliPlacementEntityNames[prefix.."helicopter"] = prefix
+end
+--[[
 heliEntityNames = heliEntityNames .. concatStrTable({
 	"heli-entity-_-",
 	"heli-body-entity-_-",
@@ -45,5 +83,6 @@ heliEntityNames = heliEntityNames .. concatStrTable({
 	"rotor-entity-_-",
 	"rotor-shadow-entity-_-",
 }, ",")
+]]
 
-heliBaseEntityNames = heliBaseEntityNames .. "heli-entity-_-" .. ","
+--heliBaseEntityNames = heliBaseEntityNames .. "heli-entity-_-" .. ","
