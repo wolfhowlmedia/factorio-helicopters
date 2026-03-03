@@ -427,7 +427,7 @@ function OnDrivingStateChanged(e)
 
 	local entityName = ent.name
 
-	if heliEntityNames[entityName] == nil then return end
+	if not heliEntityNames[entityName] then return end
 
 	local heli = nil
 	for _, currentHeli in ipairs(storage.helis) do

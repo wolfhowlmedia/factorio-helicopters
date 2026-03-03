@@ -57,7 +57,7 @@ local heliEntityNamesSuffix = {
 heliEntityNames = {}
 for _, prefix in pairs(datas) do
 	for _, suffix in pairs(heliEntityNamesSuffix) do
-		table.insert(heliEntityNames, prefix..suffix)
+		heliEntityNames[prefix..suffix] = true
 	end
 end
 
