@@ -111,6 +111,16 @@ data:extend({
 	},
 	{
 		type = "recipe",
+        name = "scout-helicopter",
+		enabled = false,
+		energy_required = 60,
+		ingredients = {
+			{type = "item", name = "iron-plate", amount = 1},
+		},
+        results = { { type = "item", name = "scout-helicopter", amount = 1 }, },
+	},
+	{
+		type = "recipe",
         name = "helicopter-remote-equipment",
 		enabled = false,
 		energy_required = 15,
@@ -209,6 +219,10 @@ data:extend({
             {
                 type = "unlock-recipe",
                 recipe = "helicopter"
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "scout-helicopter"
             },
             {
                 type = "unlock-recipe",
