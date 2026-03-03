@@ -8,6 +8,7 @@ require("logic.simpleNoise")
 
 require("logic.heliBase")
 require("logic.heliAttack")
+require("logic.heliScout")
 
 require("logic.heliPad")
 require("logic.heliController")
@@ -51,6 +52,8 @@ function OnLoad(e)
 		for _, heli in pairs(storage.helis) do
 			if not heli.type or heli.type == "heliAttack" then
 				setmetatable(heli, {__index = heliAttack})
+			elseif heli.type == "heliScout" then
+				setmetatable(heli, {__index = heliScout})
 			end
 		end
 	end
