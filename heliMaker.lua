@@ -96,6 +96,8 @@ local requiredFields = {
   entityProperties = "table",
 }
 local optionalFields = {
+  animationTurret = "table",
+  animationTurretShadow = "table",
   smoke = "table",
   smokePositions = "table",
 }
@@ -127,8 +129,8 @@ function HRHelicopterMaker(args)
       animationShadow,
       animationRotor,
       animationRotorShadow,
-      animation,
-      animationShadow,
+      animationTurret,
+      animationTurretShadow,
         (light)
         (crash_trigger)
         (vehicle_impact_sound)
@@ -183,6 +185,7 @@ function HRHelicopterMaker(args)
   blueprintBase.final_render_layer = "air-object"
   blueprintBase.factoriopedia_alternative  = args.name.."helicopter"
   blueprintBase.animation = util.empty_animation(1)
+  blueprintBase.turret_animation = args.animationTurret
 
   data:extend({
     ---------------rotor entity---------------
@@ -244,6 +247,7 @@ function HRHelicopterMaker(args)
       collision_box = {{0,0},{0,0}},
       collision_mask = {layers = {}},
       animation = args.animationShadow,
+      turret_animation = args.animationTurretShadow,
     },
   })
 

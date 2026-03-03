@@ -1,9 +1,7 @@
 require("heliMaker")
 
-local math3d = require("math3d")
-
 function by_pixel(t)
-  return {t[1]/32,t[2]/32}
+  return {t[1]/64,t[2]/64}
 end
 
 local fuel_slots = 5
@@ -11,92 +9,80 @@ local inventory_slots = 80
 local gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower"}
 
 ---------------------------
-local dim =
-{
-	chassis = {300,240},
-	chassisShadow = {290,178},
+--Width, Height, Count
+local dim = {
+	chassis = {2400, 1920, 4},
+	chassisShadow = {2320, 1424, 4},
 
-	gun = {100,76},
-	gunShadow = {90,60},
+	gun = {1600, 1216, 8},
+	gunShadow = {1440, 960, 8},
 
-	rotor = {202,140},
-	rotorShadow = {198,120},
+	rotor = {1608, 1116, 4},
+	rotorShadow = {1584, 960, 4},
 }
 
-local dimHr = {}
-for k,v in pairs(dim) do
-	dimHr[k] = math3d.vector2.mul(v, 2)
+for _, v in pairs(dim) do
+  v[1] = v[1] / v[3]
+  v[2] = v[2] / v[3]
 end
-dim.hr = dimHr
-dim.hr.rotor = {402,279}
 
----------------------------
 
-local off = {chassis = {0,0}}
-off.chassisShadow = math3d.vector2.add(off.chassis, {36.5,33})
+local offset = {}
 
-off.gun = math3d.vector2.add(off.chassis, {0.5,25.5})
-off.gunShadow = math3d.vector2.add(off.gun, {6,8})
+offset.chassis = {0, -4.5}
+offset.chassisShadow = {1.25, 1.5}
 
-off.rotor = math3d.vector2.add(off.chassis, {0,-11})
-off.rotorShadow = math3d.vector2.add(off.rotor, {53,39.5})
+offset.gun = {0, 1}
+offset.gunShadow = {1, 1}
 
-offHr = {}
-for k,v in pairs(off) do
-	offHr[k] = by_pixel(v)
-	off[k] = by_pixel(v)
+offset.rotor = {0, -5.1}
+offset.rotorShadow = {0.75, 1.5}
+
+for _, v in pairs(offset) do
+  v[2] = v[2] -1
+  v = by_pixel(v)
 end
-off.hr = offHr
 
-
-off.chassis[2] = off.chassis[2] - 5
-off.rotor[2] = off.rotor[2] - 5.1
-off.rotorShadow[2] = off.rotorShadow[2] - 0.1
-
-off.hr.chassis[2] = off.hr.chassis[2] - 5
-off.hr.rotor[2] = off.hr.rotor[2] - 5.1
-off.hr.rotorShadow[2] = off.hr.rotorShadow[2] - 0.1
 ---------------------------
 
 local args = {
-  type = "car",
   name = "scout",
   icon = "__HelicopterRevival__/graphics/icons/heli.png",
   iconSize = 64,
-  selBox = { { -1.5, -1.8 }, { 0.9, 3 } },
-  colBox = { { -1.5, -1.8 }, { 0.9, 3 } },
+  selBox = {{-1.2, -2.4}, {1.2, 2.4}},
+  colBox = {{-1.2, -2.4}, {1.2, 2.4}},
   icon_size = 64,
   animation = {
     layers = {
       {
         priority = "high",
-        width = dim.hr.chassis[1],
-        height = dim.hr.chassis[2],
+        width = dim.chassis[1],
+        height = dim.chassis[2],
         frame_count = 1,
         direction_count = 64,
-        shift = off.hr.chassis,
-        animation_speed = 8,
-        max_advance = 0.2,
+        shift = offset.chassis,
+        animation_speed = 1,
+        max_advance = 1,
         scale = 0.5,
         stripes =
         {
           {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Chassis_Hi-0.png",
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-0.png",
             width_in_frames = 4,
             height_in_frames = 4,
           },
           {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Chassis_Hi-1.png",
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-1.png",
             width_in_frames = 4,
             height_in_frames = 4,
           },
           {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Chassis_Hi-2.png",
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-2.png",
             width_in_frames = 4,
             height_in_frames = 4,
           },
           {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Chassis_Hi-3.png",
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-3.png",
             width_in_frames = 4,
             height_in_frames = 4,
           },
@@ -105,68 +91,115 @@ local args = {
     }
   },
   animationShadow = {
-    priority = "very-low",
-    width = dim.hr.chassisShadow[1],
-    height = dim.hr.chassisShadow[2],
+    priority = "high",
+    width = dim.chassisShadow[1],
+    height = dim.chassisShadow[2],
     frame_count = 1,
     draw_as_shadow = true,
     direction_count = 64,
-    shift = off.hr.chassisShadow,
-    animation_speed = 8,
-    max_advance = 0.2,
+    shift = offset.chassisShadow,
+    animation_speed = 1,
+    max_advance = 1,
     stripes =
     {
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/ChassisShadow_Hi-0.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/ChassisShadow_Hi-0.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/ChassisShadow_Hi-1.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/ChassisShadow_Hi-1.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/ChassisShadow_Hi-2.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/ChassisShadow_Hi-2.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/ChassisShadow_Hi-3.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/ChassisShadow_Hi-3.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
     },
     scale = 0.5,
   },
+  animationTurret = {
+    layers = {
+      {
+        priority = "high",
+        width = dim.gun[1],
+        height = dim.gun[2],
+        frame_count = 1,
+        direction_count = 64,
+        shift = {offset.gun[1], offset.gun[2]},
+        animation_speed = 1,
+        max_advance = 1,
+        scale = 0.5,
+        stripes =
+        {
+          {
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Gun_Hi.png",
+            width_in_frames = 8,
+            height_in_frames = 8,
+          },
+        },
+      },
+    }
+  },
+  animationTurretShadow = {
+    layers = {
+      {
+        priority = "high",
+        width = dim.gunShadow[1],
+        height = dim.gunShadow[2],
+        frame_count = 1,
+        direction_count = 64,
+        shift = {offset.gunShadow[1], offset.gunShadow[2]},
+        animation_speed = 1,
+        max_advance = 1,
+        scale = 0.5,
+        draw_as_shadow = true,
+        stripes =
+        {
+          {
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/GunShadow_Hi.png",
+          width_in_frames = 8,
+          height_in_frames = 8,
+          },
+        },
+      },
+    }
+  },
   animationRotor = {
     priority = "high",
-    width = dim.hr.rotor[1],
-    height = dim.hr.rotor[2],
+    width = dim.rotor[1],
+    height = dim.rotor[2],
     frame_count = 1,
     direction_count = 64,
-    shift = off.hr.rotor,
-    animation_speed = 8,
-    max_advance = 0.2,
+    shift = offset.rotor,
+    animation_speed = 1,
+    max_advance = 1,
     stripes =
     {
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-0.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-0.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-1.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-1.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-2.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-2.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-3.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-3.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
@@ -174,34 +207,34 @@ local args = {
     scale = 0.5,
   },
   animationRotorShadow = {
-    priority = "very-low",
-    width = dim.hr.rotorShadow[1],
-    height = dim.hr.rotorShadow[2],
+    priority = "high",
+    width = dim.rotorShadow[1],
+    height = dim.rotorShadow[2],
     frame_count = 1,
     draw_as_shadow = true,
     direction_count = 64,
-    shift = off.hr.rotorShadow,
-    animation_speed = 8,
-    max_advance = 0.2,
+    shift = offset.rotorShadow,
+    animation_speed = 1,
+    max_advance = 1,
     stripes =
     {
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/RotorShadow_Hi-0.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Hi-0.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/RotorShadow_Hi-1.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Hi-1.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/RotorShadow_Hi-2.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Hi-2.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/RotorShadow_Hi-3.png",
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Hi-3.png",
         width_in_frames = 4,
         height_in_frames = 4,
       },
@@ -216,7 +249,7 @@ local args = {
     {
       filename = "__core__/graphics/light-cone.png",
       priority = "extra-high",
-      flags = { "light" },
+      flags = {"light" },
       scale = 2.5,
       width = 200,
       height = 200
@@ -255,24 +288,24 @@ local args = {
   smoke = {
     {
       name = "heli-smoke",
-      deviation = { 0, 0 },
+      deviation = {0, 0},
       frequency = 200,
-      position = { -0.725, 0 },
+      position = {-0.725, 0},
       starting_frame = 0,
       starting_frame_deviation = 60
     },
     {
       name = "heli-smoke",
-      deviation = { 0, 0 },
+      deviation = {0, 0},
       frequency = 200,
-      position = { 0.725, 0 },
+      position = {0.725, 0},
       starting_frame = 0,
       starting_frame_deviation = 60
     }
   },
   entityProperties = {
     max_health = 2500,
-    flags = { "placeable-neutral", "player-creation", "placeable-off-grid", "not-flammable" },
+    flags = {"placeable-neutral", "player-creation", "placeable-off-grid", "not-flammable"},
     corpse = "medium-remnants",
     dying_explosion = "medium-explosion",
     energy_per_hit_point = 1,
@@ -305,8 +338,8 @@ local args = {
       fuel_inventory_size = fuel_slots,
     },
 
-    open_sound = { filename = "__base__/sound/car-door-open.ogg", volume = 0.7 },
-    close_sound = { filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },
+    open_sound = {filename = "__base__/sound/car-door-open.ogg", volume = 0.7},
+    close_sound = {filename = "__base__/sound/car-door-close.ogg", volume = 0.7},
     mined_sound = data.raw["car"]["tank"].mined_sound,
     sound_no_fuel =
     {
@@ -318,55 +351,55 @@ local args = {
 
     minimap_representation = {
       filename = "__HelicopterRevival__/graphics/icons/heli-minimap-representation.png",
-      flags = { "icon" },
-      size = { 40, 40 },
+      flags = {"icon"},
+      size = {40, 40},
       scale = 0.5
     },
     selected_minimap_representation = {
       filename = "__HelicopterRevival__/graphics/icons/heli-minimap-representation-selected.png",
-      flags = { "icon" },
-      size = { 40, 40 },
+      flags = {"icon"},
+      size = {40, 40},
       scale = 0.5
     },
     animation = {
       layers = {
         {
           priority = "high",
-          width = dim.hr.chassis[1],
-          height = dim.hr.chassis[2],
+          width = dim.chassis[1],
+          height = dim.chassis[2],
           frame_count = 1,
           direction_count = 1,
-          shift = {off.hr.chassis[1], off.hr.chassis[2] + 5},
-          animation_speed = 8,
-          max_advance = 0.2,
+          shift = {offset.chassis[1], offset.chassis[2] + 5},
+          animation_speed = 1,
+          max_advance = 1,
+          scale = 0.5,
           stripes =
           {
             {
-              filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Chassis_Hi-0.png",
+              filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-0.png",
               width_in_frames = 1,
               height_in_frames = 1,
             },
           },
-          scale = 0.5,
         },
         {
-						priority = "high",
-						width = dim.hr.rotor[1],
-						height = dim.hr.rotor[2],
-						frame_count = 1,
-						direction_count = 1,
-						shift = {off.hr.rotor[1], off.hr.rotor[2] + 5.1},
-						animation_speed = 8,
-						max_advance = 0.2,
-						stripes =
-						{
-							{
-								filename = "__HelicopterRevival__/graphics/entities/heli_scout/hr/Rotor_Hi-0.png",
-								width_in_frames = 1,
-								height_in_frames = 1,
-							},
-						},
-						scale = 0.5,
+          priority = "high",
+          width = dim.rotor[1],
+          height = dim.rotor[2],
+          frame_count = 1,
+          direction_count = 1,
+          shift = {offset.rotor[1], offset.rotor[2] + 5.1},
+          animation_speed = 1,
+          max_advance = 1,
+          scale = 0.5,
+          stripes =
+          {
+            {
+              filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-0.png",
+              width_in_frames = 1,
+              height_in_frames = 1,
+            },
+          },
         },
       }
     },
