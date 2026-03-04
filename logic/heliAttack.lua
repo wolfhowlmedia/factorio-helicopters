@@ -35,8 +35,11 @@ heliAttack =
 
 setmetatable(heliAttack, {__index = heliBase})
 
-
-local _, datas = serpent.load(prototypes.entity[transferralEntityName].localised_description)
+local entity = prototypes.entity[transferralEntityName]
+local datas
+if entity ~= nil then
+	_, datas = serpent.load(entity.localised_description)
+end
 if datas == nil then
 	datas = {""}
 end

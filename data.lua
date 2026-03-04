@@ -1,10 +1,15 @@
-require("prototypes.entities.heli_entity")
-require("prototypes.entities.heli_scout")
-require("prototypes.entities.smoke")
-require("prototypes.entities.heli_pad")
+if settings.startup["heli-disabler"].value == false then
+    require("prototypes.entities.heli_entity")
+    require("prototypes.entities.heli_scout")
+    require("prototypes.prototypesHelis")
+    require("prototypes.itemsHelis")
+end
 
 require("prototypes.prototypes")
 require("prototypes.items")
+
+require("prototypes.entities.heli_pad")
+require("prototypes.entities.smoke")
 require("prototypes.input")
 require("prototypes.style")
 

@@ -81,8 +81,16 @@ function OnLoad(e)
 end
 
 function OnConfigChanged(e)
+	local invalidHelis = {}
+
 	if storage.helis then
-		for _, curHeli in pairs(storage.helis) do
+		for i, curHeli in ipairs(storage.helis) do
+			if curHeli.baseEnt.valid == false then
+				curHeli:destroy()
+				table.insert(invalidHelis, i)
+				goto continue
+			end
+
 			if not curHeli.curState then
 				if curHeli.goUp then
 					curHeli:changeState(curHeli.engineStarting)
@@ -108,8 +116,17 @@ function OnConfigChanged(e)
 			end
 
 			curHeli:reassignCurState()
+		    ::continue::
 		end
 	end
+
+	local j = 0
+	for i = #invalidHelis, 1, -1 do
+		local index = invalidHelis[i]
+		table.remove(storage.helis, index)
+		j = j + 1
+	end
+	if j > 0 then game.print("Deleted "..j.." invalid helis.") end
 
 	if storage.heliPads then
 		for k, curPad in pairs(storage.heliPads) do
