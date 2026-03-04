@@ -836,11 +836,11 @@ heliBase = {
 				force = game.forces.neutral,
 				boxLengths =
 				{
-					ends = 3,
-					sides = 4.8,
+					ends = 0.6 + math.abs(self.baseEnt.prototype.collision_box.left_top.x) + self.baseEnt.prototype.collision_box.right_bottom.x,
+					sides = math.abs(self.baseEnt.prototype.collision_box.left_top.y) + self.baseEnt.prototype.collision_box.right_bottom.y,
 				},
-				nameEnds = "heli-landed-collision-end-entity-_-",
-				nameSides = "heli-landed-collision-side-entity-_-",
+				nameEnds = self.prefix.."heli-landed-collision-end-entity-_-",
+				nameSides = self.prefix.."heli-landed-collision-side-entity-_-",
 			})
 
 			self.childs.collisionEnt.ejectPlayers()
@@ -848,7 +848,7 @@ heliBase = {
 
 		elseif name == "flying" then
 			self.childs.collisionEnt = self.surface.create_entity{
-				name = "heli-flying-collision-entity-_-",
+				name = self.prefix.."heli-flying-collision-entity-_-",
 				force = game.forces.neutral,
 				position = self.baseEnt.position,
 			}
@@ -1107,7 +1107,7 @@ heliBase = {
 		if self.childs.collisionEnt then
 			if not self.hasLandedCollider then
 				local initVec = {0,1}
-				local mul = 2
+				local mul = self.baseEnt.prototype.collision_box.right_bottom.y * 0.83 --originally 2
 				if self.baseEnt.speed < 0 then
 					initVec = {0,-1}
 					local x = self.baseEnt.orientation

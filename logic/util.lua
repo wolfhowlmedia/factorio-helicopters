@@ -176,7 +176,7 @@ function getIndexedPos(pos)
 		return {pos[1], pos[2]}
 	elseif pos.x and pos.y then
 		return {pos.x, pos.y}
-	end	
+	end
 end
 
 string.startswith = function(str, strSub)

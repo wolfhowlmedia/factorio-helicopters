@@ -237,7 +237,7 @@ emptyBoxCollider =
 					else
 						delta = -1.2 - b
 					end
-					
+
 					deltaVec = math3d.vector2.mul(self.childColliderOffsets.right, delta)
 				end
 
