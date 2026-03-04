@@ -60,32 +60,27 @@ data:extend({
 	},
 })
 
+table.insert(data.raw["technology"]["heli-technology"].effects, {type = "unlock-recipe", recipe = "helicopter"})
+data.raw["technology"]["heli-technology"].prerequisites = {"heli-technology-scout", "processing-unit", "rocketry"}
+
 --Technologies
 data:extend({
     {
         type = "technology",
-        name = "heli-technology",
+        name = "heli-technology-scout",
         icon = "__HelicopterRevival__/graphics/technology/heli-technology.png",
         icon_size = 256,
         effects =
         {
             {
                 type = "unlock-recipe",
-                recipe = "helicopter"
-            },
-            {
-                type = "unlock-recipe",
                 recipe = "scout-helicopter"
             },
-            {
-                type = "unlock-recipe",
-                recipe = "helicopter-pad"
-            },
         },
-        prerequisites = {"automobilism", "processing-unit", "gun-turret", "rocketry"},
+        prerequisites = {"automobilism", "advanced-circuit", "gun-turret"},
         unit =
         {
-            count = 400,
+            count = 350,
             ingredients =
             {
                 {"automation-science-pack", 1},

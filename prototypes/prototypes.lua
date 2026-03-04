@@ -130,6 +130,32 @@ data:extend({
 data:extend({
     {
         type = "technology",
+        name = "heli-technology",
+        icon = "__HelicopterRevival__/graphics/technology/heli-technology.png",
+        icon_size = 256,
+        effects =
+        {
+            {
+                type = "unlock-recipe",
+                recipe = "helicopter-pad"
+            },
+        },
+        prerequisites = {"automobilism", "processing-unit", "gun-turret", "rocketry"},
+        unit =
+        {
+            count = 600,
+            ingredients =
+            {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 2},
+            },
+            time = 30
+        },
+        order = "e-d"
+    },
+    {
+        type = "technology",
         name = "heli-remote-technology",
         icon = "__HelicopterRevival__/graphics/technology/heli-remote-technology.png",
         icon_size = 256,
@@ -157,9 +183,6 @@ data:extend({
     },
 })
 
-if data.raw["technology"]["heli-technology"] == nil then
-    data.raw["technology"]["heli-remote-technology"].prerequisites = {"automobilism", "concrete", "processing-unit", "battery", "modular-armor"}
-end
 
 --Sprites
 data:extend({

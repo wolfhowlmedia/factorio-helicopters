@@ -190,3 +190,11 @@ if (mods["Krastorio2"] or mods["Krastorio2-spaced-out"]) and data.raw["ammo-cate
         },
     })
 end
+
+local scoutGun = table.deepcopy(data.raw["gun"]["heli-gun"])
+scoutGun.name = "heli-gun-scout"
+scoutGun.attack_parameters.cooldown = 10
+scoutGun.attack_parameters.range = 15
+scoutGun.attack_parameters.projectile_center = {0, 1}
+scoutGun.attack_parameters.projectile_creation_distance = 2.5
+data:extend({scoutGun})

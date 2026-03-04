@@ -5,8 +5,8 @@ function by_pixel(t)
 end
 
 local fuel_slots = 5
-local inventory_slots = 80
-local gun_slots = {"heli-gun", "heli-rocket-launcher-item", "heli-flamethrower"}
+local inventory_slots = 20
+local gun_slots = {"heli-gun-scout"}
 
 ---------------------------
 --Width, Height, Count
@@ -304,16 +304,16 @@ local args = {
     }
   },
   entityProperties = {
-    max_health = 2500,
+    max_health = 750,
     flags = {"placeable-neutral", "player-creation", "placeable-off-grid", "not-flammable"},
     corpse = "medium-remnants",
     dying_explosion = "medium-explosion",
-    energy_per_hit_point = 1,
-    rotation_speed = 0.005,
+    energy_per_hit_point = 3,
+    rotation_speed = 0.0075,
     turret_rotation_speed = 1 / 60,
     trash_inventory_size = 10,
     inventory_size = inventory_slots,
-    weight = settings.startup["heli-weight"].value,
+    weight = settings.startup["heli-weight"].value / 2,
 
     allow_remote_driving = true,
     is_military_target = true,
@@ -322,20 +322,19 @@ local args = {
     guns = gun_slots,
 
     deliver_category = "vehicle",
-    equipment_grid = "heli-equipment-grid",
     subgroup = "transport",
     order = "b[personal-transport]-c[heli]",
 
-    effectivity = 0.4,
-    consumption = settings.startup["heli-consumption"].value,
-    braking_power = settings.startup["heli-braking-power"].value,
+    effectivity = 0.5,
+    consumption = "1000kW",
+    braking_power = "500kW",
     friction = 0.002,
     terrain_friction_modifier = 0,
     energy_source = {
       type = "burner",
-      effectivity = 0.5,
+      effectivity = 0.75,
       emissions = 0.005,
-      fuel_inventory_size = fuel_slots,
+      fuel_inventory_size = 2,
     },
 
     open_sound = {filename = "__base__/sound/car-door-open.ogg", volume = 0.7},
