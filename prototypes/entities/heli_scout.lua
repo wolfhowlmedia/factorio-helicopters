@@ -11,14 +11,15 @@ local gun_slots = {"heli-gun-scout"}
 ---------------------------
 --Width, Height, Count
 local dim = {
-	chassis = {2400, 1920, 4},
-	chassisShadow = {2320, 1424, 4},
+	chassis = {5632, 5632, 8},
+	chassisLight = {5632, 5632, 8},
+	chassisShadow = {6144, 6144, 8},
 
-	gun = {1600, 1216, 8},
-	gunShadow = {1440, 960, 8},
+	gun = {5632, 5632, 8},
+	gunShadow = {6144, 6144, 8},
 
-	rotor = {1608, 1116, 4},
-	rotorShadow = {1584, 960, 4},
+	rotor = {5632, 5632, 8},
+	rotorShadow = {6144, 6144, 8},
 }
 
 for _, v in pairs(dim) do
@@ -29,14 +30,15 @@ end
 
 local offset = {}
 
-offset.chassis = {0, -4.5}
-offset.chassisShadow = {1.25, 1.5}
+offset.chassis = {0, -3.5}
+offset.chassisLight = {0, -3.5}
+offset.chassisShadow = {1, 1.5}
 
-offset.gun = {0, 1}
-offset.gunShadow = {1, 1}
+offset.gun = {0, 1.5}
+offset.gunShadow = {1.5, 1.5}
 
-offset.rotor = {0, -5.1}
-offset.rotorShadow = {0.75, 1.5}
+offset.rotor = {0, -3.6}
+offset.rotorShadow = {0.5, 1.5}
 
 for _, v in pairs(offset) do
   v[2] = v[2] -1
@@ -67,24 +69,9 @@ local args = {
         stripes =
         {
           {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-0.png",
-            width_in_frames = 4,
-            height_in_frames = 4,
-          },
-          {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-1.png",
-            width_in_frames = 4,
-            height_in_frames = 4,
-          },
-          {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-2.png",
-            width_in_frames = 4,
-            height_in_frames = 4,
-          },
-          {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-3.png",
-            width_in_frames = 4,
-            height_in_frames = 4,
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout.png",
+            width_in_frames = 8,
+            height_in_frames = 8,
           },
         },
       },
@@ -103,24 +90,9 @@ local args = {
     stripes =
     {
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/ChassisShadow_Hi-0.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/ChassisShadow_Hi-1.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/ChassisShadow_Hi-2.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/ChassisShadow_Hi-3.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout_shadow.png",
+        width_in_frames = 8,
+        height_in_frames = 8,
       },
     },
     scale = 0.5,
@@ -140,7 +112,7 @@ local args = {
         stripes =
         {
           {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/Gun_Hi.png",
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout_tower.png",
             width_in_frames = 8,
             height_in_frames = 8,
           },
@@ -164,7 +136,7 @@ local args = {
         stripes =
         {
           {
-            filename = "__HelicopterRevival__/graphics/entities/heli_scout/GunShadow_Hi.png",
+            filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout_tower_shadow.png",
           width_in_frames = 8,
           height_in_frames = 8,
           },
@@ -181,27 +153,13 @@ local args = {
     shift = offset.rotor,
     animation_speed = 1,
     max_advance = 1,
+    counterclockwise = true,
     stripes =
     {
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-0.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-1.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-2.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-3.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout_rotor.png",
+        width_in_frames = 8,
+        height_in_frames = 8,
       },
     },
     scale = 0.5,
@@ -216,27 +174,13 @@ local args = {
     shift = offset.rotorShadow,
     animation_speed = 1,
     max_advance = 1,
+    counterclockwise = true,
     stripes =
     {
       {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Hi-0.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Hi-1.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Hi-2.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
-      },
-      {
-        filename = "__HelicopterRevival__/graphics/entities/heli_scout/RotorShadow_Hi-3.png",
-        width_in_frames = 4,
-        height_in_frames = 4,
+        filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout_rotor_shadow.png",
+        width_in_frames = 8,
+        height_in_frames = 8,
       },
     },
     scale = 0.5,
@@ -310,7 +254,7 @@ local args = {
     dying_explosion = "medium-explosion",
     energy_per_hit_point = 3,
     rotation_speed = 0.0075,
-    turret_rotation_speed = 1 / 60,
+    turret_rotation_speed = 1 / 120,
     trash_inventory_size = 10,
     inventory_size = inventory_slots,
     weight = settings.startup["heli-weight"].value / 2,
@@ -375,7 +319,7 @@ local args = {
           stripes =
           {
             {
-              filename = "__HelicopterRevival__/graphics/entities/heli_scout/Chassis_Hi-0.png",
+              filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout.png",
               width_in_frames = 1,
               height_in_frames = 1,
             },
@@ -394,9 +338,35 @@ local args = {
           stripes =
           {
             {
-              filename = "__HelicopterRevival__/graphics/entities/heli_scout/Rotor_Hi-0.png",
+              filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout_rotor.png",
               width_in_frames = 1,
               height_in_frames = 1,
+            },
+          },
+        },
+      }
+    },
+    darkness_to_render_light_animation = -100,
+    light_animation = {
+      layers = {
+        {
+          priority = "high",
+          width = dim.chassisLight[1],
+          height = dim.chassisLight[2],
+          frame_count = 1,
+          direction_count = 64,
+          shift = offset.chassisLight,
+          animation_speed = 1,
+          blend_mode = "additive",
+          draw_as_glow = true,
+          max_advance = 1,
+          scale = 0.5,
+          stripes =
+          {
+            {
+              filename = "__HelicopterRevival__/graphics/entities/heli_scout/scout_light.png",
+              width_in_frames = 8,
+              height_in_frames = 8,
             },
           },
         },

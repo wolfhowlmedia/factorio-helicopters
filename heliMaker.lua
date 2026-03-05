@@ -185,6 +185,7 @@ function HRHelicopterMaker(args)
   blueprintBase.final_render_layer = "air-object"
   blueprintBase.factoriopedia_alternative  = args.name.."helicopter"
   blueprintBase.animation = util.empty_animation(1)
+  blueprintBase.light_animation = nil
   blueprintBase.turret_animation = args.animationTurret
 
   data:extend({
@@ -251,6 +252,11 @@ function HRHelicopterMaker(args)
     },
   })
 
+  ---------------light anim--------------------
+  if args.entityProperties.light_animation ~= nil then
+    data.raw["car"][args.name.."heli-body-entity-_-"].light_animation = args.entityProperties.light_animation
+    data.raw["car"][args.name.."heli-body-entity-_-"].darkness_to_render_light_animation = args.entityProperties.darkness_to_render_light_animation
+  end
   ---------------smoke and sound--------------------
   if args.smoke ~= nil then
     data:extend({

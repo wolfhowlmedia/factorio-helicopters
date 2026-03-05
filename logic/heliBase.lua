@@ -198,8 +198,13 @@ stateFuncs = {
 			heli:setRotorTargetRPF(heli.rotorMaxRPF)
 
 			if not (heli.burnerDriver and heli.burnerDriver.valid) then
-				heli.burnerDriver = heli.surface.create_entity{name="character", force = game.forces.neutral, position = heli.baseEnt.position}
+				heli.burnerDriver = heli.surface.create_entity{name = "character", force = game.forces.neutral, position = heli.baseEnt.position}
 				heli.childs.burnerEnt.set_driver(heli.burnerDriver)
+			end
+
+			if not (heli.baseDriver and heli.baseDriver.valid) then
+				heli.baseDriver = heli.surface.create_entity{name = "character", force = game.forces.neutral, position = heli.childs.bodyEnt.position}
+				heli.childs.bodyEnt.set_driver(heli.baseDriver)
 			end
 
 			if heli.floodlightEnabled then
@@ -322,10 +327,15 @@ stateFuncs = {
 	engineStopping = {
 		init = function(heli)
 			heli.childs.burnerEnt.set_driver(nil)
+			heli.childs.bodyEnt.set_driver(nil)
 
 			if heli.burnerDriver and heli.burnerDriver.valid then
 				heli.burnerDriver.destroy()
 				heli.burnerDriver = nil
+			end
+			if heli.baseDriver and heli.baseDriver.valid then
+				heli.baseDriver.destroy()
+				heli.baseDriver = nil
 			end
 
 			heli:setRotorTargetRPF(0)
@@ -803,6 +813,12 @@ heliBase = {
 						if curDriver ~= self.floodlightDriver then
 							self:insertIntoCar(self.baseEnt, curDriver)
 							curChild.set_driver(self.floodlightDriver)
+						end
+
+					elseif k == "bodyEnt" and self.baseDriver then
+						if curDriver ~= self.baseDriver then
+							self:insertIntoCar(self.baseEnt, curDriver)
+							curChild.set_driver(self.baseDriver)
 						end
 
 					else
