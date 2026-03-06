@@ -49,7 +49,7 @@ end
 
 local args = {
   name = "scout",
-  icon = "__HelicopterRevival__/graphics/icons/heli.png",
+  icon = "__HelicopterRevival__/graphics/icons/heli-scout.png",
   iconSize = 64,
   selBox = {{-0.75, -1.75}, {0.75, 1.75}},
   colBox = {{-0.75, -1.75}, {0.75, 1.75}},
@@ -374,7 +374,5 @@ local args = {
     },
   }
 }
-
-log(serpent.dump(args))
 
 HRHelicopterMaker(args)

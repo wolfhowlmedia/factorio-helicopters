@@ -52,11 +52,15 @@ data:extend({
 		type = "recipe",
         name = "scout-helicopter",
 		enabled = false,
-		energy_required = 60,
+		energy_required = 30,
 		ingredients = {
-			{type = "item", name = "iron-plate", amount = 1},
+			{type = "item", name = "engine-unit", amount = 50},
+			{type = "item", name = "steel-plate", amount = 50},
+			{type = "item", name = "iron-gear-wheel", amount = 75},
+			{type = "item", name = "advanced-circuit", amount = 75},
+			{type = "item", name = "gun-turret", amount = 1},
 		},
-        results = { { type = "item", name = "scout-helicopter", amount = 1 }, },
+        results = {{type = "item", name = "scout-helicopter", amount = 1},},
 	},
 })
 
@@ -68,7 +72,7 @@ data:extend({
     {
         type = "technology",
         name = "heli-technology-scout",
-        icon = "__HelicopterRevival__/graphics/technology/heli-technology.png",
+        icon = "__HelicopterRevival__/graphics/technology/heli-technology-scout.png",
         icon_size = 256,
         effects =
         {
