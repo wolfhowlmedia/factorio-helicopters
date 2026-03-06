@@ -10,6 +10,7 @@ end
 
 local args = {
   override = true,
+  bobbing = true,
   name = "",
   icon = "__HelicopterRevival__/graphics/icons/heli.png",
   iconSize = 64,

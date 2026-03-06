@@ -13,7 +13,7 @@ heliAttack =
 
 	fuelSlots = 5,
 
-	new = function(prefix, placementEnt)
+	new = function(prefix, placementEnt, bobbing)
 		local baseEnt = placementEnt.surface.create_entity {name = prefix.."heli-entity-_-", force = placementEnt.force, position = placementEnt.position, quality = placementEnt.quality}
 
 		local childs =
@@ -29,7 +29,7 @@ heliAttack =
 			floodlightEnt = placementEnt.surface.create_entity{name = prefix.."heli-floodlight-entity-_-", force = game.forces.neutral, position = baseEnt.position},
 		}
 
-		return heliBase.new(prefix, placementEnt, baseEnt, childs, {__index = heliAttack})
+		return heliBase.new(prefix, placementEnt, baseEnt, childs, {__index = heliAttack}, bobbing)
 	end,
 }
 
@@ -39,9 +39,6 @@ local entity = prototypes.entity[transferralEntityName]
 local datas
 if entity ~= nil then
 	_, datas = serpent.load(entity.localised_description)
-end
-if datas == nil then
-	datas = {""}
 end
 
 local heliEntityNamesSuffix = {
@@ -58,20 +55,20 @@ local heliEntityNamesSuffix = {
 }
 
 heliEntityNames = {}
-for _, prefix in pairs(datas) do
+for _, data in pairs(datas) do
 	for _, suffix in pairs(heliEntityNamesSuffix) do
-		heliEntityNames[prefix..suffix] = true
+		heliEntityNames[data.prefix..suffix] = true
 	end
 end
 
 heliBaseEntityNames = {}
-for _, prefix in pairs(datas) do
-	heliBaseEntityNames[prefix.."heli-entity-_-"] = prefix
+for _, data in pairs(datas) do
+	heliBaseEntityNames[data.prefix.."heli-entity-_-"] = data.prefix
 end
 
 heliPlacementEntityNames = {}
-for _, prefix in pairs(datas) do
-	heliPlacementEntityNames[prefix.."helicopter"] = prefix
+for _, data in pairs(datas) do
+	heliPlacementEntityNames[data.prefix.."helicopter"] = {prefix = data.prefix, bobbing = data.bobbing}
 end
 --[[
 heliEntityNames = heliEntityNames .. concatStrTable({

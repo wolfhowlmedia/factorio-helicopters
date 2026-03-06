@@ -1,6 +1,6 @@
 local transferralEntityName = "hr-heli-names"
 
-local function addTransferralEntity(name)
+local function addTransferralEntity(datas)
   data:extend{
     {
       type = "entity-ghost",
@@ -10,7 +10,7 @@ local function addTransferralEntity(name)
       stack_size = 1,
       flags = {"not-on-map", "hide-alt-info", "not-blueprintable", "not-flammable"},
       localised_name = "BIGDATA",
-      localised_description = serpent.dump(name),
+      localised_description = serpent.dump(datas),
       hidden_in_factoriopedia = true,
       order = "z",
     }
@@ -100,6 +100,7 @@ local optionalFields = {
   animationTurretShadow = "table",
   smoke = "table",
   smokePositions = "table",
+  bobbing = "boolean",
 }
 local requiredFieldsEntity = {
   max_health = "number",
@@ -318,15 +319,15 @@ function HRHelicopterMaker(args)
     }
   end
 
+  local datas = {}
   if data.raw["entity-ghost"][transferralEntityName] == nil then
-    addTransferralEntity({args.name})
+    datas[1] = {prefix = args.name, bobbing = args.bobbing or false}
+    addTransferralEntity(datas)
   else
     local _, datas = serpent.load(data.raw["entity-ghost"][transferralEntityName].localised_description)
     if datas ~= nil then
-      table.insert(datas, args.name)
-    else
-      datas = {}
+      table.insert(datas, {prefix = args.name, bobbing = args.bobbing or false})
+      addTransferralEntity(datas)
     end
-    addTransferralEntity(datas)
   end
 end

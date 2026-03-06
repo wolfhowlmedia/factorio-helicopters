@@ -8,7 +8,6 @@ require("logic.simpleNoise")
 
 require("logic.heliBase")
 require("logic.heliAttack")
---require("logic.heliScout")
 
 require("logic.heliPad")
 require("logic.heliController")
@@ -52,8 +51,6 @@ function OnLoad(e)
 		for _, heli in pairs(storage.helis) do
 			if not heli.type or heli.type == "heliAttack" then
 				setmetatable(heli, {__index = heliAttack})
-			--elseif heli.type == "heliScout" then
-			--	setmetatable(heli, {__index = heliScout})
 			end
 		end
 	end
@@ -179,7 +176,7 @@ function OnBuilt(e)
 	local ent = e.entity
 
 	if heliPlacementEntityNames[ent.name] ~= nil then
-		local newHeli = insertInGlobal("helis", heliAttack.new(heliPlacementEntityNames[ent.name], ent))
+		local newHeli = insertInGlobal("helis", heliAttack.new(heliPlacementEntityNames[ent.name].prefix, ent, heliPlacementEntityNames[ent.name].bobbing))
 
 		if storage.remoteGuis then
 			for _, rg in pairs(storage.remoteGuis) do

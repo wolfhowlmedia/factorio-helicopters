@@ -114,8 +114,8 @@ end
 
 maxCollisionHeight = 2
 
-local maxBobbing = 0.05
-local bobbingPeriod = 8*60
+local maxBobbing = 0.15
+local bobbingPeriod = 4*60
 
 local colliderMaxHealth = 999999
 
@@ -185,6 +185,15 @@ stateFuncs = {
 					return false
 				end
 			end
+
+			if heli.rotorAnimator and not heli.rotorAnimator.isDone then
+				local isDone
+				heli.rotorRPF, isDone = heli.rotorAnimator:nextFrame()
+
+				if isDone then
+					heli.rotorAnimator = nil
+				end
+			end
 		end,
 
 		OnUp = function(heli)
@@ -239,7 +248,7 @@ stateFuncs = {
 			heli.baseEnt.friction_modifier = 1
 
 			local time = heli:setTargetHeight(heli.maxHeight)
-			--heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time*60, "linear")
+			heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time * 60, "linear")
 
 			heli:setCollider("flying")
 		end,
@@ -250,9 +259,9 @@ stateFuncs = {
 			heli:landIfEmpty()
 			heli:handleInserters()
 
-			--if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
-			--	heli.curBobbing = heli.bobbingAnimator:nextFrame()
-			--end
+			if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
+				heli.curBobbing = heli.bobbingAnimator:nextFrame()
+			end
 
 			if heli.height > maxCollisionHeight then
 				heli:setCollider("none")
@@ -269,7 +278,9 @@ stateFuncs = {
 	},
 	hovering = {
 		init = function(heli)
-			--heli.bobbingAnimator = basicAnimator.new(0, maxBobbing, bobbingPeriod, "cyclicSine")
+			if (heli.bobbing ~= nil and heli.bobbing == true) then
+				heli.bobbingAnimator = basicAnimator.new(0, maxBobbing, bobbingPeriod, "cyclicSine")
+			end
 		end,
 
 		OnTick = function(heli)
@@ -278,14 +289,12 @@ stateFuncs = {
 			heli:landIfEmpty()
 			heli:handleInserters()
 
-			--[[
 			local isDone
 			heli.curBobbing, isDone = heli.bobbingAnimator:nextFrame()
 
 			if isDone then
 				heli.bobbingAnimator:reset()
 			end
-			]]
 		end,
 
 		OnMaxHeightChanged = function(heli)
@@ -295,7 +304,7 @@ stateFuncs = {
 	descend = {
 		init = function(heli)
 			local time = heli:setTargetHeight(0)
-			--heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time*60, "linear")
+			heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time * 60, "linear")
 		end,
 
 		deinit = function(heli)
@@ -307,9 +316,9 @@ stateFuncs = {
 			heli:handleFuelConsumption()
 			heli:handleInserters()
 
-			--if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
-			--	heli.curBobbing = heli.bobbingAnimator:nextFrame()
-			--end
+			if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
+				heli.curBobbing = heli.bobbingAnimator:nextFrame()
+			end
 
 			if heli.height <= maxCollisionHeight and not (heli.childs.collisionEnt and heli.childs.collisionEnt.valid) then
 				heli:setCollider("flying")
@@ -356,6 +365,7 @@ heliBase = {
 	targetHeight = 0,
 	maxHeight = 5,
 	curBobbing = 0,
+	bobbing = false,
 
 	heightSpeed = 0,
 	heightAcceleration = 0.001,
@@ -389,7 +399,7 @@ heliBase = {
 
 	------------------------------------------------------------
 
-	new = function(prefix, placementEnt, baseEnt, childEnts, mt)
+	new = function(prefix, placementEnt, baseEnt, childEnts, mt, bobbing)
 		transferGridEquipment(placementEnt, baseEnt)
 		baseEnt.health = placementEnt.health
 
@@ -405,6 +415,8 @@ heliBase = {
 
 			baseEnt = baseEnt,
 			childs = childEnts,
+
+			bobbing = bobbing,
 
 			surface = placementEnt.surface,
 
@@ -1112,8 +1124,8 @@ heliBase = {
 		self.childs.bodyEnt.teleport({ x = basePos.x - vec[1], y = basePos.y - vec[2] + self.bodyOffset  - self.curBobbing})
 		self.childs.rotorEnt.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.rotorOffset - self.curBobbing})
 
-		self.childs.rotorEntShadow.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.height})
-		self.childs.bodyEntShadow.teleport({ x = basePos.x - vec[1], y = basePos.y - vec[2] + self.height})
+		self.childs.rotorEntShadow.teleport({x = basePos.x - vec[1] + self.height + self.curBobbing, y = basePos.y - vec[2] + self.height})
+		self.childs.bodyEntShadow.teleport({ x = basePos.x - vec[1] + self.height + self.curBobbing, y = basePos.y - vec[2] + self.height})
 
 		if self.childs.floodlightEnt then
 			local lightOffsetVec = math3d.vector2.mul(baseVec, self.height)

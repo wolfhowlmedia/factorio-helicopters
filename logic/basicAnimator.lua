@@ -12,7 +12,7 @@ basicAnimator =
 			easingFunc = basicAnimator.easingFuncs[easingName],
 
 			startValue = startValue,
-			--maxValue = maxValue,
+			maxValue = maxValue,
 			delta = maxValue - startValue,
 
 			direction = 1,
@@ -129,7 +129,7 @@ basicAnimator =
 
 		-- decelerating to zero velocity
 		easeOutQuint = function(x) return 1+(x-1)^5 end,
-			
+
 		-- acceleration until halfway, then deceleration
 		easeInOutQuint = function(x) if x < 0.5 then return 16*x^5 else return 1+16*(1-x)^5 end end,
 

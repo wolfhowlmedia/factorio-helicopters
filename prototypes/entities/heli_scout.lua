@@ -49,6 +49,7 @@ end
 
 local args = {
   name = "scout",
+  bobbing = false,
   icon = "__HelicopterRevival__/graphics/icons/heli-scout.png",
   iconSize = 64,
   selBox = {{-0.75, -1.75}, {0.75, 1.75}},
