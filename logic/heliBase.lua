@@ -278,7 +278,7 @@ stateFuncs = {
 	},
 	hovering = {
 		init = function(heli)
-			if (heli.bobbing ~= nil and heli.bobbing == true) then
+			if (heli.bobbing ~= nil and heli.bobbing == true) and settings.global["heli-bobbing"].value == true then
 				heli.bobbingAnimator = basicAnimator.new(0, maxBobbing, bobbingPeriod, "cyclicSine")
 			end
 		end,

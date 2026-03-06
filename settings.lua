@@ -127,7 +127,7 @@ data:extend({
         minimum_value = 0,
         order = "2",
     },
-   
+
     ------------- Misc -------------------
     {
         type = "bool-setting",
@@ -142,6 +142,13 @@ data:extend({
         setting_type = "runtime-global",
         default_value = 1,
         minimum_value = 0,
+    },
+
+    {
+        type = "bool-setting",
+        name = "heli-bobbing",
+        setting_type = "runtime-global",
+        default_value = false,
     },
 
     ----------------------------------------------
