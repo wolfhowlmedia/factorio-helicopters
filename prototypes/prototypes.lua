@@ -130,9 +130,9 @@ data:extend({
 data:extend({
     {
         type = "technology",
-        name = "heli-technology",
-        icon = "__HelicopterRevival__/graphics/technology/heli-technology.png",
-        icon_size = 256,
+        name = "heli-technology-pad",
+        icon = "__HelicopterRevival__/graphics/icons/heli_pad.png",
+        icon_size = 64,
         effects =
         {
             {
@@ -140,15 +140,14 @@ data:extend({
                 recipe = "helicopter-pad"
             },
         },
-        prerequisites = {"automobilism", "processing-unit", "gun-turret", "rocketry"},
+        prerequisites = {"concrete"},
         unit =
         {
-            count = 600,
+            count = 100,
             ingredients =
             {
                 {"automation-science-pack", 1},
                 {"logistic-science-pack", 1},
-                {"chemical-science-pack", 2},
             },
             time = 30
         },
@@ -166,7 +165,7 @@ data:extend({
                 recipe = "helicopter-remote-equipment"
             },
         },
-        prerequisites = {"heli-technology", "concrete", "processing-unit", "battery", "modular-armor"},
+        prerequisites = {"battery", "modular-armor"},
         unit =
         {
             count = 450,
