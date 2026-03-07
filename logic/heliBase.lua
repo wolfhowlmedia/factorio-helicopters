@@ -3,7 +3,7 @@ require("logic.basicState")
 require("logic.emptyBoxCollider")
 
 function getHeliFromBaseEntity(ent)
-	for k,v in pairs(storage.helis) do
+	for _, v in pairs(storage.helis) do
 		if v.baseEnt == ent then
 			return v
 		end
@@ -139,6 +139,35 @@ end
 --heliBaseEntityNames = ""
 
 stateFuncs = {
+	landedStatic = {
+		init = function(heli)
+			heli.baseEnt.effectivity_modifier = 0
+			heli.baseEnt.friction_modifier = 50
+
+			heli.lockedBaseOrientation = heli.baseEnt.orientation
+
+			heli.landedColliderCreationDelay = 2
+
+			heli:setFloodlightEntities(false)
+
+			for k, curGG in pairs(heli.gaugeGuis) do
+				curGG:setPointerNoise("gauge_fs", "speed", false)
+				curGG:setPointerNoise("gauge_hr", "height", false)
+				curGG:setPointerNoise("gauge_hr", "rpm", false)
+			end
+
+			heli:setFuelGaugeTarget(0, true)
+		end,
+		OnTick = function(heli)
+			if heli.baseEnt.orientation ~= heli.lockedBaseOrientation then
+				heli.baseEnt.orientation = heli.lockedBaseOrientation
+			end
+		end,
+
+		OnUp = function(heli)
+			heli:changeState(heli.engineStarting)
+		end,
+	},
 	landed = {
 		init = function(heli)
 			heli.baseEnt.effectivity_modifier = 0
@@ -495,11 +524,14 @@ heliBase = {
 		end
 
 		self:redirectPassengers()
-		self:updateRotor()
-		self:updateHeight()
 		self:updateFuelGauge()
-		self:updateEntityPositions()
-		self.curState.OnTick(self)
+
+		if self.curState.name ~= "landedStatic" then
+			self:updateRotor()
+			self:updateHeight()
+			self:updateEntityPositions()
+			self.curState.OnTick(self)
+		end
 
 		if self.valid then
 			self:handleColliderDamage()
@@ -622,6 +654,10 @@ heliBase = {
 
 
 	---------------- states ----------------
+
+	landedStatic = basicState.new({
+		name = "landedStatic",
+	}),
 
 	landed = basicState.new({
 		name = "landed",
@@ -1051,6 +1087,9 @@ heliBase = {
 			self.childs.rotorEntShadow.orientation = frameFix
 		end
 
+		if self.rotorRPF == 0 then
+			self:changeState(self.landedStatic)
+		end
 
 		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_hr", "rpm", self.rotorRPF * 3600 * self.engineReduction + math.abs(self.baseEnt.speed) * 100)
@@ -1091,15 +1130,16 @@ heliBase = {
 		if self.fuelGaugeVal ~= self.fuelGaugeTargetVal then
 			if self.fuelGaugeVal < self.fuelGaugeTargetVal then
 				self.fuelGaugeVal = math.min(self.fuelGaugeVal + self.fuelGaugeSpeed, self.fuelGaugeTargetVal)
-
 			else
 				self.fuelGaugeVal = math.max(self.fuelGaugeVal - self.fuelGaugeSpeed, self.fuelGaugeTargetVal)
 			end
 		end
 
-		for k, curGG in pairs(self.gaugeGuis) do
+		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_fs", "fuel", self.fuelGaugeVal)
-			if self.curState.name ~= "landed" then
+			if self.curState.name == "landed" or self.curState.name == "landedStatic" then
+				curGG:setLedBlinking("gauge_fs", "fuel", false)
+			else
 				if self.fuelGaugeTargetVal <= self.tankCriticalWarningRatio then
 					curGG:setLedBlinking("gauge_fs", "fuel", true, 20, "heli-fuel-warning")
 
@@ -1109,8 +1149,6 @@ heliBase = {
 				else
 					curGG:setLedBlinking("gauge_fs", "fuel", false)
 				end
-			else
-				curGG:setLedBlinking("gauge_fs", "fuel", false)
 			end
 		end
 	end,

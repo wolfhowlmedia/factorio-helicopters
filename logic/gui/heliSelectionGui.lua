@@ -84,7 +84,7 @@ heliSelectionGui =
 						self.manager:OnChildEvent(self, "showTargetSelectionGui", playerSelectionGui)
 					end
 				else
-					if self.selectedCam.heli.curState.name ~= "landed" and self.selectedCam.heli.remoteController and self.selectedCam.heli.remoteController.targetIsPlayer == true then
+					if (self.selectedCam.heli.curState.name ~= "landed" or self.selectedCam.heli.curState.name ~= "landedStatic") and self.selectedCam.heli.remoteController and self.selectedCam.heli.remoteController.targetIsPlayer == true then
 						self.manager:OnChildEvent(self, "selectedPosition", self.selectedCam.heli.baseEnt.position)--heli was on the way to player, but player changed surface -> landing at last spot
 						return true
 					end
