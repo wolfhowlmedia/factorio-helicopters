@@ -2,6 +2,11 @@ require("logic.basicAnimator")
 require("logic.basicState")
 require("logic.emptyBoxCollider")
 
+funmode = false
+if script.active_mods["fun_mode"] ~= nil then
+	funmode = true
+end
+
 function getHeliFromBaseEntity(ent)
 	for _, v in pairs(storage.helis) do
 		if v.baseEnt == ent then
@@ -1083,8 +1088,14 @@ heliBase = {
 			if self.rotorOrient > 1 then self.rotorOrient = self.rotorOrient - 1 end
 
 			local frameFix = frameFixes[math.floor(self.rotorOrient * 64) + 1]
-			self.childs.rotorEnt.orientation = frameFix
-			self.childs.rotorEntShadow.orientation = frameFix
+
+			if settings.global["heli-fun-mode"].value == true or funmode then
+				self.childs.bodyEnt.orientation = frameFix
+				self.childs.bodyEntShadow.orientation = frameFix
+			else
+				self.childs.rotorEnt.orientation = frameFix
+				self.childs.rotorEntShadow.orientation = frameFix
+			end
 		end
 
 		if self.rotorRPF == 0 then
@@ -1207,8 +1218,13 @@ heliBase = {
 	end,
 
 	updateEntityRotations = function(self)
-		self.childs.bodyEnt.orientation = self.baseEnt.orientation
-		self.childs.bodyEntShadow.orientation = self.baseEnt.orientation
+		if settings.global["heli-fun-mode"].value == true or funmode then
+			self.childs.rotorEnt.orientation = self.baseEnt.orientation
+			self.childs.rotorEntShadow.orientation = self.baseEnt.orientation
+		else
+			self.childs.bodyEnt.orientation = self.baseEnt.orientation
+			self.childs.bodyEntShadow.orientation = self.baseEnt.orientation
+		end
 		self.childs.burnerEnt.orientation = self.baseEnt.orientation
 
 		if self.childs.collisionEnt then

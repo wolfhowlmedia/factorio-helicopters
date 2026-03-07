@@ -151,6 +151,13 @@ data:extend({
         default_value = false,
     },
 
+    {
+        type = "bool-setting",
+        name = "heli-fun-mode",
+        setting_type = "runtime-global",
+        default_value = false,
+    },
+
     ----------------------------------------------
 
     {
