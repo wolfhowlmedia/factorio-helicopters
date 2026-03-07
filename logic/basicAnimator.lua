@@ -9,7 +9,7 @@ basicAnimator =
 			curVal = nil,
 			isDone = false,
 
-			easingFunc = basicAnimator.easingFuncs[easingName],
+			easingFunc = easingName,--basicAnimator.easingFuncs[easingName],
 
 			startValue = startValue,
 			maxValue = maxValue,
@@ -22,7 +22,7 @@ basicAnimator =
 	end,
 
 	nextFrame = function(self)
-		local easedProgress = self.easingFunc(self.curFrame / self.endFrame)
+		local easedProgress = basicAnimator.easingFuncs[self.easingFunc](self.curFrame / self.endFrame)
 
 		self.curVal = self.startValue + self.delta * easedProgress
 

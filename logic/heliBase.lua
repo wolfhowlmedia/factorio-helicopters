@@ -140,9 +140,6 @@ local transferGridEquipment = function(srcEnt, destEnt)
 	end
 end
 
---heliEntityNames = ""
---heliBaseEntityNames = ""
-
 stateFuncs = {
 	landedStatic = {
 		init = function(heli)
@@ -151,7 +148,8 @@ stateFuncs = {
 
 			heli.lockedBaseOrientation = heli.baseEnt.orientation
 
-			heli.landedColliderCreationDelay = 2
+			heli:setCollider("landed")
+			heli:updateEntityRotations()
 
 			heli:setFloodlightEntities(false)
 
@@ -529,13 +527,13 @@ heliBase = {
 		end
 
 		self:redirectPassengers()
-		self:updateFuelGauge()
+		self.curState.OnTick(self)
 
 		if self.curState.name ~= "landedStatic" then
 			self:updateRotor()
+			self:updateFuelGauge()
 			self:updateHeight()
 			self:updateEntityPositions()
-			self.curState.OnTick(self)
 		end
 
 		if self.valid then
@@ -1156,7 +1154,6 @@ heliBase = {
 
 				elseif self.fuelGaugeTargetVal <= self.tankWarningRatio then
 					curGG:setLedBlinking("gauge_fs", "fuel", true, 60, "heli-fuel-warning")
-
 				else
 					curGG:setLedBlinking("gauge_fs", "fuel", false)
 				end
