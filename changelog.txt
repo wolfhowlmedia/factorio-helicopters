@@ -9,9 +9,12 @@ Date: 2026-03-18
     - re-added optional heli hover bobbing (setting)
     - performance increase for heli idle mode
     - added option to disable heli creation (relevant for API users)
-    - added support for fun-mode mod (heli body will spin around the blades)
+    - added support for fun-mode mod (heli body will spin around static blades)
   Changes:
     - split up tech tree
+    - minor visual improvements of heli rotor center
+  Bugfixes:
+    - heli visually centered again
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.4
 Date: 2026-01-03
