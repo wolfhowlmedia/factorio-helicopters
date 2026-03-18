@@ -291,7 +291,7 @@ stateFuncs = {
 			heli:landIfEmpty()
 			heli:handleInserters()
 
-			if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
+			if heli.bobbingAnimator and not heli.bobbingAnimator.isDone and heli.bobbingAnimator.nextFrame then
 				heli.curBobbing = heli.bobbingAnimator:nextFrame()
 			end
 

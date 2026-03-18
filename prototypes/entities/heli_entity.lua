@@ -189,7 +189,7 @@ local args = {
       color = {r = 0.92, g = 0.77, b = 0.3}
     },
   },
-  crash_trigger = {
+  crashTrigger = {
     type = "play-sound",
     sound =
     {

@@ -85,22 +85,25 @@ local function checkArgs(args, req, opt)
 end
 
 local requiredFields = {
-  animation = "table",
-  animationShadow = "table",
-  animationRotor = "table",
-  animationRotorShadow = "table",
   icon = "string",
   iconSize = "number",
   selBox = "table",
   colBox = "table",
+  animation = "table",
+  animationShadow = "table",
+  animationRotor = "table",
+  animationRotorShadow = "table",
   entityProperties = "table",
 }
 local optionalFields = {
-  animationTurret = "table",
-  animationTurretShadow = "table",
+  light = "table",
+  crashTrigger = "table",
   smoke = "table",
   smokePositions = "table",
   bobbing = "boolean",
+  workingSound = "table",
+  animationTurret = "table",
+  animationTurretShadow = "table",
 }
 local requiredFieldsEntity = {
   max_health = "number",
@@ -133,10 +136,10 @@ function HRHelicopterMaker(args)
       animationTurret,
       animationTurretShadow,
         (light)
-        (crash_trigger)
-        (vehicle_impact_sound)
+        (crashTrigger)
         (smoke)
         (smokePositions)
+        (bobbing)
     entityProperties
   }
   ]]
@@ -150,12 +153,13 @@ function HRHelicopterMaker(args)
 
   if args.smokePositions ~= nil then
     args.smoke = {}
-    for _, pos in pairs(args.smokePositions) do
+    for _, pos in pairs(args.smokePositions.pos) do
       table.insert(args.smoke, {
           name = "heli-smoke",
           deviation = {0,0},
           frequency = 200,
           position = pos,
+          height = args.smokePositions.height,
           starting_frame = 0,
           starting_frame_deviation = 60
         }
@@ -174,6 +178,8 @@ function HRHelicopterMaker(args)
   blueprintPlacement.collision_box = args.colBox
   blueprintPlacement.minable = {mining_time = 1, result = args.name.."helicopter"}
   blueprintPlacement.hidden_in_factoriopedia = true
+  blueprintPlacement.localised_name = {"", {"entity-name."..args.name.."helicopter"}}
+  blueprintPlacement.localised_description = {"", {"entity-description."..args.name.."helicopter"}}
 
   local blueprintBase = table.deepcopy(blueprintPlacement)
   blueprintPlacement.name = args.name.."helicopter"
@@ -189,6 +195,8 @@ function HRHelicopterMaker(args)
   blueprintBase.animation = util.empty_animation(1)
   blueprintBase.light_animation = nil
   blueprintBase.turret_animation = args.animationTurret
+  blueprintBase.localised_name = {"", {"entity-name."..args.name.."helicopter"}}
+  blueprintBase.localised_description = {"", {"entity-description."..args.name.."helicopter"}}
 
   data:extend({
     ---------------rotor entity---------------
@@ -307,7 +315,7 @@ function HRHelicopterMaker(args)
     data.raw["car"][args.name..name].rotation_speed = 1
     data.raw["car"][args.name..name].inventory_size = 0
     data.raw["car"][args.name..name].deliver_category = "vehicle"
-    data.raw["car"][args.name..name].crash_trigger = args.crash_trigger
+    data.raw["car"][args.name..name].crash_trigger = args.crashTrigger
   end
 
   if args.smoke ~= nil then

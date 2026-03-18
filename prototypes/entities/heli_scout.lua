@@ -205,7 +205,7 @@ local args = {
     color = {r = 0.92, g = 0.77, b = 0.3}
     },
   },
-  crash_trigger = {
+  crashTrigger = {
     type = "play-sound",
     sound =
     {
@@ -230,24 +230,7 @@ local args = {
     },
     --match_speed_to_activity = true,
   },
-  smoke = {
-    {
-      name = "heli-smoke",
-      deviation = {0, 0},
-      frequency = 200,
-      position = {-0.725, 0},
-      starting_frame = 0,
-      starting_frame_deviation = 60
-    },
-    {
-      name = "heli-smoke",
-      deviation = {0, 0},
-      frequency = 200,
-      position = {0.725, 0},
-      starting_frame = 0,
-      starting_frame_deviation = 60
-    }
-  },
+  smokePositions = {pos = {{0, 0.35}}, height = 0.55},
   entityProperties = {
     max_health = 750,
     flags = {"placeable-neutral", "player-creation", "placeable-off-grid", "not-flammable"},
