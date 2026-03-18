@@ -12,5 +12,5 @@
         "? space-age >= 2.0.32",
         "? fun_mode >= 1.0.0"
     ],
-    "description": "Adds a fully animated attack helicopter to the game. Ideal for getting from A to B quickly, exploring the map, building islands and nuking biters from the sky. Now 84% less buggier! Forked from Kumpu with updates beyond Factorio 0.17."
+    "description": "Adds two fully animated helicopters to the game. Ideal for getting from A to B quickly, exploring the map, building islands and nuking biters from the sky. Forked from Kumpu with updates beyond Factorio 0.17. NOW also includes API for other mod authors to register their own helicopters!"
 }
