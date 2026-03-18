@@ -232,7 +232,7 @@ heliSelectionGui =
 
 				local searchField = renameFlow.add{
 					type = "textfield",
-					name = self.prefix.."rename_field",
+					name = cam.heli.prefix.."rename_field",
 					text = cam.heli.name or "Helicopter",
 					style = "stretchable_textfield"
 				}
@@ -500,7 +500,7 @@ heliSelectionGui =
 			type = "table",
 			name = self.prefix .. "camTable",
 			column_count = 4,
-			tooltip = {"heli-gui-frame-tt"},
+			--tooltip = {"heli-gui-frame-tt"},
 		}
 		els.camTable.style.horizontal_spacing = 10
 		els.camTable.style.vertical_spacing = 10

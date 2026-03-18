@@ -321,11 +321,13 @@ stateFuncs = {
 			heli:landIfEmpty()
 			heli:handleInserters()
 
-			local isDone
-			heli.curBobbing, isDone = heli.bobbingAnimator:nextFrame()
+			if heli.bobbingAnimator ~= nil then
+				local isDone
+				heli.curBobbing, isDone = heli.bobbingAnimator:nextFrame()
 
-			if isDone then
-				heli.bobbingAnimator:reset()
+				if isDone then
+					heli.bobbingAnimator:reset()
+				end
 			end
 		end,
 
@@ -922,9 +924,6 @@ heliBase = {
 		end
 
 		if self.childs.collisionEnt then
-			--[[
-			self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = fallbackFuel.name, count = fallbackFuel.count})
-			]]
 			self.childs.collisionEnt.operable = false
 		end
 	end,
@@ -933,9 +932,6 @@ heliBase = {
 		if enabled then
 			if not (self.childs.floodlightEnt and self.childs.floodlightEnt.valid) then
 				self.childs.floodlightEnt = self.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = self.baseEnt.position}
-				--[[
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = fallbackFuel.name, count = fallbackFuel.count})
-				]]
 			end
 			self.childs.floodlightEnt.orientation = self.baseEnt.orientation
 			self.childs.floodlightEnt.operable = false

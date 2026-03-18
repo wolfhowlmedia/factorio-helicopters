@@ -181,6 +181,7 @@ function HRHelicopterMaker(args)
   blueprintPlacement.alert_icon_shift = nil
 
   blueprintBase.name = args.name.."heli-entity-_-"
+  blueprintBase.selection_priority = 51
   blueprintBase.collision_mask = {layers={}}
   blueprintBase.render_layer = "air-object"
   blueprintBase.final_render_layer = "air-object"

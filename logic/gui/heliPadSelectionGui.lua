@@ -66,8 +66,8 @@ heliPadSelectionGui =
 		if e.button == defines.mouse_button_type.left then
 			local camID = tonumber(e.element.name:match("%d+"))
 			local cam = searchInTable(self.guiElems.cams, camID, "ID")
-			local heliSurface = self.manager.guis.heliSelection.selectedCam.heli.surface.index --heli
-			local padSurface = cam.heliPad.surface.index --pad
+			local heliSurface = self.manager.guis.heliSelection.selectedCam.heli.surface.index --heli S
+			local padSurface = cam.heliPad.surface.index --pad S
 
 			if heliSurface == padSurface then --if case made here so that pad UI doesn't close
 				self.manager:OnChildEvent(self, "selectedPosition", cam.heliPad.baseEnt.position)
