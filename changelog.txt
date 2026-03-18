@@ -3,7 +3,7 @@ Version: 0.6.0
 Date: 2026-03-18
   Major Features:
     - added API for other mods to register their own helis to be handled like this one's (see documentation)
-    - added scout helicopter
+    - added scout helicopter (model by zumf)
   Features:
     - heli shadow distance increases with hover height
     - re-added optional heli hover bobbing (setting)
