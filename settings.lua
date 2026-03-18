@@ -1,4 +1,11 @@
 data:extend({
+    {
+        type = "bool-setting",
+        name = "heli-disabler",
+        setting_type = "startup",
+        default_value = false,
+        order = "0",
+    },
     --------- Armory settings ---------
     {
         type = "double-setting",
@@ -6,6 +13,7 @@ data:extend({
         setting_type = "startup",
         default_value = 1,
         minimum_value = 0.1,
+        order = "1",
     },
     {
         type = "int-setting",
@@ -13,6 +21,7 @@ data:extend({
         setting_type = "startup",
         default_value = 20,
         minimum_value = 0,
+        order = "1",
     },
     {
         type = "double-setting",
@@ -20,6 +29,7 @@ data:extend({
         setting_type = "startup",
         default_value = 1.2,
         minimum_value = 0.1,
+        order = "1",
     },
     {
         type = "int-setting",
@@ -27,6 +37,7 @@ data:extend({
         setting_type = "startup",
         default_value = 50,
         minimum_value = 0,
+        order = "1",
     },
     {
         type = "double-setting",
@@ -34,6 +45,7 @@ data:extend({
         setting_type = "startup",
         default_value = 1,
         minimum_value = 0.1,
+        order = "1",
     },
     {
         type = "int-setting",
@@ -41,6 +53,7 @@ data:extend({
         setting_type = "startup",
         default_value = 30,
         minimum_value = 0,
+        order = "1",
     },
     {
         type = "double-setting",
@@ -48,6 +61,7 @@ data:extend({
         setting_type = "startup",
         default_value = 1,
         minimum_value = 0.1,
+        order = "1",
     },
     {
         type = "int-setting",
@@ -55,6 +69,7 @@ data:extend({
         setting_type = "startup",
         default_value = 70,
         minimum_value = 0,
+        order = "1",
     },
     {
         type = "double-setting",
@@ -63,6 +78,7 @@ data:extend({
         maximum_value = 2,
         default_value = 1.25,
         minimum_value = 0.5,
+        order = "1",
     },
     ------------------------------
     -- Take damage settings
@@ -72,18 +88,21 @@ data:extend({
         name = "heli-disable-biters-damage",
         setting_type = "runtime-global",
         default_value = true,
+        order = "1",
     },
     {
         type = "bool-setting",
         name = "heli-disable-acid-splash-damage",
         setting_type = "runtime-global",
         default_value = true,
+        order = "1",
     },
     {
         type = "bool-setting",
         name = "heli-disable-direct-spitter-damage",
         setting_type = "runtime-global",
         default_value = false,
+        order = "1",
     },
     ------------------------------
     {
@@ -91,12 +110,14 @@ data:extend({
         name = "heli-consumption",
         setting_type = "startup",
         default_value = "3.2MW",
+        order = "2",
     },
     {
         type = "string-setting",
         name = "heli-braking-power",
         setting_type = "startup",
         default_value = "1MW",
+        order = "2",
     },
     {
         type = "int-setting",
@@ -104,8 +125,9 @@ data:extend({
         setting_type = "startup",
         default_value = 2800,
         minimum_value = 0,
+        order = "2",
     },
-   
+
     ------------- Misc -------------------
     {
         type = "bool-setting",
@@ -120,6 +142,20 @@ data:extend({
         setting_type = "runtime-global",
         default_value = 1,
         minimum_value = 0,
+    },
+
+    {
+        type = "bool-setting",
+        name = "heli-bobbing",
+        setting_type = "runtime-global",
+        default_value = false,
+    },
+
+    {
+        type = "bool-setting",
+        name = "heli-fun-mode",
+        setting_type = "runtime-global",
+        default_value = false,
     },
 
     ----------------------------------------------

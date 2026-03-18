@@ -84,7 +84,7 @@ heliSelectionGui =
 						self.manager:OnChildEvent(self, "showTargetSelectionGui", playerSelectionGui)
 					end
 				else
-					if self.selectedCam.heli.curState.name ~= "landed" and self.selectedCam.heli.remoteController and self.selectedCam.heli.remoteController.targetIsPlayer == true then
+					if (self.selectedCam.heli.curState.name ~= "landed" or self.selectedCam.heli.curState.name ~= "landedStatic") and self.selectedCam.heli.remoteController and self.selectedCam.heli.remoteController.targetIsPlayer == true then
 						self.manager:OnChildEvent(self, "selectedPosition", self.selectedCam.heli.baseEnt.position)--heli was on the way to player, but player changed surface -> landing at last spot
 						return true
 					end
@@ -232,7 +232,7 @@ heliSelectionGui =
 
 				local searchField = renameFlow.add{
 					type = "textfield",
-					name = self.prefix.."rename_field",
+					name = cam.heli.prefix.."rename_field",
 					text = cam.heli.name or "Helicopter",
 					style = "stretchable_textfield"
 				}
@@ -372,7 +372,7 @@ heliSelectionGui =
 		local name = cam.add
 		{
 			type = "label",
-			caption = titleCase(heli.name or "Helicopter"),
+			caption = heli.name or "Helicopter",
 		}
 		name.style.font = "pixelated_normal"
 		name.style.left_padding = 3
@@ -500,7 +500,7 @@ heliSelectionGui =
 			type = "table",
 			name = self.prefix .. "camTable",
 			column_count = 4,
-			tooltip = {"heli-gui-frame-tt"},
+			--tooltip = {"heli-gui-frame-tt"},
 		}
 		els.camTable.style.horizontal_spacing = 10
 		els.camTable.style.vertical_spacing = 10

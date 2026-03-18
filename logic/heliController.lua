@@ -115,7 +115,7 @@ heliController =
 		end
 	end,
 
-	OnTick = function(self)		
+	OnTick = function(self)
 		if not (self.heli.valid and self.heli.baseEnt.valid and self.owner.valid) then
 			self:destroy()
 			return
@@ -213,7 +213,7 @@ heliController =
 	end,
 
 	getTargetOrientation = function(self)
-		local curPos = self.heli.childs.bodyEntShadow.position
+		local curPos = self:getPosition()
 
 		local vec = {x = self.targetPos.x - curPos.x, y = curPos.y - self.targetPos.y}
 		local len = math.sqrt(vec.x ^ 2 + vec.y ^ 2)
@@ -275,8 +275,12 @@ heliController =
 		end
 	end,
 
+	getPosition = function(self)
+		return math3d.vector2.sub(self.heli.childs.bodyEntShadow.position, {x = self.heli.height, y = 0})
+	end,
+
 	moveToTarget = function(self)
-		local dist = getDistance(self.heli.childs.bodyEntShadow.position, self.targetPos)
+		local dist = getDistance(self:getPosition(), self.targetPos)
 
 		if self.stateChanged then
 			self.updateOrientationCooldown = 30
@@ -317,7 +321,7 @@ heliController =
 	end,
 
 	creepToPosition = function(self)
-		local curPos = self.heli.childs.bodyEntShadow.position
+		local curPos = self:getPosition()
 
 		if self.stateChanged then
 			self:setRidingState(defines.riding.acceleration.braking, defines.riding.direction.straight)
@@ -339,7 +343,7 @@ heliController =
 		self.heli.baseEnt.teleport({x = self.heli.baseEnt.position.x + self.creepVec.x, y = self.heli.baseEnt.position.y + self.creepVec.y})
 		self.heli:updateEntityPositions()
 
-		local dist = getDistance(self.heli.childs.bodyEntShadow.position, self.targetPos)
+		local dist = getDistance(self:getPosition(), self.targetPos)
 		if dist < 0.2 or dist > self.oldDist then
             -- If targeting the player and we shouldn't land when we catch up, then just stop, otherwise land
             if (self.targetIsPlayer and self.targetPlayer.mod_settings["heli-remote-dont-land-following-player"].value) then
@@ -367,7 +371,7 @@ heliController =
 
 		if self.heli.baseEnt.speed == 0 then
             if( self.targetIsPlayer and self.targetPlayer.mod_settings["heli-remote-dont-land-following-player"].value )then
-                local dist = getDistance(self.heli.childs.bodyEntShadow.position, self.targetPos)
+                local dist = getDistance(self:getPosition(), self.targetPos)
                 if dist > 0.2 then
                     -- Player moved off, orient on them
                     self:changeState(heliControllerState.orientToTarget)

@@ -28,10 +28,3 @@ data:extend({
       }
     }
 })
-
---[[      fade_in_duration = 0,
-      fade_away_duration = 100,
-      spread_duration = 50,
-      start_scale = 0.1,
-      end_scale = 0.5,
-      color = {r = 0.15, g = 0.15, b = 0.15, a = 0.1},]]

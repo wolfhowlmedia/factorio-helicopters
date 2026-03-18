@@ -22,7 +22,8 @@ function playerIsInHeli(p)
     if not p.driving or not p.vehicle then
         return false
     end
-    return string.find(heliBaseEntityNames, p.vehicle.name .. ",", 1, true) ~= nil
+
+	return heliBaseEntityNames[p.vehicle.name] ~= nil
 end
 
 function throwVisualError(p, text, cursor)
@@ -77,8 +78,16 @@ function OnLoad(e)
 end
 
 function OnConfigChanged(e)
+	local invalidHelis = {}
+
 	if storage.helis then
-		for _, curHeli in pairs(storage.helis) do
+		for i, curHeli in ipairs(storage.helis) do
+			if curHeli.baseEnt.valid == false then
+				curHeli:destroy()
+				table.insert(invalidHelis, i)
+				goto continue
+			end
+
 			if not curHeli.curState then
 				if curHeli.goUp then
 					curHeli:changeState(curHeli.engineStarting)
@@ -104,8 +113,17 @@ function OnConfigChanged(e)
 			end
 
 			curHeli:reassignCurState()
+		    ::continue::
 		end
 	end
+
+	local j = 0
+	for i = #invalidHelis, 1, -1 do
+		local index = invalidHelis[i]
+		table.remove(storage.helis, index)
+		j = j + 1
+	end
+	if j > 0 then game.print("Deleted "..j.." invalid helis.") end
 
 	if storage.heliPads then
 		for k, curPad in pairs(storage.heliPads) do
@@ -157,8 +175,8 @@ end
 function OnBuilt(e)
 	local ent = e.entity
 
-	if ent.name == "helicopter" then
-		local newHeli = insertInGlobal("helis", heliAttack.new(ent))
+	if heliPlacementEntityNames[ent.name] ~= nil then
+		local newHeli = insertInGlobal("helis", heliAttack.new(heliPlacementEntityNames[ent.name].prefix, ent, heliPlacementEntityNames[ent.name].bobbing))
 
 		if storage.remoteGuis then
 			for _, rg in pairs(storage.remoteGuis) do
@@ -186,7 +204,7 @@ function OnRemoved(e)
 	if ent.valid then
 		local entName = ent.name
 
-		if string.find(heliEntityNames, entName .. ",", 1, true) then
+		if heliEntityNames[entName] ~= nil then
 			for i, val in ipairs(storage.helis) do
 				if val:isBaseOrChild(ent) then
 					val:destroy()
@@ -261,7 +279,7 @@ function OnHeliFollow(e)
 		if heli then
 			if heli.surface_index == p.surface_index then
 				assignHeliController(p, heli, p, true)
-				p.add_custom_alert(heli.baseEnt, {type = "item", name = "helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
+				p.add_custom_alert(heli.baseEnt, {type = "item", name = heli.prefix.."helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
 			else
 				throwVisualError(p, "heli-gui-heliSelection-missmatch", false)
 			end
@@ -426,8 +444,7 @@ function OnDrivingStateChanged(e)
 
 	local entityName = ent.name
 
-	-- heliEntityNames = comma-separated string containing all valid heli base and heli child entity names
-	if not string.find(heliEntityNames, entityName .. ",", 1, true) then return end
+	if not heliEntityNames[entityName] then return end
 
 	local heli = nil
 	for _, currentHeli in ipairs(storage.helis) do
@@ -491,11 +508,17 @@ function OnHeliDamaged(e)
 	if ent.valid then
 		local entName = ent.name
 
-		if entName == "heli-entity-_-" then
+		if heliBaseEntityNames[entName] ~= nil then
 			getHeliFromBaseEntity(ent):OnDamaged(e)
 		end
 	end
 end
+
+local entityFilter = {}
+for name, _ in pairs(heliBaseEntityNames) do
+	table.insert(entityFilter, {filter = "name", name = name})
+end
+log(serpent.dump(entityFilter))
 
 script.on_event(defines.events.on_built_entity, OnBuilt)
 script.on_event(defines.events.on_robot_built_entity, OnBuilt)
@@ -509,7 +532,7 @@ script.on_event(defines.events.on_robot_mined_entity, OnRemoved)
 script.on_event(defines.events.on_entity_died, OnRemoved)
 
 script.on_event(defines.events.on_entity_damaged, OnHeliDamaged)
-script.set_event_filter(defines.events.on_entity_damaged, {{filter = "name", name = "heli-entity-_-"}})
+script.set_event_filter(defines.events.on_entity_damaged, entityFilter)
 
 script.on_event("heli-up", OnHeliUp)
 script.on_event("heli-down", OnHeliDown)

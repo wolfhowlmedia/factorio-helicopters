@@ -2,8 +2,13 @@ require("logic.basicAnimator")
 require("logic.basicState")
 require("logic.emptyBoxCollider")
 
+funmode = false
+if script.active_mods["fun_mode"] ~= nil then
+	funmode = true
+end
+
 function getHeliFromBaseEntity(ent)
-	for k,v in pairs(storage.helis) do
+	for _, v in pairs(storage.helis) do
 		if v.baseEnt == ent then
 			return v
 		end
@@ -104,12 +109,18 @@ local frameFixes = {
 	0.984375, 	--64
 }
 
+local fallbackFuel = {name = "coal", count = 50}
+if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
+	fallbackFuel.name = "kr-fuel"
+	fallbackFuel.count = 1
+end
+
 --local modVersion = versionStrToInt(script.active_mods.HelicopterRevival)
 
 maxCollisionHeight = 2
 
-local maxBobbing = 0.05
-local bobbingPeriod = 8*60
+local maxBobbing = 0.15
+local bobbingPeriod = 4*60
 
 local colliderMaxHealth = 999999
 
@@ -129,10 +140,37 @@ local transferGridEquipment = function(srcEnt, destEnt)
 	end
 end
 
-heliEntityNames = ""
-heliBaseEntityNames = ""
-
 stateFuncs = {
+	landedStatic = {
+		init = function(heli)
+			heli.baseEnt.effectivity_modifier = 0
+			heli.baseEnt.friction_modifier = 50
+
+			heli.lockedBaseOrientation = heli.baseEnt.orientation
+
+			heli:setCollider("landed")
+			heli:updateEntityRotations()
+
+			heli:setFloodlightEntities(false)
+
+			for k, curGG in pairs(heli.gaugeGuis) do
+				curGG:setPointerNoise("gauge_fs", "speed", false)
+				curGG:setPointerNoise("gauge_hr", "height", false)
+				curGG:setPointerNoise("gauge_hr", "rpm", false)
+			end
+
+			heli:setFuelGaugeTarget(0, true)
+		end,
+		OnTick = function(heli)
+			if heli.baseEnt.orientation ~= heli.lockedBaseOrientation then
+				heli.baseEnt.orientation = heli.lockedBaseOrientation
+			end
+		end,
+
+		OnUp = function(heli)
+			heli:changeState(heli.engineStarting)
+		end,
+	},
 	landed = {
 		init = function(heli)
 			heli.baseEnt.effectivity_modifier = 0
@@ -179,6 +217,15 @@ stateFuncs = {
 					return false
 				end
 			end
+
+			if heli.rotorAnimator and not heli.rotorAnimator.isDone then
+				local isDone
+				heli.rotorRPF, isDone = heli.rotorAnimator:nextFrame()
+
+				if isDone then
+					heli.rotorAnimator = nil
+				end
+			end
 		end,
 
 		OnUp = function(heli)
@@ -192,8 +239,13 @@ stateFuncs = {
 			heli:setRotorTargetRPF(heli.rotorMaxRPF)
 
 			if not (heli.burnerDriver and heli.burnerDriver.valid) then
-				heli.burnerDriver = heli.surface.create_entity{name="character", force = game.forces.neutral, position = heli.baseEnt.position}
+				heli.burnerDriver = heli.surface.create_entity{name = "character", force = game.forces.neutral, position = heli.baseEnt.position}
 				heli.childs.burnerEnt.set_driver(heli.burnerDriver)
+			end
+
+			if not (heli.baseDriver and heli.baseDriver.valid) then
+				heli.baseDriver = heli.surface.create_entity{name = "character", force = game.forces.neutral, position = heli.childs.bodyEnt.position}
+				heli.childs.bodyEnt.set_driver(heli.baseDriver)
 			end
 
 			if heli.floodlightEnabled then
@@ -228,7 +280,7 @@ stateFuncs = {
 			heli.baseEnt.friction_modifier = 1
 
 			local time = heli:setTargetHeight(heli.maxHeight)
-			--heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time*60, "linear")
+			heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time * 60, "linear")
 
 			heli:setCollider("flying")
 		end,
@@ -239,9 +291,9 @@ stateFuncs = {
 			heli:landIfEmpty()
 			heli:handleInserters()
 
-			--if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
-			--	heli.curBobbing = heli.bobbingAnimator:nextFrame()
-			--end
+			if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
+				heli.curBobbing = heli.bobbingAnimator:nextFrame()
+			end
 
 			if heli.height > maxCollisionHeight then
 				heli:setCollider("none")
@@ -258,7 +310,9 @@ stateFuncs = {
 	},
 	hovering = {
 		init = function(heli)
-			--heli.bobbingAnimator = basicAnimator.new(0, maxBobbing, bobbingPeriod, "cyclicSine")
+			if (heli.bobbing ~= nil and heli.bobbing == true) and settings.global["heli-bobbing"].value == true then
+				heli.bobbingAnimator = basicAnimator.new(0, maxBobbing, bobbingPeriod, "cyclicSine")
+			end
 		end,
 
 		OnTick = function(heli)
@@ -267,14 +321,14 @@ stateFuncs = {
 			heli:landIfEmpty()
 			heli:handleInserters()
 
-			--[[
-			local isDone
-			heli.curBobbing, isDone = heli.bobbingAnimator:nextFrame()
+			if heli.bobbingAnimator ~= nil then
+				local isDone
+				heli.curBobbing, isDone = heli.bobbingAnimator:nextFrame()
 
-			if isDone then
-				heli.bobbingAnimator:reset()
+				if isDone then
+					heli.bobbingAnimator:reset()
+				end
 			end
-			]]
 		end,
 
 		OnMaxHeightChanged = function(heli)
@@ -284,7 +338,7 @@ stateFuncs = {
 	descend = {
 		init = function(heli)
 			local time = heli:setTargetHeight(0)
-			--heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time*60, "linear")
+			heli.bobbingAnimator = basicAnimator.new(heli.curBobbing, 0, time * 60, "linear")
 		end,
 
 		deinit = function(heli)
@@ -296,9 +350,9 @@ stateFuncs = {
 			heli:handleFuelConsumption()
 			heli:handleInserters()
 
-			--if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
-			--	heli.curBobbing = heli.bobbingAnimator:nextFrame()
-			--end
+			if heli.bobbingAnimator and not heli.bobbingAnimator.isDone then
+				heli.curBobbing = heli.bobbingAnimator:nextFrame()
+			end
 
 			if heli.height <= maxCollisionHeight and not (heli.childs.collisionEnt and heli.childs.collisionEnt.valid) then
 				heli:setCollider("flying")
@@ -316,10 +370,15 @@ stateFuncs = {
 	engineStopping = {
 		init = function(heli)
 			heli.childs.burnerEnt.set_driver(nil)
+			heli.childs.bodyEnt.set_driver(nil)
 
 			if heli.burnerDriver and heli.burnerDriver.valid then
 				heli.burnerDriver.destroy()
 				heli.burnerDriver = nil
+			end
+			if heli.baseDriver and heli.baseDriver.valid then
+				heli.baseDriver.destroy()
+				heli.baseDriver = nil
 			end
 
 			heli:setRotorTargetRPF(0)
@@ -340,6 +399,7 @@ heliBase = {
 	targetHeight = 0,
 	maxHeight = 5,
 	curBobbing = 0,
+	bobbing = false,
 
 	heightSpeed = 0,
 	heightAcceleration = 0.001,
@@ -373,7 +433,7 @@ heliBase = {
 
 	------------------------------------------------------------
 
-	new = function(placementEnt, baseEnt, childEnts, mt)
+	new = function(prefix, placementEnt, baseEnt, childEnts, mt, bobbing)
 		transferGridEquipment(placementEnt, baseEnt)
 		baseEnt.health = placementEnt.health
 
@@ -390,9 +450,13 @@ heliBase = {
 			baseEnt = baseEnt,
 			childs = childEnts,
 
+			bobbing = bobbing,
+
 			surface = placementEnt.surface,
 
-			name = "Helicopter "..count,
+			name = {"", {"item-name." .. placementEnt.name}, " ", count},
+
+			prefix = prefix,
 
 			deactivatedInserters = {},
 		}
@@ -402,12 +466,8 @@ heliBase = {
 		obj.baseEnt.effectivity_modifier = 0
 
 		for k,v in pairs(obj.childs) do
-			if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
-				v.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 200})
-			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-				v.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			else
-				v.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
+			if v.get_inventory(defines.inventory.fuel) ~= nil then
+				v.get_inventory(defines.inventory.fuel).insert({name = fallbackFuel.name, count = fallbackFuel.count})
 			end
 			v.destructible = false
 		end
@@ -469,11 +529,14 @@ heliBase = {
 		end
 
 		self:redirectPassengers()
-		self:updateRotor()
-		self:updateHeight()
-		self:updateFuelGauge()
-		self:updateEntityPositions()
 		self.curState.OnTick(self)
+
+		if self.curState.name ~= "landedStatic" then
+			self:updateRotor()
+			self:updateFuelGauge()
+			self:updateHeight()
+			self:updateEntityPositions()
+		end
 
 		if self.valid then
 			self:handleColliderDamage()
@@ -596,6 +659,10 @@ heliBase = {
 
 
 	---------------- states ----------------
+
+	landedStatic = basicState.new({
+		name = "landedStatic",
+	}),
 
 	landed = basicState.new({
 		name = "landed",
@@ -801,6 +868,12 @@ heliBase = {
 							curChild.set_driver(self.floodlightDriver)
 						end
 
+					elseif k == "bodyEnt" and self.baseDriver then
+						if curDriver ~= self.baseDriver then
+							self:insertIntoCar(self.baseEnt, curDriver)
+							curChild.set_driver(self.baseDriver)
+						end
+
 					else
 						if not self:insertIntoCar(self.baseEnt, curDriver) then
 							curChild.set_driver(nil)
@@ -832,11 +905,11 @@ heliBase = {
 				force = game.forces.neutral,
 				boxLengths =
 				{
-					ends = 3,
-					sides = 4.8,
+					ends = 0.6 + math.abs(self.baseEnt.prototype.collision_box.left_top.x) + self.baseEnt.prototype.collision_box.right_bottom.x,
+					sides = math.abs(self.baseEnt.prototype.collision_box.left_top.y) + self.baseEnt.prototype.collision_box.right_bottom.y,
 				},
-				nameEnds = "heli-landed-collision-end-entity-_-",
-				nameSides = "heli-landed-collision-side-entity-_-",
+				nameEnds = self.prefix.."heli-landed-collision-end-entity-_-",
+				nameSides = self.prefix.."heli-landed-collision-side-entity-_-",
 			})
 
 			self.childs.collisionEnt.ejectPlayers()
@@ -844,20 +917,13 @@ heliBase = {
 
 		elseif name == "flying" then
 			self.childs.collisionEnt = self.surface.create_entity{
-				name = "heli-flying-collision-entity-_-",
+				name = self.prefix.."heli-flying-collision-entity-_-",
 				force = game.forces.neutral,
 				position = self.baseEnt.position,
 			}
 		end
 
 		if self.childs.collisionEnt then
-			if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 200})
-			elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-			else
-				self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
-			end
 			self.childs.collisionEnt.operable = false
 		end
 	end,
@@ -866,13 +932,6 @@ heliBase = {
 		if enabled then
 			if not (self.childs.floodlightEnt and self.childs.floodlightEnt.valid) then
 				self.childs.floodlightEnt = self.surface.create_entity{name = "heli-floodlight-entity-_-", force = game.forces.neutral, position = self.baseEnt.position}
-				if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
-					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 200})
-				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-					self.childs.collisionEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 200})
-				else
-					self.childs.floodlightEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 50})
-				end
 			end
 			self.childs.floodlightEnt.orientation = self.baseEnt.orientation
 			self.childs.floodlightEnt.operable = false
@@ -938,8 +997,6 @@ heliBase = {
 
 		if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"]  then
 			remainingFuel = remainingFuel * 16
-		elseif script.active_mods["SeaBlock"] then
-			remainingFuel = remainingFuel * 9
 		end
 
 		local burner = self.baseEnt.burner
@@ -1003,12 +1060,8 @@ heliBase = {
 		if self.burnerDriver and self.burnerDriver.valid then
 			self.burnerDriver.riding_state = {acceleration = defines.riding.acceleration.accelerating, direction = defines.riding.direction.straight}
 			if self.childs.burnerEnt.burner.remaining_burning_fuel < 1000 then
-				if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
-					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "kr-fuel", count = 1})
-				elseif script.active_mods["SeaBlock"] then --SeaBlock workaround
-					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "cellulose-fiber", count = 1})
-				else
-					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = "coal", count = 1})
+				if self.childs.burnerEnt.get_inventory(defines.inventory.fuel) ~= nil then
+					self.childs.burnerEnt.get_inventory(defines.inventory.fuel).insert({name = fallbackFuel.name, count = fallbackFuel.count})
 				end
 			end
 		end
@@ -1029,10 +1082,19 @@ heliBase = {
 			if self.rotorOrient > 1 then self.rotorOrient = self.rotorOrient - 1 end
 
 			local frameFix = frameFixes[math.floor(self.rotorOrient * 64) + 1]
-			self.childs.rotorEnt.orientation = frameFix
-			self.childs.rotorEntShadow.orientation = frameFix
+
+			if settings.global["heli-fun-mode"].value == true or funmode then
+				self.childs.bodyEnt.orientation = frameFix
+				self.childs.bodyEntShadow.orientation = frameFix
+			else
+				self.childs.rotorEnt.orientation = frameFix
+				self.childs.rotorEntShadow.orientation = frameFix
+			end
 		end
 
+		if self.rotorRPF == 0 then
+			self:changeState(self.landedStatic)
+		end
 
 		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_hr", "rpm", self.rotorRPF * 3600 * self.engineReduction + math.abs(self.baseEnt.speed) * 100)
@@ -1073,26 +1135,24 @@ heliBase = {
 		if self.fuelGaugeVal ~= self.fuelGaugeTargetVal then
 			if self.fuelGaugeVal < self.fuelGaugeTargetVal then
 				self.fuelGaugeVal = math.min(self.fuelGaugeVal + self.fuelGaugeSpeed, self.fuelGaugeTargetVal)
-
 			else
 				self.fuelGaugeVal = math.max(self.fuelGaugeVal - self.fuelGaugeSpeed, self.fuelGaugeTargetVal)
 			end
 		end
 
-		for k, curGG in pairs(self.gaugeGuis) do
+		for _, curGG in pairs(self.gaugeGuis) do
 			curGG:setGauge("gauge_fs", "fuel", self.fuelGaugeVal)
-			if self.curState.name ~= "landed" then
+			if self.curState.name == "landed" or self.curState.name == "landedStatic" then
+				curGG:setLedBlinking("gauge_fs", "fuel", false)
+			else
 				if self.fuelGaugeTargetVal <= self.tankCriticalWarningRatio then
 					curGG:setLedBlinking("gauge_fs", "fuel", true, 20, "heli-fuel-warning")
 
 				elseif self.fuelGaugeTargetVal <= self.tankWarningRatio then
 					curGG:setLedBlinking("gauge_fs", "fuel", true, 60, "heli-fuel-warning")
-
 				else
 					curGG:setLedBlinking("gauge_fs", "fuel", false)
 				end
-			else
-				curGG:setLedBlinking("gauge_fs", "fuel", false)
 			end
 		end
 	end,
@@ -1100,14 +1160,14 @@ heliBase = {
 	updateEntityPositions = function(self)
 		local baseVec = math3d.vector2.rotate({0,1}, math.pi * 2 * self.baseEnt.orientation)
 		local vec = math3d.vector2.mul(baseVec, self.baseEnt.speed)
-
+		--game.print(vec[1].."|"..vec[2])
 		local basePos = self.baseEnt.position
 
-		self.childs.bodyEnt.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.bodyOffset - self.curBobbing})
+		self.childs.bodyEnt.teleport({ x = basePos.x - vec[1], y = basePos.y - vec[2] + self.bodyOffset  - self.curBobbing})
 		self.childs.rotorEnt.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.rotorOffset - self.curBobbing})
 
-		self.childs.rotorEntShadow.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] +self.height})
-		self.childs.bodyEntShadow.teleport({x = basePos.x - vec[1], y = basePos.y - vec[2] + self.height})
+		self.childs.rotorEntShadow.teleport({x = basePos.x - vec[1] + self.height + self.curBobbing, y = basePos.y - vec[2] + self.height})
+		self.childs.bodyEntShadow.teleport({ x = basePos.x - vec[1] + self.height + self.curBobbing, y = basePos.y - vec[2] + self.height})
 
 		if self.childs.floodlightEnt then
 			local lightOffsetVec = math3d.vector2.mul(baseVec, self.height)
@@ -1117,7 +1177,7 @@ heliBase = {
 		if self.childs.collisionEnt then
 			if not self.hasLandedCollider then
 				local initVec = {0,1}
-				local mul = 2
+				local mul = self.baseEnt.prototype.collision_box.right_bottom.y * 0.83 --originally 2
 				if self.baseEnt.speed < 0 then
 					initVec = {0,-1}
 					local x = self.baseEnt.orientation
@@ -1151,8 +1211,13 @@ heliBase = {
 	end,
 
 	updateEntityRotations = function(self)
-		self.childs.bodyEnt.orientation = self.baseEnt.orientation
-		self.childs.bodyEntShadow.orientation = self.baseEnt.orientation
+		if settings.global["heli-fun-mode"].value == true or funmode then
+			self.childs.rotorEnt.orientation = self.baseEnt.orientation
+			self.childs.rotorEntShadow.orientation = self.baseEnt.orientation
+		else
+			self.childs.bodyEnt.orientation = self.baseEnt.orientation
+			self.childs.bodyEntShadow.orientation = self.baseEnt.orientation
+		end
 		self.childs.burnerEnt.orientation = self.baseEnt.orientation
 
 		if self.childs.collisionEnt then
