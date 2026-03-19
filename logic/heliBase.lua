@@ -189,6 +189,11 @@ stateFuncs = {
 			end
 
 			heli:setFuelGaugeTarget(0, true)
+
+			local driver = heli.baseEnt.get_driver()
+			if driver and driver.valid then
+				driver.riding_state = {acceleration = defines.riding.acceleration.nothing, direction = defines.riding.direction.straight}
+			end
 		end,
 
 		OnTick = function(heli)
