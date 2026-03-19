@@ -51,6 +51,10 @@ function OnLoad(e)
 		for _, heli in pairs(storage.helis) do
 			if not heli.type or heli.type == "heliAttack" then
 				setmetatable(heli, {__index = heliAttack})
+
+				if heli.bobbingAnimator and not heli.bobbingAnimator.nextFrame then
+					setmetatable(heli.bobbingAnimator, {__index = basicAnimator})
+				end
 			end
 		end
 	end
