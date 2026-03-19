@@ -496,6 +496,9 @@ heliBase = {
 			end
 		end
 
+		if self.baseDriver and self.baseDriver.valid then
+			self.baseDriver.destroy()
+		end
 		if self.burnerDriver and self.burnerDriver.valid then
 			self.burnerDriver.destroy()
 		end

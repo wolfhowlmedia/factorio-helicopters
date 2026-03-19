@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 2026-03-20
+  Bugfixes:
+    - no more soulless characters spawn when remotely driven helis get destroyed
+    - preventing endless fuel consumption when crashing due to no fuel and then refueling while never changing driving_state
+    - fixed crash when crashing with heli
+    - fixed crash with missing metatable (nextFrame)
+    - fixed crash due to math3d
+---------------------------------------------------------------------------------------------------
 Version: 0.6.1
 Date: 2026-03-19
   Changes:
