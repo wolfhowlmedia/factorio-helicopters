@@ -1,3 +1,10 @@
+function vector2Sub(u, v)
+  if u.x ~= nil and v.x ~= nil then
+    return {x = u.x - v.x, y = u.y - v.y}
+  end
+  return {u[1]-v[1], u[2]-v[2]}
+end
+
 function titleCase(str)
     return (str:gsub("(%a)([%w_']*)", function(first, rest)
         return first:upper() .. rest:lower()

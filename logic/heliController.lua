@@ -212,6 +212,10 @@ heliController =
 		end
 	end,
 
+	getPosition = function(self)
+		return vector2Sub(self.heli.childs.bodyEntShadow.position, {x = self.heli.height, y = 0})
+	end,
+
 	getTargetOrientation = function(self)
 		local curPos = self:getPosition()
 
@@ -273,10 +277,6 @@ heliController =
 				self:changeState(heliControllerState.moveToTarget)
 			end
 		end
-	end,
-
-	getPosition = function(self)
-		return math3d.vector2.sub(self.heli.childs.bodyEntShadow.position, {x = self.heli.height, y = 0})
 	end,
 
 	moveToTarget = function(self)
