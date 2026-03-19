@@ -529,7 +529,6 @@ heliBase = {
 		end
 
 		self:redirectPassengers()
-		self.curState.OnTick(self)
 
 		if self.curState.name ~= "landedStatic" then
 			self:updateRotor()
@@ -537,6 +536,8 @@ heliBase = {
 			self:updateHeight()
 			self:updateEntityPositions()
 		end
+
+		self.curState.OnTick(self)
 
 		if self.valid then
 			self:handleColliderDamage()
