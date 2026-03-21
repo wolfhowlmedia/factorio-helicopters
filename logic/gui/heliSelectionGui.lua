@@ -181,6 +181,10 @@ heliSelectionGui =
 			elseif e.alt then
 				local camID = tonumber(e.element.name:match("%d+"))
 				local cam = searchInTable(self.guiElems.cams, camID, "ID")
+				local heliName = ""
+				if type(cam.heli.name) == "string" then
+					heliName = cam.heli.name
+				end
 
 				if guiHasChild(cam.cam, self.prefix.."rename_root") ~= nil then return end
 
@@ -233,7 +237,7 @@ heliSelectionGui =
 				local searchField = renameFlow.add{
 					type = "textfield",
 					name = cam.heli.prefix.."rename_field",
-					text = cam.heli.name or "Helicopter",
+					text = heliName,
 					style = "stretchable_textfield"
 				}
 				searchField.style.minimal_height = 26
