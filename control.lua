@@ -27,6 +27,8 @@ function playerIsInHeli(p)
 end
 
 function throwVisualError(p, text, cursor)
+	local text = text or "heli-gui-heliSelection-surfSwap"
+
 	if cursor == true then
 		p.create_local_flying_text{
 			text = {text},
@@ -37,7 +39,7 @@ function throwVisualError(p, text, cursor)
 		p.play_sound{path = "heli-cant-do"}
 	else
 		p.create_local_flying_text{
-			text = {"heli-gui-heliSelection-surfSwap"},
+			text = {text},
 			position = p.position,
 			color = {1,0,0,1},
 			time_to_live = 120,
@@ -278,15 +280,13 @@ function OnHeliFollow(e)
 	local p = game.players[e.player_index]
 
 	if playerHasEquipment(p, "helicopter-remote-equipment") then
-		local heli, dist = findNearestAvailableHeli(p.position, p.force, p)
+		local heli, dist = findNearestAvailableHeli(p.position, p.force, p.surface_index, p)
 
 		if heli then
-			if heli.surface_index == p.surface_index then
-				assignHeliController(p, heli, p, true)
-				p.add_custom_alert(heli.baseEnt, {type = "item", name = heli.prefix.."helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
-			else
-				throwVisualError(p, "heli-gui-heliSelection-missmatch", false)
-			end
+			assignHeliController(p, heli, p, true)
+			p.add_custom_alert(heli.baseEnt, {type = "item", name = heli.prefix.."helicopter"}, {"heli-alert-follow", chopDecimal(dist)}, true)
+		else
+			throwVisualError(p, "heli-gui-heliSelection-noHelisOnSurface", false)
 		end
 	end
 end

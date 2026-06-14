@@ -17,15 +17,16 @@ function getHeliFromBaseEntity(ent)
 	return nil
 end
 
-function findNearestAvailableHeli(pos, force, requestingPlayer)
+function findNearestAvailableHeli(pos, force, surface_index, requestingPlayer)
 	local nearestHeli = nil
 	local nearestDist = nil
 
 	if storage.helis then
 		for k, curHeli in pairs(storage.helis) do
 			if curHeli.baseEnt.valid and
-				curHeli.baseEnt.force == force and
-					(not curHeli.baseEnt.get_driver() or (curHeli.hasRemoteController and curHeli.remoteController.driverIsBot)) then
+				curHeli.surface.index == surface_index and
+					curHeli.baseEnt.force == force and
+						(not curHeli.baseEnt.get_driver() or (curHeli.hasRemoteController and curHeli.remoteController.driverIsBot)) then
 
 				if not requestingPlayer or (not curHeli.remoteController or curHeli.remoteController.owner == requestingPlayer) then
 					local curDist = getDistance(pos, curHeli.baseEnt.position)
