@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.5
+Date: 2026-06-18
+  Bugfixes:
+    - now overwriting fuel categories only for helicopters, instead of call cars, when K2 or K2SO is enabled
+---------------------------------------------------------------------------------------------------
 Version: 0.6.4
 Date: 2026-06-14
   Bugfixes:

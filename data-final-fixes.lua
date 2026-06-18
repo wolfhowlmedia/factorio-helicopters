@@ -7,12 +7,33 @@ heliConcrete.decorative_removal_probability = 1
 heliConcrete.hidden = true
 data:extend({heliConcrete})
 
+local heliBaseNames = {
+  "helicopter",
+  "heli-entity-_-",
+  "heli-body-entity-_-",
+  "heli-shadow-entity-_-",
+
+  "rotor-entity-_-",
+  "rotor-shadow-entity-_-",
+  "heli-burner-entity-_-",
+
+  "heli-floodlight-entity-_-",
+  "heli-flying-collision-entity-_-",
+  "heli-landed-collision-end-entity-_-",
+  "heli-landed-collision-side-entity-_-",
+}
+local heliNames = table.deepcopy(heliBaseNames)
+for _, name in pairs(heliBaseNames) do
+  table.insert(heliNames, "scout-"..name)
+end
+
 if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] then
-	for _, car in pairs(data.raw.car) do
-		if car.energy_source and car.energy_source.type == "burner" then
+  for _, name in pairs(heliNames) do
+    local car = data.raw["car"][name]
+		if car ~= nil and car.energy_source and car.energy_source.type == "burner" then
 			car.energy_source.fuel_categories = {"kr-vehicle-fuel"}
 		end
-	end
+  end
 end
 
 --[[
