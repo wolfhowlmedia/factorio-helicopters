@@ -43,9 +43,9 @@ cars gotta have
   energy_source
   inventory_size
   rotation_speed
-  braking_power
+  braking_force
   energy_per_hit_point
-  friction
+  friction_force
   weight
 ]]
 
@@ -71,6 +71,8 @@ local function checkArgs(args, req, opt)
       end
 
       if type(args[field]) ~= expected_type then
+        log(field)
+        log(args[field])
         error("Field '"..field.."' has to be of type '"..expected_type.."'", 2)
       end
     end
@@ -114,8 +116,8 @@ local requiredFieldsEntity = {
   weight = "number",
   effectivity = "number",
   consumption = "string",
-  braking_power = "string",
-  friction = "number",
+  braking_force = "number",
+  friction_force = "number",
   energy_source = "table",
   animation = "table",
 }
@@ -308,8 +310,8 @@ function HRHelicopterMaker(args)
     data.raw["car"][args.name..name].effectivity = 1
     data.raw["car"][args.name..name].energy_source = {type = "void"}
     data.raw["car"][args.name..name].consumption = "1W"
-    data.raw["car"][args.name..name].braking_power = "1W"
-    data.raw["car"][args.name..name].friction = 1
+    data.raw["car"][args.name..name].braking_force = (1 * 1000) / 60
+    data.raw["car"][args.name..name].friction_force = 1.0
     data.raw["car"][args.name..name].terrain_friction_modifier = 0
     data.raw["car"][args.name..name].weight = 1
     data.raw["car"][args.name..name].rotation_speed = 1

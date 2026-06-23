@@ -112,6 +112,7 @@ local frameFixes = {
 
 local fallbackFuel = {name = "coal", count = 50}
 if script.active_mods["Krastorio2"] or script.active_mods["Krastorio2-spaced-out"] then --Krastorio 2 workaround
+	log("K2 fuel arrangement")
 	fallbackFuel.name = "kr-fuel"
 	fallbackFuel.count = 1
 end
@@ -327,7 +328,7 @@ stateFuncs = {
 			heli:landIfEmpty()
 			heli:handleInserters()
 
-			if heli.bobbingAnimator ~= nil then
+			if heli.bobbingAnimator ~= nil and settings.global["heli-bobbing"].value == true then
 				local isDone
 				heli.curBobbing, isDone = heli.bobbingAnimator:nextFrame()
 

@@ -21,7 +21,7 @@ In version 0.6.0 an open access API was added to enable other mod authors to reg
      - **animationShadow** *(RotatedAnimation of the helicopter torso; only shadows!)*
      - **animationRotor** *(RotatedAnimation of the helicopter rotors; no shadows!)*
      - **animationRotorShadow** *(RotatedAnimation of the helicopter rotors; only shadows!)*
-     - **entityProperties** *(properties of the heli entity; contains its own set of required properties for the car prototype, everything else is optional (max_health, energy_per_hit_point, rotation_speed, turret_rotation_speed, inventory_size, weight, effectivity, consumption, braking_power, friction, energy_source, animation))*
+     - **entityProperties** *(properties of the heli entity; contains its own set of required properties for the car prototype, everything else is optional (max_health, energy_per_hit_point, rotation_speed, turret_rotation_speed, inventory_size, weight, effectivity, consumption, braking_force, friction, energy_source, animation))*
    - Optional:
      - **light** *(light of the heli)*
      - **crashTrigger** *(crash_trigger of the heli)*
