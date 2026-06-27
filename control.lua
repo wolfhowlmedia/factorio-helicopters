@@ -200,7 +200,7 @@ function OnBuilt(e)
 		end
 
 	elseif ent.type == "inserter" then
-		ent.active = true
+		ent.disabled_by_script = false
 	end
 end
 

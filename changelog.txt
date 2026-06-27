@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 2026-06-27
+  Changes:
+    - updated to Factorio 2.1
+    - Braking Power setting is now Braking Force
+    - disabled driving on ground sound on all heli entities
+---------------------------------------------------------------------------------------------------
 Version: 0.6.5
 Date: 2026-06-18
   Bugfixes:
