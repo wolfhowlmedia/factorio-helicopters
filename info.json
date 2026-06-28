@@ -10,7 +10,8 @@
         "? Krastorio2 >= 2.0",
         "? Krastorio2-spaced-out >= 1.4.0",
         "? space-age >= 2.0.32",
-        "? fun_mode >= 1.0.0"
+        "? fun_mode >= 1.0.0",
+        "? Powered_Concrete >= 1.2.8"
     ],
     "description": "Adds two fully animated helicopters to the game. Ideal for getting from A to B quickly, exploring the map, building islands and nuking biters from the sky. Forked from Kumpu with updates beyond Factorio 0.17. NOW also includes API for other mod authors to register their own helicopters!"
 }

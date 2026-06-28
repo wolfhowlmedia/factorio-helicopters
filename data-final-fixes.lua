@@ -1,6 +1,9 @@
 
 --Heli Pad Concrete
 local heliConcrete = table.deepcopy(data.raw.tile["refined-concrete"])
+if mods["Powered_Concrete"] then
+  heliConcrete = table.deepcopy(data.raw.tile["powered-refined-concrete"])
+end
 heliConcrete.name = "heli-pad-concrete"
 heliConcrete.minable = {hardness = 0.2, mining_time = 0.5}
 heliConcrete.decorative_removal_probability = 1
