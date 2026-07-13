@@ -33,6 +33,9 @@ In version 0.6.0 an open access API was added to enable other mod authors to reg
      - **workingSound** *(working_sound of the heli)*
 4. Done. The framework will create the entities and register them automatically in control stage.
 
+> [!IMPORTANT]
+> Examples are available in `prototypes/entities/heli_entity.lua` and `prototypes/entities/heli_scout.lua`
+
 ### Your own effort
 You need to add an item that places the helicopter placement entity. (place_result = "[your heli name]-helicopter")
 
