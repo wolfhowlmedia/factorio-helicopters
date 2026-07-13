@@ -43,9 +43,9 @@ cars gotta have
   energy_source
   inventory_size
   rotation_speed
-  braking_power
+  braking_force
   energy_per_hit_point
-  friction
+  friction_force
   weight
 ]]
 
@@ -71,6 +71,8 @@ local function checkArgs(args, req, opt)
       end
 
       if type(args[field]) ~= expected_type then
+        --log(field)
+        --log(args[field])
         error("Field '"..field.."' has to be of type '"..expected_type.."'", 2)
       end
     end
@@ -114,8 +116,8 @@ local requiredFieldsEntity = {
   weight = "number",
   effectivity = "number",
   consumption = "string",
-  braking_power = "string",
-  friction = "number",
+  braking_force = "number",
+  friction_force = "number",
   energy_source = "table",
   animation = "table",
 }
@@ -180,6 +182,7 @@ function HRHelicopterMaker(args)
   blueprintPlacement.hidden_in_factoriopedia = true
   blueprintPlacement.localised_name = {"", {"entity-name."..args.name.."helicopter"}}
   blueprintPlacement.localised_description = {"", {"entity-description."..args.name.."helicopter"}}
+  blueprintPlacement.driving_sound_volume_modifier = 0
 
   local blueprintBase = table.deepcopy(blueprintPlacement)
   blueprintPlacement.name = args.name.."helicopter"
@@ -208,6 +211,7 @@ function HRHelicopterMaker(args)
       collision_box = {{0,0},{0,0}},
       collision_mask = {layers = {}},
       animation = args.animationRotor,
+      driving_sound_volume_modifier = 0,
     },
     ---------------rotor entity shadow---------------
     {
@@ -216,6 +220,7 @@ function HRHelicopterMaker(args)
       collision_box = {{0,0},{0,0}},
       collision_mask = {layers = {}},
       animation = args.animationRotorShadow,
+      driving_sound_volume_modifier = 0,
     },
     ---------------placement entity---------------
     blueprintPlacement,
@@ -227,6 +232,7 @@ function HRHelicopterMaker(args)
       name = args.name.."heli-flying-collision-entity-_-",
       collision_box = {{args.colBox[1][1]-0.3, -0.2}, {args.colBox[2][1]+0.3, 0.2}},
       animation = util.empty_animation(1),
+      driving_sound_volume_modifier = 0,
     },
     ---------------landed collision--------------------
     {
@@ -234,12 +240,14 @@ function HRHelicopterMaker(args)
       name = args.name.."heli-landed-collision-side-entity-_-",
       collision_box = {{-0.1, args.colBox[1][2]}, {0.1, args.colBox[2][2]}},
       animation = util.empty_animation(1),
+      driving_sound_volume_modifier = 0,
     },
     {
       type = "car",
       name = args.name.."heli-landed-collision-end-entity-_-",
       collision_box = {{args.colBox[1][1]-0.3, -0.1}, {args.colBox[2][1]+0.3, 0.1}},
       animation = util.empty_animation(1),
+      driving_sound_volume_modifier = 0,
     },
     ---------------body--------------
     {
@@ -250,6 +258,7 @@ function HRHelicopterMaker(args)
       collision_box = {{0,0},{0,0}},
       collision_mask = {layers = {}},
       animation = args.animation,
+      driving_sound_volume_modifier = 0,
     },
     ---------------shadow------------
     {
@@ -259,6 +268,7 @@ function HRHelicopterMaker(args)
       collision_mask = {layers = {}},
       animation = args.animationShadow,
       turret_animation = args.animationTurretShadow,
+      driving_sound_volume_modifier = 0,
     },
   })
 
@@ -277,6 +287,7 @@ function HRHelicopterMaker(args)
         collision_mask = {layers = {}},
         animation = util.empty_animation(1),
         working_sound = args.workingSound,
+        driving_sound_volume_modifier = 0,
       },
     })
   end
@@ -291,6 +302,7 @@ function HRHelicopterMaker(args)
         collision_mask = {layers = {}},
         animation = util.empty_animation(1),
         light = args.light,
+        driving_sound_volume_modifier = 0,
       },
     })
   end
@@ -308,8 +320,8 @@ function HRHelicopterMaker(args)
     data.raw["car"][args.name..name].effectivity = 1
     data.raw["car"][args.name..name].energy_source = {type = "void"}
     data.raw["car"][args.name..name].consumption = "1W"
-    data.raw["car"][args.name..name].braking_power = "1W"
-    data.raw["car"][args.name..name].friction = 1
+    data.raw["car"][args.name..name].braking_force = (1 * 1000) / 60
+    data.raw["car"][args.name..name].friction_force = 1.0
     data.raw["car"][args.name..name].terrain_friction_modifier = 0
     data.raw["car"][args.name..name].weight = 1
     data.raw["car"][args.name..name].rotation_speed = 1

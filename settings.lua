@@ -113,10 +113,10 @@ data:extend({
         order = "2",
     },
     {
-        type = "string-setting",
-        name = "heli-braking-power",
+        type = "double-setting",
+        name = "heli-braking-force",
         setting_type = "startup",
-        default_value = "1MW",
+        default_value = 1000*1000,
         order = "2",
     },
     {

@@ -257,8 +257,8 @@ local args = {
 
     effectivity = 0.4,
     consumption = settings.startup["heli-consumption"].value,
-    braking_power = settings.startup["heli-braking-power"].value,
-    friction = 0.002,
+    braking_force = settings.startup["heli-braking-force"].value,
+    friction_force = 0.002,
     terrain_friction_modifier = 0,
     energy_source = {
       type = "burner",

@@ -21,7 +21,7 @@ In version 0.6.0 an open access API was added to enable other mod authors to reg
      - **animationShadow** *(RotatedAnimation of the helicopter torso; only shadows!)*
      - **animationRotor** *(RotatedAnimation of the helicopter rotors; no shadows!)*
      - **animationRotorShadow** *(RotatedAnimation of the helicopter rotors; only shadows!)*
-     - **entityProperties** *(properties of the heli entity; contains its own set of required properties for the car prototype, everything else is optional (max_health, energy_per_hit_point, rotation_speed, turret_rotation_speed, inventory_size, weight, effectivity, consumption, braking_power, friction, energy_source, animation))*
+     - **entityProperties** *(properties of the heli entity; contains its own set of required properties for the car prototype, everything else is optional (max_health, energy_per_hit_point, rotation_speed, turret_rotation_speed, inventory_size, weight, effectivity, consumption, braking_force, friction, energy_source, animation))*
    - Optional:
      - **light** *(light of the heli)*
      - **crashTrigger** *(crash_trigger of the heli)*
@@ -32,6 +32,9 @@ In version 0.6.0 an open access API was added to enable other mod authors to reg
      - **bobbing** *(boolean; should the heli generally be allowed to bob when hovering)*
      - **workingSound** *(working_sound of the heli)*
 4. Done. The framework will create the entities and register them automatically in control stage.
+
+> [!IMPORTANT]
+> Examples are available in `prototypes/entities/heli_entity.lua` and `prototypes/entities/heli_scout.lua`
 
 ### Your own effort
 You need to add an item that places the helicopter placement entity. (place_result = "[your heli name]-helicopter")

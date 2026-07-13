@@ -1,11 +1,11 @@
 {
     "name": "HelicopterRevival",
-    "version": "0.6.5",
+    "version": "0.7.0",
     "title": "HelicopterRevival",
     "author": "kumpuu, twilightthepony, TheKingJo, HR contributors",
-    "factorio_version": "2.0",
+    "factorio_version": "2.1",
     "dependencies": [
-        "base >= 2.0",
+        "base >= 2.1",
         "? alien-biomes",
         "? Krastorio2 >= 2.0",
         "? Krastorio2-spaced-out >= 1.4.0",

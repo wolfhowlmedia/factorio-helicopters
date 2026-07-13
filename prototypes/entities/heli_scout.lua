@@ -255,8 +255,8 @@ local args = {
 
     effectivity = 0.5,
     consumption = "1000kW",
-    braking_power = "500kW",
-    friction = 0.002,
+    braking_force = (500 * 1000) / 60,
+    friction_force = 0.002,
     terrain_friction_modifier = 0,
     energy_source = {
       type = "burner",
