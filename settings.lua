@@ -116,7 +116,7 @@ data:extend({
         type = "double-setting",
         name = "heli-braking-force",
         setting_type = "startup",
-        default_value = 1000*1000,
+        default_value = 1000*1000 / 60,
         order = "2",
     },
     {
