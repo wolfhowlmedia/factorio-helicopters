@@ -4,6 +4,7 @@ Date: 2026-07-??
   Changes:
     - Default Braking Power to 1000 * 1000 / 60 (in 2.1 you need to divide forces by 60)
     - Add missing translation for Braking Power
+    - Pyanodon support
 ---------------------------------------------------------------------------------------------------
 Version: 0.7.0
 Date: 2026-06-27
