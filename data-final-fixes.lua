@@ -27,19 +27,19 @@ for _, name in pairs(heliBaseNames) do
   table.insert(heliNames, "scout-"..name)
 end
 
-if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] then
-  vehicle_fuel = { "kr-vehicle-fuel" }
-end
-
-if mods["pycoalprocessing"] then
-  vehicle_fuel = { "jerry", "chemical", "biomass" }
-end
-
 if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] or mods["pycoalprocessing"] then
+	if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] then
+		vehicle_fuel = { "kr-vehicle-fuel" }
+	end
+
+	if mods["pycoalprocessing"] then
+		vehicle_fuel = { "jerry", "chemical", "biomass" }
+	end
+
   for _, name in pairs(heliNames) do
     local car = data.raw["car"][name]
 		if car ~= nil and car.energy_source and car.energy_source.type == "burner" then
-      car.energy_source.fuel_categories = vehicle_fuel
+			car.energy_source.fuel_categories = vehicle_fuel
 		end
   end
 end
