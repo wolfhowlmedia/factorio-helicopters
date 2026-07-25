@@ -8,23 +8,23 @@ heliConcrete.hidden = true
 data:extend({heliConcrete})
 
 local heliBaseNames = {
-  "helicopter",
-  "heli-entity-_-",
-  "heli-body-entity-_-",
-  "heli-shadow-entity-_-",
+	"helicopter",
+	"heli-entity-_-",
+	"heli-body-entity-_-",
+	"heli-shadow-entity-_-",
 
-  "rotor-entity-_-",
-  "rotor-shadow-entity-_-",
-  "heli-burner-entity-_-",
+	"rotor-entity-_-",
+	"rotor-shadow-entity-_-",
+	"heli-burner-entity-_-",
 
-  "heli-floodlight-entity-_-",
-  "heli-flying-collision-entity-_-",
-  "heli-landed-collision-end-entity-_-",
-  "heli-landed-collision-side-entity-_-",
+	"heli-floodlight-entity-_-",
+	"heli-flying-collision-entity-_-",
+	"heli-landed-collision-end-entity-_-",
+	"heli-landed-collision-side-entity-_-",
 }
 local heliNames = table.deepcopy(heliBaseNames)
 for _, name in pairs(heliBaseNames) do
-  table.insert(heliNames, "scout-"..name)
+	table.insert(heliNames, "scout-"..name)
 end
 
 if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] or mods["pycoalprocessing"] then
@@ -36,12 +36,12 @@ if mods["Krastorio2"] or mods["Krastorio2-spaced-out"] or mods["pycoalprocessing
 		vehicle_fuel = { "jerry", "chemical", "biomass" }
 	end
 
-  for _, name in pairs(heliNames) do
-    local car = data.raw["car"][name]
+	for _, name in pairs(heliNames) do
+		local car = data.raw["car"][name]
 		if car ~= nil and car.energy_source and car.energy_source.type == "burner" then
 			car.energy_source.fuel_categories = vehicle_fuel
 		end
-  end
+	end
 end
 
 --[[
@@ -65,8 +65,8 @@ end
 
 
 if mods["space-age"] then
-  local tile_graphics = require("__base__/prototypes/tile/tile-graphics")
-  local tile_sounds = require("__space-age__/prototypes/tile/tile-sounds")
+	local tile_graphics = require("__base__/prototypes/tile/tile-graphics")
+	local tile_sounds = require("__space-age__/prototypes/tile/tile-sounds")
 
   local function frozen_concrete(base_name, item_name, transition_merge_tile)
     local frozen_name = "frozen-" .. base_name
