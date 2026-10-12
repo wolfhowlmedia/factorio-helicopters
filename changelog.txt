@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 2026-10-13
+  Changes:
+    - added support for "AutoDrive Fixed" mod by plumbata by adding a remote interface coded by them
+---------------------------------------------------------------------------------------------------
 Version: 0.7.1
 Date: 2026-07-25
   Changes:
