@@ -565,3 +565,68 @@ script.on_event(defines.events.on_player_armor_inventory_changed, OnArmorInvento
 script.on_event(defines.events.on_player_driving_changed_state, OnDrivingStateChanged)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, OnRuntimeSettingsChanged)
+
+local function getHeliFromEntity(entity)
+	if not (entity and entity.valid) then return nil end
+	if storage.helis then
+		for _, heli in pairs(storage.helis) do
+			if heli.valid and (heli.baseEnt == entity or (heli.isBaseOrChild and heli:isBaseOrChild(entity))) then
+				return heli
+			end
+		end
+	end
+	return nil
+end
+
+remote.add_interface("HelicopterRevival", {
+	takeoff = function(entity)
+		local heli = getHeliFromEntity(entity)
+		if not heli then return false end
+		heli.isRemoteDriven = true
+		if heli.curState and heli.curState.OnUp then
+			heli.curState.OnUp(heli)
+			return true
+		elseif heli.OnUp then
+			heli:OnUp()
+			return true
+		end
+		return false
+	end,
+	land = function(entity)
+		local heli = getHeliFromEntity(entity)
+		if not heli then return false end
+		heli.isRemoteDriven = nil
+		if heli.curState then
+			if heli.curState.name == "engineStarting" then
+				heli:changeState(heli.engineStopping)
+				return true
+			elseif heli.curState.name == "hovering" or heli.curState.name == "ascend" or (heli.height and heli.height > 0) then
+				if heli.OnDown then
+					heli:OnDown()
+					return true
+				end
+			end
+		end
+		return false
+	end,
+	is_airborne = function(entity)
+		local heli = getHeliFromEntity(entity)
+		if not heli then return false end
+		return (heli.height and heli.height > 0) or (heli.curState and (heli.curState.name == "hovering" or heli.curState.name == "ascend" or heli.curState.name == "engineStarting"))
+	end,
+	is_ready = function(entity)
+		local heli = getHeliFromEntity(entity)
+		if not heli then return false end
+		return heli.curState and heli.curState.name == "hovering"
+	end,
+	get_state = function(entity)
+		local heli = getHeliFromEntity(entity)
+		if not heli then return nil end
+		return heli.curState and heli.curState.name or "unknown"
+	end,
+	get_height = function(entity)
+		local heli = getHeliFromEntity(entity)
+		if not heli then return 0 end
+		return heli.height or 0
+	end,
+})
