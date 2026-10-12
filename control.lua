@@ -18,6 +18,18 @@ Entity = require("stdlib.entity.entity")
 
 mod_gui = require("mod-gui")
 
+local function getHeliFromEntity(entity)
+	if not (entity and entity.valid) then return nil end
+	if storage.helis then
+		for _, heli in pairs(storage.helis) do
+			if heli.valid and (heli.baseEnt == entity or (heli.isBaseOrChild and heli:isBaseOrChild(entity))) then
+				return heli
+			end
+		end
+	end
+	return nil
+end
+
 function playerIsInHeli(p)
     if not p.driving or not p.vehicle then
         return false
@@ -522,7 +534,7 @@ local entityFilter = {}
 for name, _ in pairs(heliBaseEntityNames) do
 	table.insert(entityFilter, {filter = "name", name = name})
 end
-log(serpent.dump(entityFilter))
+--log(serpent.dump(entityFilter))
 
 script.on_event(defines.events.on_built_entity, OnBuilt)
 script.on_event(defines.events.on_robot_built_entity, OnBuilt)
@@ -565,18 +577,6 @@ script.on_event(defines.events.on_player_armor_inventory_changed, OnArmorInvento
 script.on_event(defines.events.on_player_driving_changed_state, OnDrivingStateChanged)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, OnRuntimeSettingsChanged)
-
-local function getHeliFromEntity(entity)
-	if not (entity and entity.valid) then return nil end
-	if storage.helis then
-		for _, heli in pairs(storage.helis) do
-			if heli.valid and (heli.baseEnt == entity or (heli.isBaseOrChild and heli:isBaseOrChild(entity))) then
-				return heli
-			end
-		end
-	end
-	return nil
-end
 
 remote.add_interface("HelicopterRevival", {
 	takeoff = function(entity)
